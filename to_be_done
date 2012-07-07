@@ -1,0 +1,58 @@
+-atributos
+        -dos locais... fazer testes
+
+-acoes
+        -* estabelecer relacao de pertinencia
+        -* fazer remo
+        -* ir para/ deslocar-se/ entrar / sair
+                estabelecer "grafo" de conexao
+
+        -* remar/navegar (ir_para)
+
+        -* largar
+
+        -* pegavel
+
+        -* examinar *** 
+
+        -* estabalecer meio de mostrar estado de algumas
+           coisas baseado em predicados
+                -* sug.: invisivel(X)
+
+        -previsao da conversa com personagens
+
+-lexico
+        -criar todas as palavras necessarias
+
+-integracao com o 'dialogo.pl'
+        -determinar como realizar acoes (semantica)
+
+-testes - fazer funcionar tudo ate aqui
+---------
+
+-meio de "retornar" erros (criar erro generico)
+
+-descricao do local
+
+-estabelecer conhecimento dos personagens
+        -maneira como os personagens reagem e respondem
+
+-criar o "fim"
+        
+-testes - fazer funcionar tudo ate aqui
+----------------------------------
+
+-? sistema para determinacao do que o jogador
+ efetivamente conhece (senao conhece, nao pode usar)
+
+-criar frases especificas para descrever erros
+
+-tentar criar "contexto"
+        - usar uma lista contendo os ultimos objetos e temas
+          referenciados
+
+-aprendizado de palavras
+
+-tentar adaptar o "earley" para analise
+
+-*tratamento de frases gramaticalmente incorretas
