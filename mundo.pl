@@ -21,7 +21,8 @@ ultima_tabua(1).
 
 /* DETERMINA O QUE O OBJETO X TEM */
 ter(X, Y):-
-        estar(Y, X).
+	\+ racional(Y),
+	estar(Y, X).
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
 
@@ -185,6 +186,11 @@ estar_em(X, Y):-
         setof(E1, estar(E1, _), L1),
         member(X, L1),
         estar_em(X, Y).
+
+mesmo_lugar(X, Y):-
+	estar_em(X, Local), !,
+	estar_em(Y, Local).
+
 
 /* *** PROPRIEDADES DOS OBJETOS */
 
@@ -458,18 +464,20 @@ largar(X):-
         colocar(X, CenaAtual).
 
 /* pegar */
+poder_pegar(Quem,Oque):-
+    %   \+ invisivel(X),
+	(dono(Oque, Quem); \+ dono(Oque, _)), !,
+	\+ estar_em(Oque, Quem), !,
+	mesmo_lugar(Quem, Oque), !,
+	pegavel(Oque).
+
 pegar(voce, X):-
         pegar(X).
 
 pegar(X):-
-     %   \+ invisivel(X),
-        (dono(X, voce); \+ dono(X, _)), !,
-        \+ estar_em(X, voce), !,
-        estar_em(voce, CenaAtual), !,
-        estar_em(X, CenaAtual), !, 
-        pegavel(X), !, 
-        retract(estar(X, _)),
-        assertz(estar(X, voce)).
+     poder_pegar(voce, X),!,
+     retract(estar(X, _)),
+     assertz(estar(X, voce)).
 
 /* vedar -- para vedar buracos */
 vedar(buraco, X):-

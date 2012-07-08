@@ -165,240 +165,242 @@ advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
 %%%% VERBOS
 
 % VERBO: ESTAR
-v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao ..aux:nao)> 
+v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estah].
-v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim ..aux:nao)> 
+v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim) --> 
         [estah].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> 
+v(omite:_ ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sn]) --> 
         [estah].
 
-v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao ..aux:nao)> 
+v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
         [estao].
 
-v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao ..aux:nao)> 
+v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estou].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)] ..poss:sim ..aux:nao)> 
+v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)] ..poss:sim) --> 
         [estou].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> 
+v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn]) --> 
         [estou].
 
-v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao ..aux:nao)> 
+v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estamos].
 
-v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)] ..aux:nao)> [estar].
+v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [estar].
 
 
 
 % VERBO: SER
-v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa] ..aux:nao)> [sou].
-v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)] ..aux:nao)> [sou].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sou].
 
-v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa] ..aux:nao)> ['eh'].
-v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)] ..aux:nao)> ['eh'].
-v(omite:sim ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> ['eh'].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
+v(omite:sim ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
 
-v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa] ..aux:nao)> [sao].
-v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)] ..aux:nao)> [sao].
+v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
+v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
 
-v(omite:nao ..acao:ser .. num:plur ..pessoa: indic ..subcat:[sn] ..aux:nao)> [ser].
+v(omite:nao ..acao:ser .. num:plur ..pessoa: indic ..subcat:[sn]) --> [ser].
 
 % VERBO: CONHECER
-v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: prim ..subcat:[sn] ..aux:nao)> [conheco].
+v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: prim ..subcat:[sn]) --> [conheco].
 
-v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: terc ..subcat:[sn] ..aux:nao)> [conhece].
+v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: terc ..subcat:[sn]) --> [conhece].
 
-v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: indic ..subcat:[sn] ..aux:nao)> [conhecer].
+v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: indic ..subcat:[sn]) --> [conhecer].
 
 % VERBO: CONSERTAR
-v(omite:nao ..acao:consertar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [conserto].
+v(omite:nao ..acao:consertar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [conserto].
 
-v(omite:nao ..acao:consertar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [conserta].
+v(omite:nao ..acao:consertar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [conserta].
 
-v(omite:nao..acao:consertar..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [consertar].
+v(omite:nao..acao:consertar..num:sing ..pessoa: indic ..subcat:[sn]) --> [consertar].
 
 % VERBO: PEGAR
-v(omite:nao ..acao:pegar .. num:sing .. pessoa:prim ..subcat:[sn] ..aux:nao)> [pego].
+v(omite:nao ..acao:pegar .. num:sing .. pessoa:prim ..subcat:[sn]) --> [pego].
 
-v(omite:nao ..acao:pegar .. num:sing .. pessoa:terc ..subcat:[sn] ..aux:nao)> [pega].
+v(omite:nao ..acao:pegar .. num:sing .. pessoa:terc ..subcat:[sn]) --> [pega].
 
-v(omite:nao ..acao:pegar .. num:sing .. pessoa:indic ..subcat:[sn] ..aux:nao)> [pegar].
+v(omite:nao ..acao:pegar .. num:sing .. pessoa:indic ..subcat:[sn]) --> [pegar].
 
 % VERBO: IR
-v(omite:nao ..acao:ir .. num:sing .. pessoa: prim ..subcat:[sp(prep:para)] ..aux:nao)> [vou].
+v(omite:nao ..acao:ir .. num:sing .. pessoa: prim ..subcat:[sp(prep:para)]) --> [vou].
 
-v(omite:nao ..acao:ir .. num:sing .. pessoa: terc ..subcat:[sp(prep:para)] ..aux:nao)> [vai].
+v(omite:nao ..acao:ir .. num:sing .. pessoa: terc ..subcat:[sp(prep:para)]) --> [vai].
 
-v(omite:nao ..acao:ir ..num:sing ..pessoa: indic ..subcat:[sp(prep:para)] ..aux:nao)> [ir].
+v(omite:nao ..acao:ir ..num:sing ..pessoa: indic ..subcat:[sp(prep:para)]) --> [ir].
 
 % VERBO: VEDAR
-v(omite:nao ..acao:vedar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [vedo].
+v(omite:nao ..acao:vedar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vedo].
 
-v(omite:nao ..acao:vedar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [veda].
+v(omite:nao ..acao:vedar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [veda].
 
-v(omite:nao ..acao:vedar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [vedar].
+v(omite:nao ..acao:vedar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [vedar].
 
 % VERBO: PREGAR
-v(omite:nao ..acao:pregar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)] ..aux:nao)> [prego].
+v(omite:nao ..acao:pregar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [prego].
 
-v(omite:nao ..acao:pregar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)] ..aux:nao)> [prega].
+v(omite:nao ..acao:pregar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [prega].
 
-v(omite:nao ..acao:pregar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)] ..aux:nao)> [pregar].
+v(omite:nao ..acao:pregar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [pregar].
 
 % VERBO: SERRAR
-v(omite:nao ..acao:serrar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [serro].
+v(omite:nao ..acao:serrar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [serro].
 
-v(omite:nao ..acao:serrar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [serra].
+v(omite:nao ..acao:serrar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [serra].
 
-v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [serrar].
+v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [serrar].
 
 % VERBO: PESCAR
-v(omite:nao ..acao:pescar ..num:sing ..pessoa: prim ..subcat:[] ..aux:nao)> [pesco].
+v(omite:nao ..acao:pescar ..num:sing ..pessoa: prim ..subcat:[]) --> [pesco].
 
-v(omite:nao ..acao:pescar ..num:sing ..pessoa: terc ..subcat:[] ..aux:nao)> [pesca].
+v(omite:nao ..acao:pescar ..num:sing ..pessoa: terc ..subcat:[]) --> [pesca].
 
-v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[] ..aux:nao)> [pescar].
+v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[]) --> [pescar].
 
 % VERBO: NAVEGAR
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[] ..aux:nao)> [navego].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[]) --> [navego].
 
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[] ..aux:nao)> [navega].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[]) --> [navega].
 
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[] ..aux:nao)> [navegar].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[]) --> [navegar].
 
 % VERBO: REMAR
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[] ..aux:nao)> [remo].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[]) --> [remo].
 
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[] ..aux:nao)> [rema].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[]) --> [rema].
 
-v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[] ..aux:nao)> [remar].
+v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[]) --> [remar].
 
 % VERBO: CONVERSAR
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:prim ..subcat:[sp(prep:com)] ..aux:nao)> [converso].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:prim ..subcat:[sp(prep:com)]) --> [converso].
 
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:terc ..subcat:[sp(prep:com)] ..aux:nao)> [conversa].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:terc ..subcat:[sp(prep:com)]) --> [conversa].
 
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:indic ..subcat:[sp(prep:com)] ..aux:nao)> [conversar].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:indic ..subcat:[sp(prep:com)]) --> [conversar].
 
 % VERBO: FALAR
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:prim ..subcat:[sp(prep:com)] ..aux:nao)> [falo].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:prim ..subcat:[sp(prep:com)]) --> [falo].
 
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:terc ..subcat:[sp(prep:com)] ..aux:nao)> [fala].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:terc ..subcat:[sp(prep:com)]) --> [fala].
 
-v(omite:nao ..acao:conversar ..num:sing ..pessoa:indic ..subcat:[sp(prep:com)] ..aux:nao)> [falar].
+v(omite:nao ..acao:conversar ..num:sing ..pessoa:indic ..subcat:[sp(prep:com)]) --> [falar].
 
 % VERBO: SOLTAR
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [solto].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [solto].
 
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [solta].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [solta].
 
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [soltar].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [soltar].
 
 % VERBO: LARGAR
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [largo].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [largo].
 
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [larga].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [larga].
 
-v(omite:nao ..acao:soltar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [largar].
+v(omite:nao ..acao:soltar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [largar].
 
 % VERBO: COLOCAR
-v(omite:nao ..acao:colocar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)] ..aux:nao)> [coloco].
+v(omite:nao ..acao:colocar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [coloco].
 
-v(omite:nao ..acao:colocar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)] ..aux:nao)> [coloca].
+v(omite:nao ..acao:colocar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [coloca].
 
-v(omite:nao ..acao:colocar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)] ..aux:nao)> [colocar].
+v(omite:nao ..acao:colocar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [colocar].
 
 % VERBO: COMPRAR
-v(omite:nao ..acao:comprar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [compro].
+v(omite:nao ..acao:comprar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [compro].
 
-v(omite:nao ..acao:comprar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [compra].
+v(omite:nao ..acao:comprar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [compra].
 
-v(omite:nao ..acao:comprar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [comprar].
+v(omite:nao ..acao:comprar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [comprar].
 
 % VERBO: EMPRESTAR
-v(omite:nao ..acao:emprestar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [empresto].
+v(omite:nao ..acao:emprestar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [empresto].
 
-v(omite:nao ..acao:emprestar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [empresta].
+v(omite:nao ..acao:emprestar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [empresta].
 
-v(omite:nao ..acao:emprestar ..num:sing..pessoa:indic ..subcat:[sn] ..aux:nao)> [emprestar].
+v(omite:nao ..acao:emprestar ..num:sing..pessoa:indic ..subcat:[sn]) --> [emprestar].
 
 % VERBO: VENDER
-v(omite:nao ..acao:vender ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [vendo].
+v(omite:nao ..acao:vender ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vendo].
 
-v(omite:nao ..acao:vender ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [vende].
+v(omite:nao ..acao:vender ..num:sing ..pessoa: terc ..subcat:[sn]) --> [vende].
 
-v(omite:nao ..acao:vender ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [vender].
+v(omite:nao ..acao:vender ..num:sing ..pessoa: indic ..subcat:[sn]) --> [vender].
 
 % VERBO: CORTAR
-v(omite:nao ..acao:cortar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [corto].
+v(omite:nao ..acao:cortar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [corto].
 
-v(omite:nao ..acao:cortar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [corta].
+v(omite:nao ..acao:cortar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [corta].
 
-v(omite:nao ..acao:cortar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [cortar].
+v(omite:nao ..acao:cortar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [cortar].
 
 % VERBO: FAZER
-v(omite:nao ..acao:fazer ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [faco].
+v(omite:nao ..acao:fazer ..num:sing ..pessoa: prim ..subcat:[sn]) --> [faco].
 
-v(omite:nao ..acao:fazer ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [faz].
+v(omite:nao ..acao:fazer ..num:sing ..pessoa: terc ..subcat:[sn]) --> [faz].
 
-v(omite:nao ..acao:fazer ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [fazer].
+v(omite:nao ..acao:fazer ..num:sing ..pessoa: indic ..subcat:[sn]) --> [fazer].
 
 % VERBO: EXAMINAR
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [examino].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [examino].
 
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [examina].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [examina].
 
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [examinar].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [examinar].
 
 % VERBO: OLHAR
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [olho].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [olho].
 
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [olha].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [olha].
 
-v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [olhar].
+v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [olhar].
 
 % VERBO: TER
-v(omite:sim ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [tenho].
+v(omite:sim ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
 
-v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [tenho].
+v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
 
-v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [tem].
+v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
 
-v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..aux:nao)> [tem].
+v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
 
-v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)] ..aux:nao)> [tem].
+v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
 
-v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)] ..aux:nao)> [ter].
+v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].
 
 % VERBO: POSSUIR
-v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [possuo].
+v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [possuo].
 
-v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [possui].
+v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [possuo].
 
-v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [possuir].
+v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [possui].
+
+v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sn]) --> [possuir].
 
 % VERBO: DIGITAR
-v(omite:nao ..acao:digitar ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [digito].
+v(omite:nao ..acao:digitar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [digito].
 
-v(omite:nao ..acao:digitar ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [digito].
+v(omite:nao ..acao:digitar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [digito].
 
-v(omite:nao ..acao:digitar ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [digitar].
+v(omite:nao ..acao:digitar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [digitar].
 
 % VERBO: PODER
-v(omite:nao ..acao:poder ..num:sing ..pessoa: prim ..subcat:[sv] ..aux:sim)> [posso].
+v(omite:nao ..acao:poder ..num:sing ..pessoa: prim ..subcat:[sv]) --> [posso].
 
-v(omite:nao ..acao:poder ..num:sing ..pessoa: terc ..subcat:[sv] ..aux:sim)> [pode].
+v(omite:nao ..acao:poder ..num:sing ..pessoa: terc ..subcat:[sv]) --> [pode].
 
-v(omite:nao ..acao:poder ..num:sing ..pessoa: indic ..subcat:[sv] ..aux:sim)> [poder].
+v(omite:nao ..acao:poder ..num:sing ..pessoa: indic ..subcat:[sv]) --> [poder].
 
 
 % VERBO: VER
-v(omite:nao ..acao:ver ..num:sing ..pessoa: prim ..subcat:[sn] ..aux:nao)> [vejo].
+v(omite:nao ..acao:ver ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vejo].
 
-v(omite:nao ..acao:ver ..num:sing ..pessoa: terc ..subcat:[sn] ..aux:nao)> [ve].
+v(omite:nao ..acao:ver ..num:sing ..pessoa: terc ..subcat:[sn]) --> [ve].
 
-v(omite:nao ..acao:ver ..num:sing ..pessoa: indic ..subcat:[sn] ..aux:nao)> [ver].
+v(omite:nao ..acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 
 % "VERBO": "SER DONO DE"
-v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)] ..aux:nao)> [eh],[dono].
+v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
 
-v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)] ..aux:nao)> [sou],[dono].
+v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].

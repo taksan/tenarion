@@ -30,6 +30,13 @@ s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E) -->
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
         ['.'].
 
+s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E) -->
+	sn(tipo: pron_ninguem(E) .. coord:nao),
+	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
+        ['.'].
+
+
+
 s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
@@ -52,14 +59,26 @@ s(ato_fala:interro_adv .. agente:A .. acao:X) -->
         ['?'].
 
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T) -->
+		{ AX = '' },
 	sn(id:A),
-	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T),
+	sv(puxa_pron:nao ..omite:nao ..acao_aux:AX ..acao:X .. tema:T),
         ['?'].
 
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T) -->
-        { (member(Tipo, [np,nc]))},
-	sv(puxa_pron:nao ..agente:A ..tipo:Tipo ..omite:nao ..acao:X .. tema:T),
+        { AX = '', (member(Tipo, [np,nc]))},
+	sv(puxa_pron:nao ..agente:A ..tipo:Tipo ..omite:nao ..acao_aux: AX ..acao:X .. tema:T),
         ['?'].
+
+s(ato_fala:int_sim_nao_aux .. agente:A .. acao_aux: AX ..acao:X .. tema:T) -->
+	sn(id:A),
+	sv(omite:nao ..acao_aux: AX ..acao:X ..tema:T),
+        ['?'].
+
+s(ato_fala:int_sim_nao_aux .. agente:A .. acao_aux: AX ..acao:X .. tema:T) -->
+		{ A = prim },
+	sv(omite:sim ..acao_aux: AX ..acao:X ..tema:T),
+        ['?'].
+
 
 /* atos de fala diversos */
 s(ato_fala:recusar ..agente:A ..acao:X .. tema:T) -->
@@ -71,14 +90,14 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T) -->
 % SINTAGMA NOMINAL
 sn(cood:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
         { var(I), var(T) },
-        det(gen:G .. num:N ..tipo:T ),
-        mod(gen:G .. num:N), 
+    det(gen:G .. num:N ..tipo:T ),
+    mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N),
-        mod(gen:G .. num:N).
+    mod(gen:G .. num:N).
 
 sn(cood:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
         { (\+ var(I); \+ is_list(I)) },
-        ident(gen:G .. num:N ..tipo:T),
+    ident(gen:G .. num:N ..tipo:T),
 	np(id:I .. tipo:T ..gen:G ..num:N).
 
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P) -->
@@ -121,6 +140,10 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	sn(id:T),
     sp(prep:Prep).
 
+sv(pessoa:P ..acao_aux: AX ..acao:A .. tema:T .. num:N) -->
+	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
+	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic).
+	
 sp(id:I .. prep:P) -->
     prep(prep:P),
     sn(id:I).

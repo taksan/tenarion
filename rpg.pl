@@ -68,6 +68,18 @@ processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
         PredAcao =.. [Relacao, A, T],
         \+ PredAcao.
 
+processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux: AcaoAuxiliar ..acao:Relacao ..tema:T),
+          (ato_fala:responder .. mensagem:positivo)):-
+		concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
+        PredAcao =.. [RelacaoAuxiliar, A, T],
+        PredAcao.
+
+processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Relacao ..tema:T),
+          (ato_fala:responder .. mensagem:negativo)):-
+		concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
+        PredAcao =.. [RelacaoAuxiliar, A, T],
+        \+ PredAcao.
+
 % perguntas qu
 processar((ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
    (ato_fala:informar .. agente:W ..acao:Relacao .. tema:T1 ..pessoa:terc ..entidade:Tipo)):-
