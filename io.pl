@@ -182,4 +182,4 @@ equivale(comigo, [em, eu]).
 equivale(contigo, [em, voce]).
 equivale(nele, [em, ele]).
 
-char_code(X,X).
+%char_code(X,X).

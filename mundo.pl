@@ -368,12 +368,14 @@ comprimento(remo, 60).
 /* ACOES: define acoes que podem ser realizadas SOBRE os objetos */
 
 /* acoes de deslocamento */
-
-ir(voce, X):-
+poder_ir(voce, X):-
         estar(voce, CenaAtual),!,
         local(X),!,
-        conectado(CenaAtual, X),!,
-        retract(estar(voce, CenaAtual)),
+        conectado(CenaAtual, X).
+
+ir(voce, X):-
+		poder_ir(voce, X),!,
+        retract(estar(voce, _)),
         assert(estar(voce, X)).
 
 
@@ -396,12 +398,16 @@ cortar_com((tabua, X), serrote):-
         estar_em(voce, CenaAtual),
         assertz(estar((tabua, NovaUltima), CenaAtual)).
 
-cortar_com(corda, serrote):-
-        estar_em(serrote,voce),!,
-        estar_em(corda, _),
+poder_cortar(ObjACortar, ObjParaCortar):-
+	estar(voce, CenaAtual),
+	(estar_em(ObjACortar, voce) ; estar(ObjACortar, CenaAtual)),!,
+	estar_em(ObjParaCortar, voce).
+
+cortar(corda, serrote):-
+        poder_cortar(corda, serrote),
         retract(estar(corda, _)).
 
-cortar_com(sua(mao), serrote):-
+cortar(mao, serrote):-
         assertz(injuriado(voce)).
 
 /* execucao da acao de consertar: somente para buraco/barco */

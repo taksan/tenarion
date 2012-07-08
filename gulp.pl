@@ -648,7 +648,7 @@ g_error(List) :- repeat,
 
 %/*Q*/ :- public writeln/1.
 
-writeln(X) :- g_tb(TranslatedX,X), writeln_aux(TranslatedX).
+redefine_system_predicate(writeln(X) :- g_tb(TranslatedX,X), writeln_aux(TranslatedX)).
 
 writeln_aux(X) :- var(X), !, write(X), nl.
 writeln_aux([]) :- !, nl.
