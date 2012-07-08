@@ -131,7 +131,7 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 
 sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	sn(id:T ..pessoa:P),
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
+	v(omite:O ..acao:A ..subcat:[] ..num:N ..pessoa:P).
 
 sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),

@@ -22,13 +22,15 @@ jogar:-
         write('Bem Vindo ao mundo de Fagageh!'),
         nl,
         write('Qual o seu sexo (F/M/I)? '),
-        readText([Sex|_]),
+%        readText([Sex|_]),
+		Sex='m',
         assert(sexoJogador(Sex)),
         ((Sex = 'm', T='aventureiro'); (T='aventureira')),
         write('Digite seu nome, nobre '),
         write(T), write(': '),
-        readText([Nome|_]),
-        assert(jogador(Nome)),!,
+%        readText([Nome|_]),
+		Nome='Fulk',
+		assert(jogador(Nome)),!,
         dialogo.
 
 dialogo:-
@@ -82,12 +84,23 @@ processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Re
 
 % perguntas qu
 processar((ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
-   (ato_fala:informar .. agente:W ..acao:Relacao .. tema:T1 ..pessoa:terc ..entidade:Tipo)):-
-        PredAcao =.. [Relacao, A, T],
+   (ato_fala:informar .. agente:W ..acao:RelacaoAjustada .. tema:T1 ..pessoa:terc ..entidade:Tipo)):-
+		write('Relacao '),write(Relacao),nl,
+		write('tema '), write(T), nl,
+		write('tipo '), write(Tipo), nl,
+		ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
+		write('Relacao ajustada '),write(RelacaoAjustada),nl,
+        PredAcao =.. [RelacaoAjustada, A, T],
 		findall(A, (PredAcao, entidade(A, Tipo)), L),
         ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
         filtrar(L1,W),
         novo_agente(T,T1).
+
+ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
+	racional(QuemTemOuEsta).
+
+ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, A, A).
+
 
 processar((ato_fala:interro_adv.. agente:Agent .. acao:Relacao .. tema:T),
           (ato_fala:informar .. agente:Ag .. acao:Relacao ..tema:TS ..pessoa:terc)):-

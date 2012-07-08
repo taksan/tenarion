@@ -357,7 +357,7 @@ v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [olha].
 v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [olhar].
 
 % VERBO: TER
-v(omite:sim ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
+v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[]) --> [tenho].
 
 v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
 
@@ -366,6 +366,8 @@ v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
 
 v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
+
+v(omite:sim ..acao:estar ..num:sing ..pessoa: terc ..subcat:[]) --> [tem].
 
 v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].
 
