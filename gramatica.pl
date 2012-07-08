@@ -35,15 +35,13 @@ s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E) -->
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
         ['.'].
 
-
-
 s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
         ['.'].
 
 s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T) -->
-        sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
+    sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
         ['.'].
 
 
@@ -88,14 +86,14 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T) -->
         ['.'].
 
 % SINTAGMA NOMINAL
-sn(cood:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
         { var(I), var(T) },
     det(gen:G .. num:N ..tipo:T ),
     mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N),
     mod(gen:G .. num:N).
 
-sn(cood:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
         { (\+ var(I); \+ is_list(I)) },
     ident(gen:G .. num:N ..tipo:T),
 	np(id:I .. tipo:T ..gen:G ..num:N).
@@ -174,3 +172,5 @@ mod(adj:A ..gen:G .. num:N) --> sa(adj:A ..gen:G .. num:N).
 mod(_) --> sp(_).
 
 mod(_) --> [].
+
+
