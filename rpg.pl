@@ -84,11 +84,11 @@ processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Re
 
 % perguntas qu
 
-processar(
-	(ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:indefinido(np(id:T..tipo:Tipo ..num:Num ..gen:Gen))),
-	(ato_fala:recusar ..acao:entender ..agente:narrador ..tema:T)):-
-	write('indefinido'),nl,
-	adiciona_termo_a_definir(T, np(id:T..tipo:Tipo ..num:Num ..gen:Gen)).
+%processar(
+%	(ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:indefinido(np(id:T..tipo:Tipo ..num:Num ..gen:Gen))),
+%	(ato_fala:recusar ..acao:entender ..agente:narrador ..tema:T)):-
+%	write('indefinido'),nl,
+%	adiciona_termo_a_definir(T, np(id:T..tipo:Tipo ..num:Num ..gen:Gen)).
 
 
 processar((ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:T),

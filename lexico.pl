@@ -142,7 +142,7 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc) --> [vaso],[ming].
 np(id:vela .. tipo:nc ..num:sing ..gen:fem) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem) --> [vitoria-regia].
-np(id:indefinido(np(id:T..tipo:Tipo ..num:Num ..gen:Gen)) ..tipo:Tipo ..num:Num ..gen:Gen ..indefinido:sim) --> [T].
+np(id:T ..tipo:Tipo ..num:Num ..gen:Gen ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
 pro(tipo_pro:reto .. num:sing .. pessoa:prim) --> [eu].
@@ -176,6 +176,8 @@ v(omite:_ ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sn]) -->
         [estah].
 
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
+        [estao].
+v(omite:_ ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sn]) --> 
         [estao].
 
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
