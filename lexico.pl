@@ -96,6 +96,7 @@ prep(prep:a) --> [a].
 %%%% NOMES 
 np(id:zulu ..gen:masc ..num:sing) --> [zulu].
 np(id:mateo ..gen:masc ..num:sing) --> [mateo].
+np(id:narrador ..gen:masc ..num:sing) --> [eu].
 
 np(id:sua(mao) ..gen:fem ..num:sing) --> [sua],[mao].
 
@@ -110,6 +111,7 @@ np(id:carpintaria .. tipo:nc ..num:sing ..gen:fem) --> [carpintaria].
 np(id:caixa_eletronico .. tipo:nc ..num:sing ..gen:masc) --> [caixa],[eletronico].
 np(id:caixa_registradora .. tipo:nc ..num:sing ..gen:fem) --> [caixa],[registradora].
 np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc) --> [cartao], [de],[credito].
+np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc) --> [cartao].
 np(id:chiclete .. tipo:nc ..num:sing ..gen:masc) --> [chiclete].
 np(id:circulo_de_velas .. tipo:nc ..num:sing ..gen:masc) --> [circulo],[de],[velas].
 np(id:corda .. tipo:nc ..num:sing ..gen:fem) --> [corda].
@@ -140,6 +142,7 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc) --> [vaso],[ming].
 np(id:vela .. tipo:nc ..num:sing ..gen:fem) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem) --> [vitoria-regia].
+np(id:indefinido(np(id:T..tipo:Tipo ..num:Num ..gen:Gen)) ..tipo:Tipo ..num:Num ..gen:Gen ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
 pro(tipo_pro:reto .. num:sing .. pessoa:prim) --> [eu].
@@ -406,3 +409,8 @@ v(omite:nao ..acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
 
 v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
+
+% VERBO: entender
+v(acao:entender ..num:sing ..pessoa:prim ..subcat:[sn]) --> [entendo].
+v(acao:entender ..num:sing ..pessoa:terc ..subcat:[sn]) --> [entende].
+

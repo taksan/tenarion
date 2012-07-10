@@ -85,6 +85,13 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T) -->
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
         ['.'].
 
+s(ato_fala:recusar ..agente:A ..acao:X .. tema:T) -->
+	sn(id:A),
+        [nao], 
+	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
+        ['.'].
+
+
 % SINTAGMA NOMINAL
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
         { var(I), var(T) },
@@ -128,6 +135,11 @@ sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess) -->
 sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
 	sn(id:T).
+
+sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
+	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	sn(id:T).
+
 
 sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	sn(id:T ..pessoa:P),
