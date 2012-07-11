@@ -142,7 +142,7 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc) --> [vaso],[ming].
 np(id:vela .. tipo:nc ..num:sing ..gen:fem) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem) --> [vitoria-regia].
-np(id:T ..indefinido:sim) --> [T].
+%np(id:T ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
 pro(tipo_pro:reto .. num:sing .. pessoa:prim) --> [eu].

@@ -142,7 +142,7 @@ sn(coord:sim ..id:[A1|Resto] .. num:plur) -->
 	sn(coord:sim .. id:Resto).
 
 sv(omite:O ..acao:A ..tema:T ..num:N ..pessoa:P ..elemento_indefinido:tracos(gen:G ..num:IndefN)) -->
-	{ write([A,T,N,P,G,IndefN]), nl },
+%	{ write([A,T,N,P,G,IndefN]), nl },
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sn(id:T ..gen:G ..num:IndefN).
@@ -216,6 +216,7 @@ cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
 	np_indefinido(Texto, _),
 	retract(np_indefinido(Texto, _)).
 
+np_indefinido(_,_):-fail.
 determina_indefinido(IdentidadeIndefinido, sim, Tracos):-
 	np_indefinido(IdentidadeIndefinido, Tracos),!,
 	retract(np_indefinido(IdentidadeIndefinido, _)).

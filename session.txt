@@ -1,0 +1,55 @@
+Bem Vindo ao mundo de Fagageh!
+Qual o seu sexo (F/M/I)? m
+Digite seu nome, nobre aventureiro: nau
+
+nau > onde eu estou?
+narrador > Voce estah no ancoradouro.
+nau > quem estah aqui?
+narrador > Voce e o zulu estao no ancoradouro.
+nau > quem estah no caixa eletronico?
+narrador > Ninguem estah no caixa eletronico.
+nau > quem estah no barco?
+narrador > Ninguem estah no barco.
+nau > o que tem aqui?
+narrador > O barco, a corda, as minhocas, a vara de pescar e as tabuas
+estao no ancoradouro.
+nau > eu vou para o barco.
+narrador > Voce nao pode ir para o barco.
+nau > eu vou para o lago.
+ERROR: navegavel/1: Undefined procedure: tamanho/2
+ERROR: navegavel/1: Undefined procedure: tamanho/2
+narrador > Voce nao pode ir para o lago.
+nau > eu pego a vara de pescar.
+narrador > Ok
+nau > eu pego as minhocas.
+narrador > Ok
+nau > eu pego a corda.
+narrador > Voce nao pode pegar a corda.
+nau > eu pego as tabuas.
+narrador > Ok
+nau > eu falo com o zulu.
+zulu > Ok
+nau > oi zulu.
+zulu > H� hein?
+nau > oi.
+zulu > H� hein?
+nau > ola
+zulu > H� hein?
+
+
+nau > o que voce tem?
+zulu > O ancoradouro tem o zulu.
+nau > quem eh voce?
+zulu > Voce eh do zulu.
+nau > quem eh do zulu?
+zulu > Voce eh do zulu.
+
+
+nau > o que voce tem?
+zulu > O ancoradouro tem o zulu.
+nau > o que o zulu tem?
+zulu > O ancoradouro tem o zulu.
+o que o barco tem?
+zulu > O ancoradouro tem o barco.
+nau > 
+
