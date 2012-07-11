@@ -142,7 +142,7 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc) --> [vaso],[ming].
 np(id:vela .. tipo:nc ..num:sing ..gen:fem) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem) --> [vitoria-regia].
-np(id:T ..tipo:Tipo ..num:Num ..gen:Gen ..indefinido:sim) --> [T].
+np(id:T ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
 pro(tipo_pro:reto .. num:sing .. pessoa:prim) --> [eu].
@@ -191,7 +191,6 @@ v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:n
         [estamos].
 
 v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [estar].
-
 
 
 % VERBO: SER
@@ -413,6 +412,7 @@ v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
 v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
 
 % VERBO: entender
-v(acao:entender ..num:sing ..pessoa:prim ..subcat:[sn]) --> [entendo].
-v(acao:entender ..num:sing ..pessoa:terc ..subcat:[sn]) --> [entende].
+v(acao:entender ..num:sing ..pessoa:indic..subcat:[pro(pron:oque),sn]) --> [saber].
+v(acao:entender ..num:sing ..pessoa:prim ..subcat:[pro(pron:oque),sn]) --> [sei].
+v(acao:entender ..num:sing ..pessoa:terc ..subcat:[pro(pron:oque),sn]) --> [sabe].
 

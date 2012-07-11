@@ -84,14 +84,21 @@ processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Re
 
 % perguntas qu
 
-%processar(
-%	(ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:indefinido(np(id:T..tipo:Tipo ..num:Num ..gen:Gen))),
-%	(ato_fala:recusar ..acao:entender ..agente:narrador ..tema:T)):-
-%	write('indefinido'),nl,
-%	adiciona_termo_a_definir(T, np(id:T..tipo:Tipo ..num:Num ..gen:Gen)).
+processar(
+	(ato_fala:interro_adv ..indefinido:sim ..elemento_indefinido:tracos(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	(ato_fala:recusar ..indefinido:sim ..elemento_indefinido:tracos(tipo:Tipo ..gen:Gen ..num:Num) ..acao:entender ..agente:zulu ..tema:Texto)):-
+
+	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 
-processar((ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
+processar(
+	(ato_fala:interro_qu ..indefinido:sim ..elemento_indefinido:tracos(id:Texto ..tipo:Tipo ..gen:Gen ..num:Num) ..agente:incog(_)),
+	(ato_fala:recusar ..indefinido:sim ..elemento_indefinido:tracos(tipo:Tipo ..gen:Gen ..num:Num) ..acao:entender ..agente:zulu ..tema:Texto)):-
+	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
+
+
+
+processar((ato_fala:interro_qu ..indefinido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
    (ato_fala:informar .. agente:W ..acao:RelacaoAjustada .. tema:T1 ..pessoa:terc ..entidade:Tipo)):-
 		ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
         PredAcao =.. [RelacaoAjustada, A, T],
@@ -100,12 +107,7 @@ processar((ato_fala:interro_qu ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
         filtrar(L1,W),
         novo_agente(T,T1).
 
-ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
-	racional(QuemTemOuEsta).
-
-ajuste_acao_ter_estar_em_caso_racional(_, A, A).
-
-processar((ato_fala:interro_adv.. agente:Agent .. acao:Relacao .. tema:T),
+processar((ato_fala:interro_adv ..indefinido:nao ..agente:Agent .. acao:Relacao .. tema:T),
           (ato_fala:informar .. agente:Ag .. acao:Relacao ..tema:TS ..pessoa:terc)):-
         PredAcao =.. [Relacao, Agent, T],
 		findall(T, (PredAcao), L),
@@ -137,6 +139,12 @@ processar((mensagem:oi),(ato_fala:responder .. mensagem:oi)).
 % se o processar falhar
 processar(_, []):-
         write('Ha algo errado na sua pergunta.'), !.
+
+% converte o verbo ter para estar se o alvo eh racional; isso corrige o problema de personagens serem possuidos por coisas
+ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
+	racional(QuemTemOuEsta).
+
+ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
 % normalizacao	
 filtrar([X],X):-!.
@@ -207,4 +215,4 @@ denota_lugar(aqui, L):-
 
 denota_lugar(onde, onde).
 
-adiciona_termo_a_definir(Termo, Definicao). 
+adiciona_termo_a_definir(Termo, Definicao).

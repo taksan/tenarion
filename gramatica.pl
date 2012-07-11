@@ -25,30 +25,30 @@ s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..
 	sn(id:A .. num: N),     
 	sv(puxa_pron:nao ..omite:nao ..(acao:X .. tema:T .. num:N)),
         ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E  ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
         ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
         ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
         ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
     sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
         ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 
 /* perguntas */
@@ -56,7 +56,7 @@ s(ato_fala:interro_qu ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsInde
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
 	sv(puxa_pron:sim ..omite:_ ..acao:X ..tema:T ..pessoa:P),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:interro_adv .. agente:A .. acao:X ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         sp(_), 
@@ -69,41 +69,42 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido
 	sn(id:A),
 	sv(puxa_pron:nao ..omite:nao ..acao_aux:AX ..acao:X .. tema:T),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ 
+		determina_indefinido(T, IsIndefinido, EI);
+	  	determina_indefinido(A, IsIndefinido, EI) 
+	}.
 
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         { AX = '', (member(Tipo, [np,nc]))},
 	sv(puxa_pron:nao ..agente:A ..tipo:Tipo ..omite:nao ..acao_aux: AX ..acao:X .. tema:T),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:int_sim_nao_aux .. agente:A .. acao_aux: AX ..acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(id:A),
 	sv(omite:nao ..acao_aux: AX ..acao:X ..tema:T),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:int_sim_nao_aux .. agente:A .. acao_aux: AX ..acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 		{ A = prim },
 	sv(omite:sim ..acao_aux: AX ..acao:X ..tema:T),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 
 /* atos de fala diversos */
-s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
-	sn(id:A),
+s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao) -->
+	sn(coord:nao ..id:A),
         [nao], [pode],
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
-        ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+        ['.'].
 
-s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
-	sn(id:A),
+s(ato_fala:recusar ..agente:A ..acao:X .. tema:Texto ..indefinido:sim ..elemento_indefinido:tracos(gen:G ..num:N)) -->
+	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], 
-	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
-        ['.'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:Texto ..pessoa: Pessoa ..elemento_indefinido:tracos(gen:G ..num:N)),
+        ['.'].
 
 % SINTAGMA NOMINAL
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
@@ -140,6 +141,12 @@ sn(coord:sim ..id:[A1|Resto] .. num:plur) -->
 	[,],
 	sn(coord:sim .. id:Resto).
 
+sv(omite:O ..acao:A ..tema:T ..num:N ..pessoa:P ..elemento_indefinido:tracos(gen:G ..num:IndefN)) -->
+	{ write([A,T,N,P,G,IndefN]), nl },
+	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
+	pro(tipo_pro:pron_qu ..pron:Pronome),
+	sn(id:T ..gen:G ..num:IndefN).
+
 sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:P) -->
 	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P ..tema:T).
 
@@ -147,14 +154,9 @@ sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess) -->
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
 	sp(id:T ..prep:P).
 
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
+sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..elemento_indefinido:tracos(gen:G ..num:IndefN)) -->
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:T).
-
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:T).
-
+	sn(id:T ..gen:G ..num:IndefN).
 
 sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
 	sn(id:T ..pessoa:P ..num:N),
@@ -201,20 +203,20 @@ mod(_) --> sp(_).
 mod(_) --> [].
 
 
-cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
+cria_np_indefinido(IsIndefinido,_, _, _, _):-
 	var(IsIndefinido),
 	IsIndefinido = nao.
 
 cria_np_indefinido(sim, Texto, T, G, N):-
 	nonvar(T), nonvar(G), nonvar(N),
-	assertz(np_indefinido(Texto, (tipo:T ..gen:G ..num:N))).
+	assertz(np_indefinido(Texto, tracos(texto: Texto ..tipo:T ..gen:G ..num:N))).
 
 cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
 	var(IsIndefinido),
 	np_indefinido(Texto, _),
 	retract(np_indefinido(Texto, _)).
 
-determina_indefinido(IdentidadeIndefinido, sim, (texto:IdentidadeIndefinido ..tracos:Tracos)):-
+determina_indefinido(IdentidadeIndefinido, sim, Tracos):-
 	np_indefinido(IdentidadeIndefinido, Tracos),!,
 	retract(np_indefinido(IdentidadeIndefinido, _)).
 
