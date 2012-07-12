@@ -18,37 +18,37 @@ s(ato_fala:informar ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..indefinido:IsI
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(A, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)},
 	sn(id:A .. num: N),     
 	sv(puxa_pron:nao ..omite:nao ..(acao:X .. tema:T .. num:N)),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E  ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
     sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
-        ['.'],
+        pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 
@@ -56,7 +56,7 @@ s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T ..indefinid
 s(ato_fala:interro_qu ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
 	sv(puxa_pron:sim ..omite:_ ..acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
-        ['?'].
+        ['?'],
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:interro_adv .. agente:A .. acao:X ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
@@ -68,7 +68,7 @@ s(ato_fala:interro_adv .. agente:A .. acao:X ..indefinido:IsIndefinido ..element
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 		{ AX = '' },
 	sn(id:A),
-	sv(puxa_pron:nao ..omite:nao ..acao_aux:AX ..acao:X .. tema:T),
+	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T),
         ['?'],
 	{ 
 		determina_indefinido(T, IsIndefinido, EI);
@@ -99,13 +99,13 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao) -->
 	sn(coord:nao ..id:A),
         [nao], [pode],
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
-        ['.'].
+        pontuacao_opcional(_).
 
 s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:sim) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], 
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. acao_aux:AX ..tema:Tema ..pessoa: Pessoa ..indefinido:sim),
-        ['.'].
+        pontuacao_opcional(_).
 
 % SINTAGMA NOMINAL
 % essa regra eh para produzir texto
@@ -221,6 +221,9 @@ mod(_) --> sp(_).
 
 mod(_) --> [].
 
+pontuacao_opcional(_) --> ['.'].%pontuacao_opcional(_).
+pontuacao_opcional(_) --> [].
+
 % tratamento de casos indefinidos
 
 cria_np_indefinido(IsIndefinido,_, _, _, _):-
@@ -243,3 +246,6 @@ determina_indefinido(IdentidadeIndefinido, sim, Tracos):-
 
 determina_indefinido(IdentidadeIndefinido, nao, []):-
 	\+ np_indefinido(IdentidadeIndefinido, _).
+
+determina_indefinido(_, _,_):-
+	retractall(np_indefinido).
