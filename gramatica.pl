@@ -100,28 +100,35 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao) -->
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
         ['.'].
 
-s(ato_fala:recusar ..agente:A ..acao:X .. tema:Texto ..indefinido:sim ..elemento_indefinido:tracos(gen:G ..num:N)) -->
+s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:sim) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], 
-	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:Texto ..pessoa: Pessoa ..elemento_indefinido:tracos(gen:G ..num:N)),
+	sv(puxa_pron:nao ..omite:_ ..acao:X .. acao_aux:AX ..tema:Tema ..pessoa: Pessoa ..indefinido:sim),
         ['.'].
 
 % SINTAGMA NOMINAL
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
+% essa regra eh para produzir texto
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:sim) -->
         { var(I), var(T) },
+    det(gen:G .. num:N ..tipo:T ),
+    mod(gen:G .. num:N), 
+	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:sim).
+
+% a regra abaixo faz match do texto, nao deve ser usada para produzir texto
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
+        { var(I), var(T), var(IsIndefinido) },
     det(gen:G .. num:N ..tipo:T ),
     mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
     mod(gen:G .. num:N),
 	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
 
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc) -->
-        { (\+ var(I); \+ is_list(I)) },
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
+        { (\+ var(I); \+ is_list(I)); var(IsIndefinido) },
     ident(gen:G .. num:N ..tipo:T),
-	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
-	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
+	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido).
 
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P) -->
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
         { \+ is_list(Ag) },
         { ( (\+ var(Ag); \+ var(T)), 
            denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
@@ -141,39 +148,39 @@ sn(coord:sim ..id:[A1|Resto] .. num:plur) -->
 	[,],
 	sn(coord:sim .. id:Resto).
 
-sv(omite:O ..acao:A ..tema:T ..num:N ..pessoa:P ..elemento_indefinido:tracos(gen:G ..num:IndefN)) -->
+sv(omite:O ..acao:A ..acao_aux:(acao:AX ..pessoa:PX ..num:NX ) ..tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 %	{ write([A,T,N,P,G,IndefN]), nl },
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:pron_qu ..pron:Pronome),
-	sn(id:T ..gen:G ..num:IndefN).
+	sv(omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..indefinido:IsIndefinido).
 
-sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:P) -->
-	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P ..tema:T).
+sv(omite:O ..acao:A .. num:N ..pessoa:P ..indefinido:nao) -->
+	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P).
 
-sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess) -->
+sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) -->
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
-	sp(id:T ..prep:P).
+	sp(id:T ..prep:P ..indefinido:IsIndefinido).
 
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..elemento_indefinido:tracos(gen:G ..num:IndefN)) -->
+sv(omite:O ..acao:A .. tema:T ..gen:G ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:T ..gen:G ..num:IndefN).
+	sn(id:T ..gen:G ..num:N ..indefinido:IsIndefinido).
 
-sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
-	sn(id:T ..pessoa:P ..num:N),
+sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
+	sn(id:T ..pessoa:P ..num:N ..indefinido:IsIndefinido),
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
 
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P) -->
+sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
-	sn(id:T),
-    sp(prep:Prep).
+	sn(id:T ..indefinido:IsIndefinido),
+    sp(prep:Prep ..indefinido:IsIndefinido).
 
-sv(pessoa:P ..acao_aux: AX ..acao:A .. tema:T .. num:N) -->
+sv(pessoa:P ..acao_aux: AX ..acao:A .. tema:T .. num:N ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
-	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic).
+	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..indefinido:IsIndefinido).
 	
-sp(id:I .. prep:P) -->
+sp(id:I .. prep:P ..indefinido:IsIndefinido) -->
     prep(prep:P),
-    sn(id:I).
+    sn(id:I ..indefinido:IsIndefinido).
 
 sp(id:I .. prep:_) -->
     advb(adv:A),
@@ -209,14 +216,13 @@ cria_np_indefinido(IsIndefinido,_, _, _, _):-
 
 cria_np_indefinido(sim, Texto, T, G, N):-
 	nonvar(T), nonvar(G), nonvar(N),
-	assertz(np_indefinido(Texto, tracos(texto: Texto ..tipo:T ..gen:G ..num:N))).
+	assertz(np_indefinido(Texto, indefinido(texto: Texto ..tipo:T ..gen:G ..num:N))).
 
 cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
 	var(IsIndefinido),
 	np_indefinido(Texto, _),
 	retract(np_indefinido(Texto, _)).
 
-np_indefinido(_,_):-fail.
 determina_indefinido(IdentidadeIndefinido, sim, Tracos):-
 	np_indefinido(IdentidadeIndefinido, Tracos),!,
 	retract(np_indefinido(IdentidadeIndefinido, _)).

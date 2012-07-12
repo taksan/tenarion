@@ -85,16 +85,21 @@ processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Re
 % perguntas qu
 
 processar(
-	(ato_fala:interro_adv ..indefinido:sim ..elemento_indefinido:tracos(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
-	(ato_fala:recusar ..indefinido:sim ..elemento_indefinido:tracos(tipo:Tipo ..gen:Gen ..num:Num) ..acao:entender ..agente:zulu ..tema:Texto)):-
+	(ato_fala:interro_adv ..indefinido:sim ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	(ato_fala:recusar 
+		..indefinido:sim 
+		..acao:entender
+		..num:sing
+		..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num) 
+		..acao_aux:(acao:ser ..pessoa:terc ..num:Num)
+		..agente:zulu )):-
 
 	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
-
-processar(
-	(ato_fala:interro_qu ..indefinido:sim ..elemento_indefinido:tracos(id:Texto ..tipo:Tipo ..gen:Gen ..num:Num) ..agente:incog(_)),
-	(ato_fala:recusar ..indefinido:sim ..elemento_indefinido:tracos(tipo:Tipo ..gen:Gen ..num:Num) ..acao:entender ..agente:zulu ..tema:Texto)):-
-	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
+%processar(
+%	(ato_fala:interro_qu ..indefinido:sim ..elemento_indefinido:tracos(id:Texto ..tipo:Tipo ..gen:Gen ..num:Num) ..agente:incog(_)),
+%	(ato_fala:recusar ..indefinido:sim ..elemento_indefinido:tracos(tipo:Tipo ..gen:Gen ..num:Num) ..acao:entender ..agente:zulu ..tema:Texto)):-
+%	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 
 
