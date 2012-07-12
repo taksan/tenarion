@@ -119,7 +119,7 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao).
 
 % a regra abaixo faz match do texto, nao deve ser usada para produzir texto
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
         { var(I), var(T), var(IsIndefinido) },
     det(gen:G .. num:N ..tipo:T ),
     mod(gen:G .. num:N), 
@@ -215,17 +215,15 @@ mod(_) --> sp(_).
 
 mod(_) --> [].
 
-
-np_indefinido($,$).
+% tratamento de casos indefinidos
 
 cria_np_indefinido(IsIndefinido,_, _, _, _):-
 	var(IsIndefinido),
 	IsIndefinido = nao.
 
 cria_np_indefinido(sim, Texto, T, G, N):-
-	nonvar(T), nonvar(G), nonvar(N),
-	retract(np_indefinido($,$)),
-	assertz(np_indefinido(Texto, indefinido(texto: Texto ..tipo:T ..gen:G ..num:N))).
+	nonvar(T), nonvar(G), nonvar(N), nonvar(Texto),
+	asserta(np_indefinido(Texto, indefinido(texto: Texto ..tipo:T ..gen:G ..num:N))).
 
 cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
 	( var(IsIndefinido) ; IsIndefinido = nao ),
