@@ -16,14 +16,14 @@ s(ato_fala:terminar .. mensagem: tchau) --> [tchau],[_].
 /* informar / mandar */
 s(ato_fala:informar ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)}, 
-	sn(id:A .. num: N ..pessoa:Pes),
+	sn(id:A .. num: _ ..pessoa:Pes),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
         pontuacao_opcional(_),
 	{ determina_indefinido(A, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)},
-	sn(id:A .. num: N),     
+	sn(id:A .. num: _),     
 	sv(puxa_pron:nao ..omite:nao ..(acao:X .. tema:T .. num:N)),
         pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
@@ -125,7 +125,7 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao).
 
 % a regra abaixo faz match do texto, nao deve ser usada para produzir texto
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:nao) -->
         { var(I), var(T), var(IsIndefinido) },
     det(gen:G .. num:N ..tipo:T ),
     mod(gen:G .. num:N), 
@@ -175,7 +175,8 @@ sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) 
 
 sv(omite:O ..acao:A .. tema:T ..gen:G ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:T ..gen:G ..num:N ..indefinido:IsIndefinido).
+	sn(id:T ..gen:G ..num:_ ..indefinido:IsIndefinido).
+	% nao forca o substantivo que tem depois a concordar com o anterior.
 
 sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	sn(id:T ..pessoa:P ..num:N ..indefinido:IsIndefinido),
