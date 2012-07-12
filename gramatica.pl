@@ -1,4 +1,5 @@
 /*********************** Gramatica *********************/
+:- dynamic(np_indefinido/2).
 
 /*** Mensagens simples ****/
 s([]) --> [].
@@ -6,7 +7,7 @@ s(ato_fala:responder .. mensagem: positivo)--> [sim].
 s(ato_fala:responder .. mensagem: negativo)--> [nao].
 s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
 s(ato_fala:responder .. mensagem: ok) --> [ok].
-s(ato_fala:responder .. mensagem: oi) --> [oi].
+%s(ato_fala:responder .. mensagem: oi) --> [oi].
 s(ato_fala:terminar .. mensagem: tchau) --> [tchau].
 s(ato_fala:terminar .. mensagem: tchau) --> [tchau],[_].
 
@@ -54,8 +55,8 @@ s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T ..indefinid
 /* perguntas */
 s(ato_fala:interro_qu ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
-	sv(puxa_pron:sim ..omite:_ ..acao:X ..tema:T ..pessoa:P),
-        ['?'],
+	sv(puxa_pron:sim ..omite:_ ..acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
+        ['?'].
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 s(ato_fala:interro_adv .. agente:A .. acao:X ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
@@ -108,10 +109,15 @@ s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:si
 
 % SINTAGMA NOMINAL
 % essa regra eh para produzir texto
-%sn(coord:nao ..id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N) ..indefinido:sim) -->
-%    det(gen:G .. num:N ..tipo:Tipo ),
-%    mod(gen:G .. num:N), 
-%	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
+sn(coord:nao .. id:Texto ..indefinido:sim) -->
+	{ nonvar(Texto) },
+	sn_indef(coord:nao ..id:Texto).
+
+sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -->
+    det(gen:G .. num:N ..tipo:Tipo ),
+    mod(gen:G .. num:N), 
+	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
+
 
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
         { (\+ var(I); \+ is_list(I)) },
@@ -227,6 +233,7 @@ cria_np_indefinido(sim, Texto, T, G, N):-
 
 cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
 	( var(IsIndefinido) ; IsIndefinido = nao ),
+	clause(np_indefinido, _),
 	np_indefinido(Texto, _),
 	retract(np_indefinido(Texto, _)).
 
