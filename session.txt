@@ -53,3 +53,54 @@ o que o barco tem?
 zulu > O ancoradouro tem o barco.
 nau > 
 
+Fulk > o que tem aqui?
+narrador > O barco, a corda, as minhocas, a vara de pescar e as tabuas
+estao no ancoradouro.
+Fulk > o que tem no ancoradouro?
+narrador > O barco, a corda, as minhocas, a vara de pescar e as tabuas
+estao no ancoradouro.
+Fulk > onde estah o zulu?
+narrador > O zulu estah no ancoradouro.
+Fulk > o zulu estah no ancoradouro?
+narrador > Sim
+Fulk > eu posso pegar as minhocas?
+narrador > H� hein?
+Fulk > onde estao as minhocas?
+narrador > As minhocas estao no ancoradouro.
+Fulk > o que tem no barco?
+narrador > O buraco, a corda e os pregos estao no barco.
+Fulk > eu pego os pregos.
+narrador > H� hein?
+Fulk > eu pego a corda.
+narrador > Voce nao pode pegar a corda.
+Fulk > eu pego as minhocas.
+narrador > H� hein?
+Fulk > o que eu tenho?
+narrador > O cartao de credito, a identidade e a sua mao estao contigo.
+Fulk > o que o zulu tem?
+narrador > Nada estah no zulu.
+Fulk > eu vou para a carpintaria.
+narrador > Ok
+Fulk > onde eu estou?
+narrador > Voce estah na carpintaria.
+Fulk > quem estah aqui?
+narrador > O mateo e voce estao na carpintaria.
+Fulk > quem eh o mateo?
+narrador > Ninguem eh do mateo.
+Fulk > o que tem aqui?
+narrador > O balcao, o caixa eletronico, a carteira, o estande, a placa e o
+poster estao na carpintaria.
+Fulk > eu pego a carteira.
+narrador > Voce nao pode pegar a carteira.
+Fulk > eu posso pegar a carteira?
+narrador > Nao
+Fulk > o que tem no balcao?
+narrador > A caixa registradora, o circulo de velas e o vaso ming estao no
+balcao.
+Fulk > eu pego o vaso ming.
+narrador > Ok
+Fulk > o que eu tenho?
+narrador > O cartao de credito, a identidade, o vaso ming e a sua mao estao
+contigo.
+Fulk > onde estah o vaso ming?
+narrador > O vaso ming estah contigo.
