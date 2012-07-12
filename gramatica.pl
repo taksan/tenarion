@@ -108,11 +108,16 @@ s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:si
 
 % SINTAGMA NOMINAL
 % essa regra eh para produzir texto
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:sim) -->
-        { var(I), var(T) },
-    det(gen:G .. num:N ..tipo:T ),
-    mod(gen:G .. num:N), 
-	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:sim).
+%sn(coord:nao ..id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N) ..indefinido:sim) -->
+%    det(gen:G .. num:N ..tipo:Tipo ),
+%    mod(gen:G .. num:N), 
+%	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
+
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
+        { (\+ var(I); \+ is_list(I)) },
+    ident(gen:G .. num:N ..tipo:T),
+	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao),
+	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
 
 % a regra abaixo faz match do texto, nao deve ser usada para produzir texto
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
@@ -122,11 +127,6 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
     mod(gen:G .. num:N),
 	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
-
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
-        { (\+ var(I); \+ is_list(I)); var(IsIndefinido) },
-    ident(gen:G .. num:N ..tipo:T),
-	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido).
 
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
         { \+ is_list(Ag) },
@@ -210,16 +210,19 @@ mod(_) --> sp(_).
 mod(_) --> [].
 
 
+np_indefinido($,$).
+
 cria_np_indefinido(IsIndefinido,_, _, _, _):-
 	var(IsIndefinido),
 	IsIndefinido = nao.
 
 cria_np_indefinido(sim, Texto, T, G, N):-
 	nonvar(T), nonvar(G), nonvar(N),
+	retract(np_indefinido($,$)),
 	assertz(np_indefinido(Texto, indefinido(texto: Texto ..tipo:T ..gen:G ..num:N))).
 
 cria_np_indefinido(IsIndefinido,Texto, _, _, _):-
-	var(IsIndefinido),
+	( var(IsIndefinido) ; IsIndefinido = nao ),
 	np_indefinido(Texto, _),
 	retract(np_indefinido(Texto, _)).
 
