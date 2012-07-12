@@ -116,8 +116,7 @@ s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:si
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
         { (\+ var(I); \+ is_list(I)) },
     ident(gen:G .. num:N ..tipo:T),
-	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao),
-	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
+	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao).
 
 % a regra abaixo faz match do texto, nao deve ser usada para produzir texto
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
@@ -138,15 +137,22 @@ sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
            denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
           \+ var(Ag)}.
 
-sn(coord:sim ..id:[A1,A2] .. num:plur) -->
+sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
+	{ var(P) },
 	sn(id:A1 .. coord:nao),
 	[e],
 	sn(id:A2 .. coord:nao).
 
-sn(coord:sim ..id:[A1|Resto] .. num:plur) -->
+sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
+	{ \+ var(P) },
+	sn(id:A1 .. coord:nao),
+	[e],
+	sp(id:A2 .. prep:P).
+
+sn(coord:sim ..id:[A1|Resto] .. num:plur ..prep:P) -->
 	sn(id:A1 .. coord:nao),
 	[,],
-	sn(coord:sim .. id:Resto).
+	sn(coord:sim .. id:Resto ..prep:P).
 
 sv(omite:O ..acao:A ..acao_aux:(acao:AX ..pessoa:PX ..num:NX ) ..tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 %	{ write([A,T,N,P,G,IndefN]), nl },
@@ -180,7 +186,7 @@ sv(pessoa:P ..acao_aux: AX ..acao:A .. tema:T .. num:N ..indefinido:IsIndefinido
 	
 sp(id:I .. prep:P ..indefinido:IsIndefinido) -->
     prep(prep:P),
-    sn(id:I ..indefinido:IsIndefinido).
+    sn(id:I ..indefinido:IsIndefinido ..prep:P).
 
 sp(id:I .. prep:_) -->
     advb(adv:A),
