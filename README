@@ -1,0 +1,4 @@
+Para jogar:
+$ apt-get install swi-prolog
+$ swipl -s rpg.pl
+> jogar.

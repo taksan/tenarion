@@ -70,8 +70,6 @@ s(ato_fala:interro_adv .. agente:Ag .. acao:X ..indefinido:IsIndefinido ) -->
         sv(puxa_pron:sim ..omite:sim ..acao:X ..tema:A ..indefinido:IsIndefinido),
         ['?'],
 	{ 
-		write([A, ' ', IsIndefinido]),nl,
-	  spy(determina_indefinido),
 	  determina_indefinido(A, IsIndefinido, Ag)
 	}.
 
@@ -104,13 +102,13 @@ s(ato_fala:int_sim_nao_aux .. agente:A .. acao_aux: AX ..acao:X .. tema:T ..inde
 
 
 /* atos de fala diversos */
-s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao) -->
-	sn(coord:nao ..id:A),
+s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao ..pessoa:Pessoa) -->
+	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], [pode],
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
         pontuacao_opcional(_).
 
-s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:sim) -->
+s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:sim ..pessoa:Pessoa) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], 
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. acao_aux:AX ..tema:Tema ..pessoa: Pessoa ..indefinido:sim),
@@ -118,13 +116,11 @@ s(ato_fala:recusar ..agente:A ..acao:X.. acao_aux:AX ..tema:Tema ..indefinido:si
 
 % SINTAGMA NOMINAL
 % essa regra eh para produzir texto
-sn(coord:nao .. id:Texto ..indefinido:sim) -->
+sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
 	{ nonvar(Texto) },
-	sn_indef(coord:nao ..id:Texto).
+	sn_indef(coord:nao ..id:Texto ..pessoa:terc).
 
 sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -->
-    det(gen:G .. num:N ..tipo:Tipo ),
-    mod(gen:G .. num:N), 
 	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
 
 
@@ -144,13 +140,16 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:IsIndefi
 
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
         { \+ is_list(Ag) },
-        { ( (\+ var(Ag); \+ var(T)), 
+        { ( (nonvar(Ag); nonvar(T)), 
            denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
            var(Ag)},
         pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
         { (var(Ag),
            denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
           \+ var(Ag)}.
+
+sn(coord:nao ..id:narrador ..pessoa:prim ..indefinido:nao) -->
+	[eu].
 
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ var(P) },

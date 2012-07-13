@@ -90,9 +90,11 @@ processar(
 		..indefinido:sim 
 		..acao:entender
 		..num:sing
+		..acao_aux:(acao:ser ..pessoa:terc ..num:Num ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
 		..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num) 
-		..acao_aux:(acao:ser ..pessoa:terc ..num:Num)
-		..agente:zulu )):-
+		..agente:narrador
+		..pessoa:prim
+		)):-
 	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 %processar(
