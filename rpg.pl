@@ -85,7 +85,7 @@ processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Re
 % perguntas qu
 
 processar(
-	(ato_fala:interro_adv ..indefinido:sim ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	(ato_fala:interro_adv ..indefinido:sim ..agente:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
 	(ato_fala:recusar 
 		..indefinido:sim 
 		..acao:entender
@@ -93,7 +93,6 @@ processar(
 		..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num) 
 		..acao_aux:(acao:ser ..pessoa:terc ..num:Num)
 		..agente:zulu )):-
-
 	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 %processar(
@@ -114,6 +113,7 @@ processar((ato_fala:interro_qu ..indefinido:nao ..agente:incog(Tipo) ..acao:Rela
 
 processar((ato_fala:interro_adv ..indefinido:nao ..agente:Agent .. acao:Relacao .. tema:T),
           (ato_fala:informar .. agente:Ag .. acao:Relacao ..tema:TS ..pessoa:terc)):-
+		\+ compound(Agent),
         PredAcao =.. [Relacao, Agent, T],
 		findall(T, (PredAcao), L),
         ( (\+ L = [], setof(A, member(A,L), L1));

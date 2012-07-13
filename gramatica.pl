@@ -1,6 +1,12 @@
 /*********************** Gramatica *********************/
 :- dynamic(np_indefinido/2).
 
+/*
+ * premissas:
+ * 	o verbo deve concordar com o agente, e nao com o tema!
+ *  
+ */
+
 /*** Mensagens simples ****/
 s([]) --> [].
 s(ato_fala:responder .. mensagem: positivo)--> [sim].
@@ -16,14 +22,14 @@ s(ato_fala:terminar .. mensagem: tchau) --> [tchau],[_].
 /* informar / mandar */
 s(ato_fala:informar ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)}, 
-	sn(id:A .. num: _ ..pessoa:Pes),
+	sn(id:A .. num: N ..pessoa:Pes), 
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
         pontuacao_opcional(_),
 	{ determina_indefinido(A, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)},
-	sn(id:A .. num: _),     
+	sn(id:A .. num: N),     
 	sv(puxa_pron:nao ..omite:nao ..(acao:X .. tema:T .. num:N)),
         pontuacao_opcional(_),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
@@ -59,16 +65,19 @@ s(ato_fala:interro_qu ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsInde
         ['?'],
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
-s(ato_fala:interro_adv .. agente:A .. acao:X ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
-        sp(_), 
-        sv(puxa_pron:sim ..omite:sim ..acao:X ..tema:A),
+s(ato_fala:interro_adv .. agente:Ag .. acao:X ..indefinido:IsIndefinido ) -->
+        sp(_), 											%ex.: onde
+        sv(puxa_pron:sim ..omite:sim ..acao:X ..tema:A ..indefinido:IsIndefinido),
         ['?'],
-	{ determina_indefinido(A, IsIndefinido, EI) }.
+	{ 
+		write([A, ' ', IsIndefinido]),nl,
+	  spy(determina_indefinido),
+	  determina_indefinido(A, IsIndefinido, Ag)
+	}.
 
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
-		{ AX = '' },
-	sn(id:A),
-	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T),
+	sn(id:A ..num:N),
+	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T ..num:N),
         ['?'],
 	{ 
 		determina_indefinido(T, IsIndefinido, EI);
@@ -125,7 +134,7 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao).
 
 % a regra abaixo faz match do texto, nao deve ser usada para produzir texto
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:nao) -->
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
         { var(I), var(T), var(IsIndefinido) },
     det(gen:G .. num:N ..tipo:T ),
     mod(gen:G .. num:N), 
@@ -181,6 +190,11 @@ sv(omite:O ..acao:A .. tema:T ..gen:G ..num:N ..pessoa:P ..indefinido:IsIndefini
 sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	sn(id:T ..pessoa:P ..num:N ..indefinido:IsIndefinido),
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
+
+%sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
+%	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+%	sn(id:T ..pessoa:P ..num:N ..indefinido:IsIndefinido).
+
 
 sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
@@ -245,8 +259,9 @@ determina_indefinido(IdentidadeIndefinido, sim, Tracos):-
 	np_indefinido(IdentidadeIndefinido, Tracos),!,
 	retract(np_indefinido(IdentidadeIndefinido, _)).
 
-determina_indefinido(IdentidadeIndefinido, nao, []):-
+determina_indefinido(IdentidadeIndefinido, nao, IdentidadeIndefinido):-
 	\+ np_indefinido(IdentidadeIndefinido, _).
 
-determina_indefinido(_, _,_):-
+determina_indefinido(A, _,A):-
+	\+ compound(A),
 	retractall(np_indefinido).
