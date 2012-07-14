@@ -1,4 +1,5 @@
 /*********************** Gramatica *********************/
+:-[gulp].
 :- dynamic(np_indefinido/2).
 
 /*
@@ -13,9 +14,15 @@ s(ato_fala:responder .. mensagem: positivo)--> [sim].
 s(ato_fala:responder .. mensagem: negativo)--> [nao].
 s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
 s(ato_fala:responder .. mensagem: ok) --> [ok].
-%s(ato_fala:responder .. mensagem: oi) --> [oi].
+s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
 s(ato_fala:terminar .. mensagem: tchau) --> [tchau].
 s(ato_fala:terminar .. mensagem: tchau) --> [tchau],[_].
+
+
+s(ato_fala:responder .. mensagem: oi ..tema:T) --> 
+	[oi],
+	sn(id:T),
+	pontuacao_opcional('.').
 
 /*** Gramatica Real ****/
 
@@ -24,37 +31,34 @@ s(ato_fala:informar ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..indefinido:IsI
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes), 
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
-        pontuacao_opcional(_),
+    	pontuacao_opcional('.'),
 	{ determina_indefinido(A, IsIndefinido, EI) }.
 
 s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
         {\+ is_list(A)},
-	sn(id:A .. num: N),     
+	sn(id:A .. num: N),
 	sv(puxa_pron:nao ..omite:nao ..(acao:X .. tema:T .. num:N)),
-        pontuacao_opcional(_),
+    pontuacao_opcional('.'),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
-s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E  ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
-	sn(tipo: pron_ninguem(E) .. coord:nao),
-	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-        pontuacao_opcional(_),
-	{ determina_indefinido(T, IsIndefinido, EI) }.
-
+% sentenca onde o agente eh "ninguem" ou "nada". (ex: nada estah aqui)
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(puxa_pron:nao ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-        pontuacao_opcional(_),
+        pontuacao_opcional('.'),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
+% sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
 s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
-        pontuacao_opcional(_),
+        pontuacao_opcional('.'),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
-s(ato_fala:informar ..agente:[pessoa(P), num(N)] .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
+% sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
+s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..indefinido:IsIndefinido ..elemento_indefinido:EI) -->
     sv(puxa_pron:nao ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
-        pontuacao_opcional(_),
+        pontuacao_opcional('.'),
 	{ determina_indefinido(T, IsIndefinido, EI) }.
 
 
@@ -98,19 +102,30 @@ s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..indefinido:nao ..pessoa:Pesso
 	sn(coord:nao ..id:A ..pessoa:Pessoa),
         [nao], [pode],
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
-        pontuacao_opcional(_).
+        pontuacao_opcional('.').
 
 % funciona para resposta do tipo tipo "eu nao sei o que eh faca"
 s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..indefinido:sim ..pessoa:Pessoa) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa ..tipo:_ ..produzindo:sim),
         [nao], 
 	sv(puxa_pron:nao ..omite:_ ..acao:X .. tema:Tema ..pessoa: Pessoa ..indefinido:sim),
-        pontuacao_opcional(_).
+        pontuacao_opcional('.').
 
 % SINTAGMA NOMINAL
 sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -->
     ident(gen:G .. num:N ..tipo:Tipo),
 	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
+
+% casa com pronomes: eu, ele, voce
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
+        { \+ is_list(Ag) },
+        { ( (nonvar(Ag); nonvar(T)), 
+           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
+           var(Ag)},
+        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
+        { (var(Ag),
+           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
+          \+ var(Ag)}.
 
 % essa regra eh para produzir texto sobre substantivos indefinidos
 sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
@@ -131,17 +146,6 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:IsIndefi
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
     mod(gen:G .. num:N),
 	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
-
-% casa com pronomes: eu, ele, voce
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
-        { \+ is_list(Ag) },
-        { ( (nonvar(Ag); nonvar(T)), 
-           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
-           var(Ag)},
-        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
-        { (var(Ag),
-           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
-          \+ var(Ag)}.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
@@ -249,8 +253,7 @@ mod(_) --> sp(_).
 
 mod(_) --> [].
 
-pontuacao_opcional(_) --> ['.'].%pontuacao_opcional(_).
-pontuacao_opcional(_) --> [].
+pontuacao_opcional(P) --> [P];[].
 
 % tratamento de casos indefinidos
 

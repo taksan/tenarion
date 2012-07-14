@@ -1,3 +1,5 @@
+:-[gulp].
+
 %%%% ADJETIVOS
 
 a(adj:sem_fio ..gen:_ ..num:_) --> [sem], [fio].
@@ -46,7 +48,7 @@ num(num:plur) -->   [doze].
 num(num:plur) -->   [treze].
 num(_) -->   [].
 
-%%%% ADV* (que raio é isso??)
+%%%% ADV* (que raio ï¿½ isso??)
 adv -->  [bem].
 adv -->  [mais].
 
@@ -162,21 +164,21 @@ np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [vitor
 np(id:T ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
-pro(tipo_pro:reto .. num:sing .. pessoa:prim) --> [eu].
-pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem) --> [ela].
-pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc) --> [ele].
-pro(tipo_pro:voce .. num:sing .. pessoa:terc) --> [voce].
-pro(tipo_pro:reto .. num:plur .. pessoa:prim) --> [nos].
-pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[]) --> [mim].
-pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv]) --> [me].
-pro(tipo_pro:obliquo ..num:sing ..pessoa:seg) -->  [te].
+pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
+pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem ..pron:ela) --> [ela].
+pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
+pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
+pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
+pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[] ..pron:mim) --> [mim].
+pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv] ..pron:me) --> [me].
+pro(tipo_pro:obliquo ..num:sing ..pessoa:seg ..pron:te) -->  [te].
 pro(tipo_pro:pron_qu ..pron:quem) --> [quem].
 pro(tipo_pro:pron_qu ..pron:que) --> [que].
 pro(tipo_pro:pron_qu ..pron:oque) --> [o],[que].
 pro(tipo_pro:pron_qu ..pron:qual ..num:sing ) --> [qual].
 pro(tipo_pro:pron_qu ..pron:qual ..num:plur ) --> [quais].
-pro(tipo_pro:pron_ninguem(quem)) --> [ninguem].
-pro(tipo_pro:pron_ninguem(oque))--> [nada].
+pro(tipo_pro:pron_ninguem(quem) ..pron:ninguem) --> [ninguem].
+pro(tipo_pro:pron_ninguem(oque) ..pron:nada)--> [nada].
 
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:onde) --> [onde].
