@@ -170,16 +170,4 @@ cap([F|Rest],[F2|Rest]):-
 	C2 is C -32,
 	char_code(F2,C2).
 
-%%%%%%%% Utilizado para contracoes/quebra
-
-equivale(na, [em, a]).
-equivale(no, [em, o]).
-equivale(da, [de, a]).
-equivale(das, [de, as]).
-equivale(do, [de, o]).
-equivale(dos, [de, os]).
-equivale(comigo, [em, eu]).
-equivale(contigo, [em, voce]).
-equivale(nele, [em, ele]).
-
 %char_code(X,X).

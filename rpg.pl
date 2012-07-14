@@ -62,21 +62,23 @@ processar([],[]).
 
 processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
           (ato_fala:responder .. mensagem:positivo)):-
+		\+ compound(T),
         PredAcao =.. [Relacao, A, T],
         PredAcao.
 
 processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
           (ato_fala:responder .. mensagem:negativo)):-
+		\+ compound(T),
         PredAcao =.. [Relacao, A, T],
         \+ PredAcao.
 
-processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux: AcaoAuxiliar ..acao:Relacao ..tema:T),
+processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:positivo)):-
 		concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
         PredAcao =.. [RelacaoAuxiliar, A, T],
         PredAcao.
 
-processar((ato_fala:int_sim_nao_aux ..agente:A ..acao_aux:AcaoAuxiliar ..acao:Relacao ..tema:T),
+processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:negativo)):-
 		concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
         PredAcao =.. [RelacaoAuxiliar, A, T],
@@ -90,8 +92,7 @@ processar(
 		..indefinido:sim 
 		..acao:entender
 		..num:sing
-		..acao_aux:(acao:ser ..pessoa:terc ..num:Num ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
-		..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num) 
+		..tema:(acao:ser ..pessoa:terc ..num:Num ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
 		..agente:narrador
 		..pessoa:prim
 		)):-

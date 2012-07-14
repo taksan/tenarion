@@ -51,14 +51,20 @@ adv -->  [bem].
 adv -->  [mais].
 
 %%%% IDENT
-ident(gen:masc.. num:sing ..tipo:nc) --> [o].
-ident(gen:fem.. num:sing ..tipo:nc) --> [a].
-ident(gen:masc.. num:plur ..tipo:nc) --> [os].
-ident(gen:fem.. num:plur ..tipo:nc) --> [as].
+% tipo:nc -> nome comum
+% tipo:np -> nome proprio
+% vai preferir usar nc para respostas, a nao ser que o objeto seja NP mesmo
+ident(gen:masc.. num:sing ..tipo:np) --> [o].
+ident(gen:fem.. num:sing ..tipo:np) --> [a].
+ident(gen:masc.. num:plur ..tipo:np) --> [os].
+ident(gen:fem.. num:plur ..tipo:np) --> [as].
 ident(gen:masc.. num:sing..tipo:nc) --> [um].
 ident(gen:fem.. num:sing..tipo:nc) --> [uma]. 
+ident(gen:masc.. num:plur..tipo:nc) --> [alguns].
 ident(gen:masc.. num:plur..tipo:nc) --> [uns].
+ident(gen:fem.. num:plur..tipo:nc) --> [algumas].
 ident(gen:fem.. num:plur..tipo:nc) --> [umas].
+
 ident(gen:masc.. num:sing..tipo:nc) --> [esse].
 ident(gen:fem.. num:sing..tipo:nc) --> [essa].
 ident(gen:masc.. num:plur..tipo:nc) --> [esses].
@@ -71,6 +77,12 @@ ident(gen:masc.. num:sing..tipo:nc) --> [aquele].
 ident(gen:fem.. num:sing..tipo:nc) --> [aquela].
 ident(gen:masc.. num:plur..tipo:nc) --> [aqueles].
 ident(gen:fem.. num:plur..tipo:nc) --> [aquelas].
+% em dialogos, o a os as podem ser usados com nomes comuns
+ident(gen:masc.. num:sing ..tipo:nc) --> [o].
+ident(gen:fem.. num:sing ..tipo:nc) --> [a].
+ident(gen:masc.. num:plur ..tipo:nc) --> [os].
+ident(gen:fem.. num:plur ..tipo:nc) --> [as].
+
 ident(tipo:np) --> [].
 
 %%%% POSSESSIVOS
@@ -94,21 +106,31 @@ prep(prep:de) --> [de].
 prep(prep:a) --> [a].
 
 %%%% NOMES 
-np(id:zulu ..gen:masc ..num:sing ..indefinido:nao) --> [zulu].
-np(id:mateo ..gen:masc ..num:sing ..indefinido:nao) --> [mateo].
-np(id:narrador ..gen:masc ..num:sing ..indefinido:nao) --> [eu].
+
+% personagens (pessoas)
+np(id:zulu ..gen:masc ..num:sing ..indefinido:nao ..tipo:np) --> [zulu].
+np(id:mateo ..gen:masc ..num:sing ..indefinido:nao ..tipo:np) --> [mateo].
 
 np(id:sua(mao) ..gen:fem ..num:sing ..indefinido:nao) --> [sua],[mao].
 
+% objetos com nomes proprios (np), serao designados com o os a as
+np(id:ancoradouro .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [ancoradouro].
+np(id:balcao .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [balcao].
+np(id:carpintaria .. tipo:np ..num:sing ..gen:fem ..indefinido:nao) --> [carpintaria].
+np(id:caixa_eletronico .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [caixa],[eletronico].
+np(id:estande .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [estande].
+np(id:feiticeira .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [feiticeira].
+np(id:ilha .. tipo:np ..num:sing ..gen:fem ..indefinido:nao) --> [ilha].
+np(id:jogo .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [jogo].
+np(id:lago .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [lago].
+np(id:santo_do_pau_oco .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [santo],[do],[pau],[oco].
+np(id:identidade .. tipo:np ..num:sing ..gen:fem ..indefinido:nao) --> [identidade].
+np(id:barco .. tipo:np ..num:sing ..gen:masc ..indefinido:nao) --> [barco].
+
 np(id:agua_do_lago .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [agua].
-np(id:ancoradouro .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [ancoradouro].
-np(id:balcao .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [balcao].
-np(id:barco .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [barco].
 np(id:botoes .. tipo:nc ..num:plur ..gen:masc ..indefinido:nao) --> [botoes].
 np(id:buraco .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [buraco].
 np(id:carteira .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [carteira].
-np(id:carpintaria .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [carpintaria].
-np(id:caixa_eletronico .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [caixa],[eletronico].
 np(id:caixa_registradora .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [caixa],[registradora].
 np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [cartao], [de],[credito].
 np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [cartao].
@@ -116,12 +138,6 @@ np(id:chiclete .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [chiclete]
 np(id:circulo_de_velas .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [circulo],[de],[velas].
 np(id:corda .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [corda].
 np(id:dinheiro .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [dinheiro].
-np(id:estande .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [estande].
-np(id:feiticeira .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [feiticeira].
-np(id:identidade .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [identidade].
-np(id:ilha .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [ilha].
-np(id:jogo .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [jogo].
-np(id:lago .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [lago].
 np(id:mao .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [mao].
 np(id:martelo .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [martelo].
 np(id:minhocas .. tipo:nc ..num:plur ..gen:fem ..indefinido:nao) --> [minhocas].
@@ -131,7 +147,6 @@ np(id:peixes .. tipo:nc ..num:plur ..gen:masc ..indefinido:nao) --> [peixes].
 np(id:placa_nome_loja .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [placa].
 np(id:poster .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [poster].
 np(id:pregos .. tipo:nc ..num:plur ..gen:masc ..indefinido:nao) --> [pregos].
-np(id:santo_do_pau_oco .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [santo],[do],[pau],[oco].
 np(id:serrote .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [serrote].
 np(id:tabua ..tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [tabua].
 np(id:(tabua,_) ..tipo:nc ..num:plur ..gen:fem ..indefinido:nao) --> [tabuas].
@@ -142,6 +157,8 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [vaso],[m
 np(id:vela .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem ..indefinido:nao) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [vitoria-regia].
+
+% casa com nomes indefinidos, ou seja, objetos ou pessoas desconhecidas.
 np(id:T ..indefinido:sim) --> [T].
 
 %%%% PRONOMES
@@ -164,16 +181,21 @@ pro(tipo_pro:pron_ninguem(oque))--> [nada].
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:onde) --> [onde].
 advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
+advb(tipo_adv:negacao ..adv:nao) --> [nao].
+advb(tipo_adv:positivo ..adv:sim) --> [].
 
 %%%% VERBOS
 
 % VERBO: ESTAR
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
-        [estah].
+		{ member(G, [estah, esta]) },
+        [G].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim) --> 
-        [estah].
+		{ member(G, [estah, esta]) },
+        [G].
 v(omite:_ ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sn]) --> 
-        [estah].
+		{ member(G, [estah, esta]) },
+        [G].
 
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
         [estao].
@@ -198,8 +220,8 @@ v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sou].
 
 v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
+v(omite:_ ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
-v(omite:sim ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
 
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
