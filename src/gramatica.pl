@@ -116,17 +116,6 @@ sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -
     ident(gen:G .. num:N ..tipo:Tipo),
 	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
 
-% casa com pronomes: eu, ele, voce
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
-        { \+ is_list(Ag) },
-        { ( (nonvar(Ag); nonvar(T)), 
-           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
-           var(Ag)},
-        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
-        { (var(Ag),
-           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
-          \+ var(Ag)}.
-
 % essa regra eh para produzir texto sobre substantivos indefinidos
 sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
 	{ nonvar(Texto) },
@@ -146,6 +135,17 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:IsIndefi
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
     mod(gen:G .. num:N),
 	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
+
+% casa com pronomes: eu, ele, voce
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
+        { \+ is_list(Ag) },
+        { ( (nonvar(Ag); nonvar(T)), 
+           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
+           var(Ag)},
+        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
+        { (var(Ag),
+           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
+          \+ var(Ag)}.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->

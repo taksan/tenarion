@@ -38,9 +38,10 @@ dialogo:-
 %	contexto_pronomial(jogador),
 	s(Sem,P,[]),
 	processar(Sem,Resposta),!,
-    	once(atualiza_contexto(Sem, Resposta)),!,
  %   	contexto_pronomial(computador),
+	once(atualiza_contexto(Sem, [])),!,
 	s(Resposta,R,[]),
+	once(atualiza_contexto([], Resposta)),!,
 	writeLine(R),
 	continuar(Sem).
 
@@ -182,12 +183,12 @@ contexto((pessoa:terc ..gen:masc ..num:sing), '$').
 atualiza_contexto([], []).
 
 atualiza_contexto((agente:AgPerg ..tema:TemaPerg), []):-
-        denota(Pessoa1, AgPerg),  atualiza_pessoa(Pessoa1, AgPerg),
-        denota(Pessoa2, TemaPerg), atualiza_pessoa(Pessoa2, TemaPerg).
+        quem_denota(Pessoa1, AgPerg),  atualiza_pessoa(Pessoa1, AgPerg),
+        quem_denota(Pessoa2, TemaPerg), atualiza_pessoa(Pessoa2, TemaPerg).
 
 atualiza_contexto([], (agente:AgResp ..tema:TemaResp)):-
-        denota(Pessoa3, AgResp),  atualiza_pessoa(Pessoa3, AgResp),
-        denota(Pessoa4, TemaResp), atualiza_pessoa(Pessoa4, TemaResp).
+        quem_denota(Pessoa3, AgResp),  atualiza_pessoa(Pessoa3, AgResp),
+        quem_denota(Pessoa4, TemaResp), atualiza_pessoa(Pessoa4, TemaResp).
 
 atualiza_contexto((agente:AgPerg ..tema:TemaPerg),
                   (agente:AgResp ..tema:TemaResp)):-
@@ -224,8 +225,13 @@ denota((tipo_pro:reto ..num:sing ..pessoa:prim), voce).
 denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
 	contexto((num:N ..gen:G ..pessoa:terc), X).
 
+
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
+	\+ compound(X),
         np((num:N ..gen:G), [X], []).
+
+quem_denota(Tracos, Substantivo):-
+	denota(Tracos, Substantivo).
 
 novo_agente(voce, voce_resp).
 
