@@ -67,18 +67,6 @@ ident(gen:masc.. num:plur..tipo:nc) --> [uns].
 ident(gen:fem.. num:plur..tipo:nc) --> [algumas].
 ident(gen:fem.. num:plur..tipo:nc) --> [umas].
 
-ident(gen:masc.. num:sing..tipo:nc) --> [esse].
-ident(gen:fem.. num:sing..tipo:nc) --> [essa].
-ident(gen:masc.. num:plur..tipo:nc) --> [esses].
-ident(gen:fem.. num:plur..tipo:nc) --> [essas].
-ident(gen:masc.. num:sing..tipo:nc) --> [este].
-ident(gen:fem.. num:sing..tipo:nc) --> [esta].
-ident(gen:masc.. num:plur..tipo:nc) --> [estes].
-ident(gen:fem.. num:plur..tipo:nc) --> [estas].
-ident(gen:masc.. num:sing..tipo:nc) --> [aquele].
-ident(gen:fem.. num:sing..tipo:nc) --> [aquela].
-ident(gen:masc.. num:plur..tipo:nc) --> [aqueles].
-ident(gen:fem.. num:plur..tipo:nc) --> [aquelas].
 % em dialogos, o a os as podem ser usados com nomes comuns
 ident(gen:masc.. num:sing ..tipo:nc) --> [o].
 ident(gen:fem.. num:sing ..tipo:nc) --> [a].
@@ -168,6 +156,7 @@ pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem ..pron:ela) --> [ela].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
+pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce_resp) --> [voce].
 pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[] ..pron:mim) --> [mim].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv] ..pron:me) --> [me].
@@ -179,10 +168,27 @@ pro(tipo_pro:pron_qu ..pron:qual ..num:sing ) --> [qual].
 pro(tipo_pro:pron_qu ..pron:qual ..num:plur ) --> [quais].
 pro(tipo_pro:pron_ninguem(quem) ..pron:ninguem) --> [ninguem].
 pro(tipo_pro:pron_ninguem(oque) ..pron:nada)--> [nada].
+pro(tipo_pro:pron_ninguem(onde) ..pron:nenhum)--> [nenhum].
+
+pro(tipo_pro:demonstrativo ..pron:esse ..gen:masc.. num:sing) --> [esse].
+pro(tipo_pro:demonstrativo ..pron:essa ..gen:fem.. num:sing) --> [essa].
+pro(tipo_pro:demonstrativo ..pron:esses ..gen:masc.. num:plur) --> [esses].
+pro(tipo_pro:demonstrativo ..pron:essas ..gen:fem.. num:plur) --> [essas].
+pro(tipo_pro:demonstrativo ..pron:este ..gen:masc.. num:sing) --> [este].
+pro(tipo_pro:demonstrativo ..pron:esta ..gen:fem.. num:sing) --> [esta].
+pro(tipo_pro:demonstrativo ..pron:estes ..gen:masc.. num:plur) --> [estes].
+pro(tipo_pro:demonstrativo ..pron:estas ..gen:fem.. num:plur) --> [estas].
+pro(tipo_pro:demonstrativo ..pron:aquele ..gen:masc.. num:sing) --> [aquele].
+pro(tipo_pro:demonstrativo ..pron:aquela ..gen:fem.. num:sing) --> [aquela].
+pro(tipo_pro:demonstrativo ..pron:aqueles ..gen:masc.. num:plur) --> [aqueles].
+pro(tipo_pro:demonstrativo ..pron:aquelas ..gen:fem.. num:plur) --> [aquelas].
+pro(tipo_pro:demonstrativo ..pron:aquilo ..gen:masc.. num:sing) --> [aquilo].
+pro(tipo_pro:relativo ..pron:onde) --> [onde].
+pro(tipo_pro:relativo ..pron:aqui  ..prep:[]) --> [aqui].
 
 %%%% ADVERBIOS
-advb(tipo_adv:lugar ..adv:onde) --> [onde].
-advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
+%advb(tipo_adv:lugar ..adv:onde) --> [onde].
+%advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
 advb(tipo_adv:negacao ..adv:nao) --> [nao].
 advb(tipo_adv:positivo ..adv:sim) --> [].
 
@@ -384,55 +390,38 @@ v(omite:nao ..acao:examinar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [olha].
 
 v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [olhar].
 
-% VERBO: TER
+% VERBO: TER e
 v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[]) --> [tenho].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
-
 v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
-
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
-
 v(omite:sim ..acao:estar ..num:sing ..pessoa: terc ..subcat:[]) --> [tem].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].
 
 % VERBO: POSSUIR
 v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [possuo].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [possuo].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [possui].
-
 v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sn]) --> [possuir].
 
 % VERBO: DIGITAR
 v(omite:nao ..acao:digitar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [digito].
-
 v(omite:nao ..acao:digitar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [digito].
-
 v(omite:nao ..acao:digitar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [digitar].
 
 % VERBO: PODER
 v(omite:nao ..acao:poder ..num:sing ..pessoa: prim ..subcat:[sv]) --> [posso].
-
 v(omite:nao ..acao:poder ..num:sing ..pessoa: terc ..subcat:[sv]) --> [pode].
-
 v(omite:nao ..acao:poder ..num:sing ..pessoa: indic ..subcat:[sv]) --> [poder].
-
 
 % VERBO: VER
 v(omite:nao ..acao:ver ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vejo].
-
 v(omite:nao ..acao:ver ..num:sing ..pessoa: terc ..subcat:[sn]) --> [ve].
-
 v(omite:nao ..acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 
 % "VERBO": "SER DONO DE"
 v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
-
 v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
 
 % VERBO: entender

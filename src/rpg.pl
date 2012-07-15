@@ -8,7 +8,7 @@
 /*
  Programa principal que controla o jogo
 
- Para executar, � s� escrever a consulta "jogar".
+ Para executar, é só escrever a consulta "jogar".
 */
 
 cleanup_player:-
@@ -37,9 +37,9 @@ dialogo:-
     once(readLine(P)),
 %	contexto_pronomial(jogador),
 	s(Sem,P,[]),
+	once(atualiza_contexto(Sem, [])),!,	
 	processar(Sem,Resposta),!,
  %   	contexto_pronomial(computador),
-	once(atualiza_contexto(Sem, [])),!,
 	s(Resposta,R,[]),
 	once(atualiza_contexto([], Resposta)),!,
 	writeLine(R),
@@ -90,7 +90,7 @@ processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxil
 % perguntas qu
 
 processar(
-	(ato_fala:interro_adv ..indefinido:sim ..agente:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	(ato_fala:interro_tema_desconhecido ..indefinido:sim ..agente:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
 	(ato_fala:recusar 
 		..indefinido:sim 
 		..acao:entender
@@ -102,48 +102,46 @@ processar(
 	adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 % encontra possibilidades de poder fazer alguma coisa
-processar((ato_fala:interro_adv ..agente:Agent ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
-	   (ato_fala:informar .. agente:Ag .. acao:Relacao ..tema:TS ..pessoa:terc)):-
+processar((ato_fala:interro_tema_desconhecido ..agente:Agent ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
+	   (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
 	nonvar(AcaoAuxiliar),
 	nonvar(Relacao),
 	concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
         PredAcao =.. [RelacaoAuxiliar, A, T],
 	findall(T, (PredAcao), L),
         ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-        filtrar(L1,TS),
-        novo_agente(Agent, Ag).
+        filtrar(L1,TS).
 
-processar((ato_fala:interro_adv ..indefinido:nao ..agente:Agent .. acao:Relacao .. tema:T),
-          (ato_fala:informar .. agente:Ag .. acao:Relacao ..tema:TS ..pessoa:terc)):-
+processar((ato_fala:interro_tema_desconhecido ..indefinido:nao ..agente:Agent .. acao:Relacao .. tema:incog(_)),
+          (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
 	\+ compound(Agent),
-        PredAcao =.. [Relacao, Agent, T],
-	findall(T, (PredAcao), L),
+	% TODO: o tipo do tema pode ser usado para restringir as respostas
+        PredAcao =.. [Relacao, Agent, TemaSolucao],
+	findall(TemaSolucao, (PredAcao), L),
         ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-        filtrar(L1,TS),
-        novo_agente(Agent, Ag).
+        filtrar(L1,TS).
 
 % o que ou quem        
 
-processar((ato_fala:interro_qu ..indefinido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
-   (ato_fala:informar .. agente:W ..acao:RelacaoAjustada .. tema:T1 ..pessoa:terc ..entidade:Tipo)):-
+processar((ato_fala:interro_agente_desconhecido ..indefinido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
+   (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema:T ..pessoa:terc ..entidade:Tipo)):-
 	ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
         PredAcao =.. [RelacaoAjustada, A, T],
 	findall(A, (PredAcao, entidade(A, Tipo)), L),
         ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
         filtrar(L1,W),
-        novo_agente(T,T1).
-
+        traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
 
 processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
           (ato_fala:responder .. mensagem:ok)):-
-		determina_agente(A, Ag),
+	determina_agente(A, Ag),
         PredAcao =.. [Relacao, Ag, T],
         notrace(PredAcao).
 
 processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
-          (ato_fala:recusar .. agente:voce_resp .. acao:Relacao .. tema:T)):-
-		determina_agente(A, Ag),
-        PredAcao =.. [Relacao, A, T],
+          (ato_fala:recusar .. agente:jogador .. acao:Relacao .. tema:T)):-
+	determina_agente(A, Ag),
+        PredAcao =.. [Relacao, Ag, T],
         \+ notrace(PredAcao).
 
 %%% acao cujo resultado eh descritivo
@@ -165,8 +163,14 @@ processar(_, []):-
 % converte o verbo ter para estar se o alvo eh racional; isso corrige o problema de personagens serem possuidos por coisas
 ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
 	racional(QuemTemOuEsta).
-
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
+
+traduz_agente_para_evitar_ambiguidade([],[]).
+traduz_agente_para_evitar_ambiguidade(voce, jogador).
+traduz_agente_para_evitar_ambiguidade([voce|Resto], [jogador|Resto]).
+traduz_agente_para_evitar_ambiguidade([Alguem|Resto], [Alguem|RestoRes]):-
+	\+ Alguem = voce,
+	traduz_agente_para_evitar_ambiguidade(Resto, RestoRes).
 
 % normalizacao	
 filtrar([X],X):-!.
@@ -175,73 +179,106 @@ filtrar(X,X):-!.
 /* Resolucao e manutencao de contexto */
 
 %% mantem mapeamento para ultimas referencias por genero
-contexto((pessoa:terc ..gen:fem ..num:sing), '$').
-contexto((pessoa:terc ..gen:masc ..num:sing), '$'). 
+contexto((tipo_pro:voce) , X):-
+	falando_com(voce, X).
+contexto((tipo_pro:relativo ..pron:aqui),Lugar):-
+	estar(voce, Lugar).	
+%contexto((pessoa:terc ..gen:fem ..num:sing), quem).
+%contexto((pessoa:terc ..gen:masc ..num:sing), quem).
+contexto((pessoa:prim ..num:sing), voce). 
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
+atualiza_pron_voce(vindo_de_pergunta):-
+	atualiza_pessoa((tipo_pro:voce) , voce),
+	atualiza_pron_aqui.
+	
+atualiza_pron_voce(vindo_de_resposta):-
+	falando_com(voce, X),
+	atualiza_pessoa((tipo_pro:voce) , X),
+	atualiza_pron_aqui.	
 
+atualiza_pron_aqui:-
+	contexto((tipo_pro:relativo ..pron:aqui),_);
+	(
+		estar(voce, Lugar),
+		asserta(contexto((tipo_pro:relativo ..pron:aqui), Lugar))
+	).
+	
 atualiza_contexto([], []).
 
+atualiza_contexto((agente:incog(_) ..tema:_), []):-
+	atualiza_pron_voce(vindo_de_pergunta).        
+
+atualiza_contexto((agente:_ ..tema:incog(onde)), []):-
+	atualiza_pron_voce(vindo_de_pergunta),
+	contexto((tipo_pro:relativo ..pron:aqui),Local),
+	retractall(contexto(_,Local)).
+
+
+atualiza_contexto((agente:_ ..tema:incog(_)), []):-
+	atualiza_pron_voce(vindo_de_pergunta).
+
 atualiza_contexto((agente:AgPerg ..tema:TemaPerg), []):-
-        quem_denota(Pessoa1, AgPerg),  atualiza_pessoa(Pessoa1, AgPerg),
-        quem_denota(Pessoa2, TemaPerg), atualiza_pessoa(Pessoa2, TemaPerg).
+        quem_denota(TracosPessoa1, AgPerg),  atualiza_pessoa(TracosPessoa1, AgPerg),
+        quem_denota(TracosPessoa2, TemaPerg), atualiza_pessoa(TracosPessoa2, TemaPerg),
+	atualiza_pron_voce(vindo_de_pergunta).        
 
 atualiza_contexto([], (agente:AgResp ..tema:TemaResp)):-
-        quem_denota(Pessoa3, AgResp),  atualiza_pessoa(Pessoa3, AgResp),
-        quem_denota(Pessoa4, TemaResp), atualiza_pessoa(Pessoa4, TemaResp).
-
-atualiza_contexto((agente:AgPerg ..tema:TemaPerg),
-                  (agente:AgResp ..tema:TemaResp)):-
-        atualiza_contexto((agente:AgPerg ..tema:TemaPerg), []),
-        atualiza_contexto([], (agente:AgResp ..tema:TemaResp)).
+        quem_denota(TracosPessoa3, AgResp),  atualiza_pessoa(TracosPessoa3, AgResp),
+        quem_denota(TracosPessoa4, TemaResp), atualiza_pessoa(TracosPessoa4, TemaResp),
+	atualiza_pron_voce(vindo_de_resposta).        
 
 atualiza_pessoa(Pessoa, NovoValor):-
         nonvar(NovoValor),
-        retract(contexto(Pessoa, _)),
-        assert(contexto(Pessoa, NovoValor)).
+        retractall(contexto(_, NovoValor)),
+        retractall(contexto(Pessoa, _)),
+        asserta(contexto(Pessoa, NovoValor)).
 
 atualiza_pessoa(_ , _).
 
 
 %% determinacao do agente baseado no contexto
-denota((tipo_pro:pron_qu ..pron:P), P).
+denota((tipo_pro:voce), jogador).
 
 denota((tipo_pro:pron_ninguem(quem)), ninguem).
 
 denota((tipo_pro:pron_ninguem(oque)), nada).
 
+denota((tipo_pro:relativo ..pron:onde), onde).
+
+denota((tipo_pro:relativo ..pron:P), Alvo):-
+	contexto((tipo_pro:relativo ..pron:P), Alvo).
+	
 denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
+	\+ denota_lugar(aqui, Ag),
         contexto((num:sing ..pessoa:prim ..gen:G), Ag).
-
-denota((tipo_pro:voce), X):-
-        falando_com(voce, X).
         
-denota((tipo_pro:voce), narrador).
-
-denota((tipo_pro:voce ..num:sing ..pessoa:terc), voce_resp):-!.
-
+denota((tipo_pro:voce), X):-
+	contexto((tipo_pro:voce), X).	
+	
 denota((tipo_pro:reto ..num:sing ..pessoa:prim), voce).
-
+	
 denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
-	contexto((num:N ..gen:G ..pessoa:terc), X).
+	contexto((num:N ..gen:G ..pessoa:terc), X),!.
+
+denota((tipo_pro:pron_qu ..pron:P), P).
 
 
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
 	\+ compound(X),
+	nonvar(X),
         np((num:N ..gen:G), [X], []).
 
 quem_denota(Tracos, Substantivo):-
 	denota(Tracos, Substantivo).
-
-novo_agente(voce, voce_resp).
-
-novo_agente(A, A).
 
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
         estar(voce, L).
 
 denota_lugar(onde, onde).
+
+denota_lugar(nenhum, []).
 
 adiciona_termo_a_definir(Termo, Definicao).
 
