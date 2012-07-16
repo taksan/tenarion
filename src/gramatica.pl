@@ -28,14 +28,14 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsIndefinido) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
-	sv(puxa_pron:sim ..omite:_ ..acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
+	sv(puxa_pron:nao ..omite:_ ..acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
         pontuacao_opcional(_).
 	%,{ determina_indefinido(T, IsIndefinido, EI) }.
 
 % 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..indefinido:IsIndefinido ) -->
         spro(id:PronRelativo),
-        sv(puxa_pron:sim ..omite:sim ..acao:X ..tema:A ..indefinido:IsIndefinido),
+        sv(puxa_pron:sim ..acao:X ..tema:A ..indefinido:IsIndefinido),
         pontuacao_opcional(_),
 	{ 
 	  determina_indefinido(A, IsIndefinido, Ag)
@@ -115,14 +115,14 @@ sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -
 	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..indefinido:sim).
 
 % casa com pronomes: eu, ele, voce
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao ..prep:PreposicaoPrecedente) -->
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
         { \+ is_list(Ag) },
         { ( 
         	(nonvar(Ag); nonvar(T)), 
            	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag)
            );
            var(Ag)},
-        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron ..prep:PreposicaoPrecedente), 
+        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
         { (var(Ag),
            denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
           \+ var(Ag)}.
@@ -134,17 +134,17 @@ sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
 
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
         { (\+ var(I); \+ is_list(I)) },
-    ident(gen:G .. num:N ..tipo:T),
+    	ident(gen:G .. num:N ..tipo:T),
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:nao).
 
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
 % nao aceita produzir texto
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..indefinido:IsIndefinido) -->
         { var(I), var(T), var(IsIndefinido) },
-    det(gen:G .. num:N ..tipo:T ),
-    mod(gen:G .. num:N), 
+	det(gen:G .. num:N ..tipo:T ),
+	mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..indefinido:IsIndefinido),
-    mod(gen:G .. num:N),
+	mod(gen:G .. num:N),
 	{ cria_np_indefinido(IsIndefinido, I, T, G, N) }.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
@@ -176,49 +176,64 @@ sn(coord:nao ..id:Ag ..pessoa:prim ..indefinido:nao ..produzindo:ProduzindoTexto
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:
 % verbo transitivo direto (ex: verbos que não exigem preposição antes do objeto, pegar '' a faca)
-% verbo transitivo indireto (ex.: verbo que exige preposição, ex: estar EM , assistir A)
 % verbo bitransitivo direto e indireto (ex.:preferir)
 
+% VERBO INTRANSITIVO
 % verbos intransitivos: verbo ou forma do verbo que nao exige nenhum complemento (ex.: pescar em, "eu pesco.")
 sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:nao) -->
 	{ var(T) },
 	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P).
 
-% verbo que exige preposicao e substantivo (ex.: estar em, "o barco esta _no_ ...")
-% casa com verbo transitivo indireto que exige preposição
-sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) -->
+% VERBO TRANSITIVO INDIRETO
+% verbo que exige preposicao e substantivo - tb chamdo de objeto indireto (ex.: estar em, "o barco esta _no_ ...")
+% AGENTE: externo (num:N ..pessoa:Pess)
+sv(puxa_pron:nao ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) -->
 	{ \+ compound(T); is_list(T) },
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
-	sp(id:T ..prep:P ..indefinido:IsIndefinido).
+	sp(id:Complemento ..prep:P ..indefinido:IsIndefinido).
 
+% VERBO TRANSITIVO INDIRETO onde o OBJETO foi determinado antes 
+% nesse caso, o substantivo determina o AGENTE
+% ex: *onde* estah a identidade? (*onde* eh o complemento, *a identidade* é o agente)
+sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) -->
+	{ \+ compound(T); is_list(T) },
+	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]),
+	sn(id:Agente ..num:N ..pessoa:Pess ..indefinido:IsIndefinido).
+	
+% igual ao caso acima, mas o verbo fica no final.
+sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) -->
+	{ \+ compound(T); is_list(T) },
+	sn(id:Agente ..num:N ..pessoa:Pess ..indefinido:IsIndefinido),
+	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]).
+	
+	
+
+% VERBO TRANSITIVO DIRETO
 % verbo que exige substantivo depois (ex.: pegar, "pegar o ...")
-sv(omite:O ..acao:A .. tema:T ..gen:G ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
+% AGENTE: externo (num:N ..pessoa:Pess)
+sv(puxa_pron:nao ..omite:O ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	{ \+ compound(T); is_list(T) },
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:T ..gen:G ..num:_ ..indefinido:IsIndefinido).
+	sn(id:Complemento ..indefinido:IsIndefinido).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn represta o tema 
 
-% verbo transitivo para o caso de perguntas, onde o complemento não está presente
-% exemplo onde a faca está?
-% O puxa_pron deveria ser um flag indicando que o complemento do verbo ja foi definido,
-% por exemplo, no caso do onde. 
-sv(puxa_pron:sim ..omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
+% VERBO TRANSITIVO DIRETO onde o OBJETO foi determinado antes
+% exemplo onde a faca está? (nesse caso o complemento é ONDE)
+% Nesses casos, o tema do sintagma verbal será o AGENTE  
+sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) -->
 	{ \+ compound(T); is_list(T) },
-	sn(id:T ..pessoa:P ..num:N ..indefinido:IsIndefinido),
+	sn(id:Agente ..pessoa:P ..num:N ..indefinido:IsIndefinido),
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
 
-
+% VERBO BITRANSITIVO 
+% seria o caso bitransitivo, exigindo um objeto direto e um indireto
 sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	{ \+ compound(T); is_list(T) },
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
 	sn(id:T ..indefinido:IsIndefinido),
-    sp(prep:Prep ..indefinido:IsIndefinido).
+    	sp(prep:Prep ..indefinido:IsIndefinido).
 
-sv(omite:O ..acao:A .. tema:T .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) -->
-%	{ \+ compound(T) },
-	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sn]),
-	sn(id:T ..indefinido:IsIndefinido).
 
 % ex.: o que eh ...
 sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
@@ -229,13 +244,18 @@ sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pes
 sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..indefinido:IsIndefinido).
+
+% cobre o caso em que o objeto indireto eh substituido por um adverbio
+sp(id:I .. prep:_ ..indefinido:_)-->
+	sadvb(id:I).
 	
 sp(id:I .. prep:P ..indefinido:IsIndefinido) -->
     prep(prep:P),
     sn(id:I ..indefinido:IsIndefinido ..prep:P).
 
-sp(id:I .. prep:_ ..indefinido:IsIndefinido) -->
-    sn(id:I ..indefinido:IsIndefinido ..prep:[]).
+sadvb(id:I) -->
+    advb(tipo_adv:lugar ..adv:A),
+    { denota_lugar(A, I) }.
 
 spro(id:I) -->
     pro(tipo_pro: relativo ..pron:A),

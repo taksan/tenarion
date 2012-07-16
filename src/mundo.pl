@@ -22,9 +22,12 @@ ultima_tabua(1).
 /**** Localizacao dos objetos no mundo */
 
 /* DETERMINA O QUE O OBJETO X TEM */
-ter(X, Y):-
-	\+ racional(Y),
-	estar(Y, X).
+ter(Quem, Oque):-
+	\+ racional(Oque),
+	estar(Oque, Quem).
+	
+pertencer(Oque,A_Quem):-
+	ter(A_Quem, Oque).	
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
 
@@ -151,13 +154,13 @@ estar(peixe, agua_do_lago).
 estar(vitoria_regia, agua_do_lago).
 
 /* Verificacao sobre um conjunto de objetos */
-estar(Z, Lug):-
-        nonvar(Z),
-        is_list(Z),
-        estar_conj(Z, Lug).
+estar(QueCoisas, Lug):-
+        nonvar(QueCoisas),
+        is_list(QueCoisas),
+        estar_conj(QueCoisas, Lug).
 
-estar_conj([X], Lug):-
-        estar(X, Lug).
+estar_conj([OQue], Lug):-
+        estar(OQue, Lug).
 
 estar_conj([X|R], Lug):-
         estar(X, Lug),
@@ -166,22 +169,22 @@ estar_conj([X|R], Lug):-
 /* *** DEFINICAO P/ DETECTAR SE UM OBJETO ESTA EM ALGUM LUGAR INDIRETAMENTE */
 
 % Diretamente
-estar_em(X, Y):-
-        estar(X, Y).
+estar_em(OQue, Onde):-
+        estar(OQue, Onde).
 
 % Pergunta em quais lugares esta X
-estar_em(X, Y):-
-        \+ var(X), !,
-        findall(Z, estar(X, Z), L),
+estar_em(OQue, QueLugares):-
+        \+ var(OQue), !,
+        findall(Onde, estar(OQue, Onde), L),
         member(E, L),
-        estar_em(E, Y).
+        estar_em(E, QueLugares).
 
-% Pergunta quais objetos entao em Y
-estar_em(X, Y):-
-        \+ var(Y), !,
-        findall(Z, estar(Z, Y), L),
+% Pergunta quais objetos estao em Y
+estar_em(QueCoisas, Onde):-
+        \+ var(Onde), !,
+        findall(Z, estar(Z, Onde), L),
         member(E, L),
-        estar_em(X, E).
+        estar_em(QueCoisas, E).
 
 % Resulta em todos os pares possiveis
 estar_em(X, Y):-
@@ -273,7 +276,7 @@ ser(voce, narrador):-
 
 ser(voce, X):-
         falando_com(voce, X).        
-        
+%ser(L,L).        
 
 /* diferenca entre pessoas e objetos */
 
@@ -303,61 +306,39 @@ dono(X, voce):-
 
 % zulu
 dono(zulu, barco).
-
 dono(zulu, vara_de_pescar).
 
 % mateo
 dono(mateo, martelo).
-
 dono(mateo, serrote).
-
 dono(mateo, tesoura).
-
 dono(mateo, (velas, _)).
-
 dono(mateo, vaso_ming).
-
 dono(mateo, poster).
-
 dono(mateo, balcao).
-
 dono(mateo, estande).
-
 dono(mateo, carpintaria).
-
 dono(mateo, santo_do_pau_oco).
-
 dono(mateo, carteira).
 
 /* quem conhece quem*/
 conhecer(zulu, mateo).
-
 conhecer(mateo, zulu).
-
 conhecer(peixe_voador, zulu).
-
 conhecer(peixe_voador, mateo).
 
 /* defeito */
 defeito(barco, [buraco]).
-
 defeito(tesoura, [semfio]).
 
 /* capacidade de flutuar */
 flutua(zulu).
-
 flutua(mateo).
-
 flutua(barco).
-
 flutua(tabua).
-
 flutua(vitoria_regia).
-
 flutua(placa_nome_loja).
-
 flutua(vaso_ming).
-
 flutua(vara_pescar).
 
 /* indica que X esta unido a Y */
@@ -385,7 +366,6 @@ ir(voce, X):-
 		poder_ir(voce, X),!,
         retract(estar(voce, _)),
         assert(estar(voce, X)).
-
 
 /* cortar */
 cortar_com((tabua, X), serrote):-

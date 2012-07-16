@@ -179,29 +179,29 @@ filtrar(X,X):-!.
 /* Resolucao e manutencao de contexto */
 
 %% mantem mapeamento para ultimas referencias por genero
-contexto((tipo_pro:voce) , X):-
+contexto((classe:pro ..tipo_pro:voce) , X):-
 	falando_com(voce, X).
-contexto((tipo_pro:relativo ..pron:aqui),Lugar):-
+contexto((classe:advb ..tipo_adv:lugar ..adv:aqui),Lugar):-
 	estar(voce, Lugar).	
 %contexto((pessoa:terc ..gen:fem ..num:sing), quem).
 %contexto((pessoa:terc ..gen:masc ..num:sing), quem).
-contexto((pessoa:prim ..num:sing), voce). 
+contexto((classe:np ..pessoa:prim ..num:sing), voce). 
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
 atualiza_pron_voce(vindo_de_pergunta):-
-	atualiza_pessoa((tipo_pro:voce) , voce),
-	atualiza_pron_aqui.
+	atualiza_pessoa((classe:pro ..tipo_pro:voce) , voce),
+	atualiza_advb_aqui.
 	
 atualiza_pron_voce(vindo_de_resposta):-
 	falando_com(voce, X),
-	atualiza_pessoa((tipo_pro:voce) , X),
-	atualiza_pron_aqui.	
+	atualiza_pessoa((classe:pro ..tipo_pro:voce) , X),
+	atualiza_advb_aqui.	
 
-atualiza_pron_aqui:-
-	contexto((tipo_pro:relativo ..pron:aqui),_);
+atualiza_advb_aqui:-
+	contexto((classe:advb ..tipo_adv:relativo ..adv:aqui),_);
 	(
 		estar(voce, Lugar),
-		asserta(contexto((tipo_pro:relativo ..pron:aqui), Lugar))
+		asserta(contexto((classe:advb ..tipo_adv:lugar ..adv:aqui), Lugar))
 	).
 	
 atualiza_contexto([], []).
@@ -211,7 +211,7 @@ atualiza_contexto((agente:incog(_) ..tema:_), []):-
 
 atualiza_contexto((agente:_ ..tema:incog(onde)), []):-
 	atualiza_pron_voce(vindo_de_pergunta),
-	contexto((tipo_pro:relativo ..pron:aqui),Local),
+	contexto((classe:advb ..tipo_adv:lugar ..adv:aqui),Local),
 	retractall(contexto(_,Local)).
 
 
@@ -238,23 +238,19 @@ atualiza_pessoa(_ , _).
 
 
 %% determinacao do agente baseado no contexto
-denota((tipo_pro:voce), jogador).
-
+denota((classe:pro ..tipo_pro:voce), jogador).
 denota((tipo_pro:pron_ninguem(quem)), ninguem).
-
 denota((tipo_pro:pron_ninguem(oque)), nada).
-
 denota((tipo_pro:relativo ..pron:onde), onde).
-
-denota((tipo_pro:relativo ..pron:P), Alvo):-
-	contexto((tipo_pro:relativo ..pron:P), Alvo).
+denota((classe:C ..tipo_pro:relativo ..pron:P), Alvo):-
+	contexto((classe:C ..tipo_pro:relativo ..pron:P), Alvo).
 	
 denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
 	\+ denota_lugar(aqui, Ag),
         contexto((num:sing ..pessoa:prim ..gen:G), Ag).
         
-denota((tipo_pro:voce), X):-
-	contexto((tipo_pro:voce), X).	
+denota((classe:C ..tipo_pro:voce), X):-
+	contexto((classe:C.. tipo_pro:voce), X).	
 	
 denota((tipo_pro:reto ..num:sing ..pessoa:prim), voce).
 	
@@ -274,7 +270,7 @@ quem_denota(Tracos, Substantivo):-
 
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
-        estar(voce, L).
+	contexto((classe:advb ..tipo_adv:lugar ..adv:aqui), L).
 
 denota_lugar(onde, onde).
 

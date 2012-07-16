@@ -1,5 +1,6 @@
 :-[gulp].
 
+
 %%%% ADJETIVOS
 
 a(adj:sem_fio ..gen:_ ..num:_) --> [sem], [fio].
@@ -184,96 +185,74 @@ pro(tipo_pro:demonstrativo ..pron:aqueles ..gen:masc.. num:plur) --> [aqueles].
 pro(tipo_pro:demonstrativo ..pron:aquelas ..gen:fem.. num:plur) --> [aquelas].
 pro(tipo_pro:demonstrativo ..pron:aquilo ..gen:masc.. num:sing) --> [aquilo].
 pro(tipo_pro:relativo ..pron:onde) --> [onde].
-pro(tipo_pro:relativo ..pron:aqui  ..prep:[]) --> [aqui].
 
 %%%% ADVERBIOS
-%advb(tipo_adv:lugar ..adv:onde) --> [onde].
-%advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
+advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
 advb(tipo_adv:negacao ..adv:nao) --> [nao].
 advb(tipo_adv:positivo ..adv:sim) --> [].
 
 %%%% VERBOS
+% INTRANSITIVO        : subcat:[]
+% TRANSITIVO DIRETO   : subcat:[sn]
+% TRANSITIVO INDIRETO : subcat[sp(prep:P)] P = preposição exigida
+% BITRANSITIVO        : subcat[sn, sp(prep:P)] P = preposição exigida para o 2o objeto
 
 % VERBO: ESTAR
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
-		{ member(G, [estah, esta]) },
+		{  member(G, [estah, esta]) },
         [G].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim) --> 
 		{ member(G, [estah, esta]) },
         [G].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sn]) --> 
-		{ member(G, [estah, esta]) },
-        [G].
-
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
         [estao].
-v(omite:_ ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sn]) --> 
-        [estao].
-
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estou].
 v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)] ..poss:sim) --> 
         [estou].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sn]) --> 
-        [estou].
-
 v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estamos].
-
 v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [estar].
 
-
 % VERBO: SER
+v(omite:_   ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: indic ..subcat:[sn]) --> [ser].
+v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sn]) --> [sou].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
-v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sou].
-
 v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
-v(omite:_ ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
-v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
-
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
-v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
 
-v(omite:nao ..acao:ser .. num:plur ..pessoa: indic ..subcat:[sn]) --> [ser].
+v(omite:nao ..acao:pertencer .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sou].
+v(omite:nao ..acao:pertencer .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
+v(omite:nao ..acao:pertencer .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
 
 % VERBO: CONHECER
 v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: prim ..subcat:[sn]) --> [conheco].
-
 v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: terc ..subcat:[sn]) --> [conhece].
-
 v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: indic ..subcat:[sn]) --> [conhecer].
 
 % VERBO: CONSERTAR
 v(omite:nao ..acao:consertar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [conserto].
-
 v(omite:nao ..acao:consertar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [conserta].
-
 v(omite:nao..acao:consertar..num:sing ..pessoa: indic ..subcat:[sn]) --> [consertar].
 
 % VERBO: PEGAR
 v(omite:nao ..acao:pegar .. num:sing .. pessoa:prim ..subcat:[sn]) --> [pego].
-
 v(omite:nao ..acao:pegar .. num:sing .. pessoa:terc ..subcat:[sn]) --> [pega].
-
 v(omite:nao ..acao:pegar .. num:sing .. pessoa:indic ..subcat:[sn]) --> [pegar].
 
 % VERBO: IR
 v(omite:nao ..acao:ir .. num:sing .. pessoa: prim ..subcat:[sp(prep:para)]) --> [vou].
-
 v(omite:nao ..acao:ir .. num:sing .. pessoa: terc ..subcat:[sp(prep:para)]) --> [vai].
-
 v(omite:nao ..acao:ir ..num:sing ..pessoa: indic ..subcat:[sp(prep:para)]) --> [ir].
 
 % VERBO: VEDAR
 v(omite:nao ..acao:vedar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vedo].
-
 v(omite:nao ..acao:vedar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [veda].
-
 v(omite:nao ..acao:vedar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [vedar].
 
-% VERBO: PREGAR
+% VERBO: PREGAR - BITRANSITIVO
 v(omite:nao ..acao:pregar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [prego].
-
 v(omite:nao ..acao:pregar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [prega].
 
 v(omite:nao ..acao:pregar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [pregar].
@@ -394,6 +373,7 @@ v(omite:nao ..acao:examinar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [olhar
 v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[]) --> [tenho].
 v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
 v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
+
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
 v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
 v(omite:sim ..acao:estar ..num:sing ..pessoa: terc ..subcat:[]) --> [tem].
