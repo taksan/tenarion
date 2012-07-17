@@ -117,15 +117,17 @@ sn_indef(coord:nao .. id:indefinido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -
 % casa com pronomes: eu, ele, voce
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
         { \+ is_list(Ag) },
-        { ( 
+        { (
+        	var(Ag); 
         	(nonvar(Ag); nonvar(T)), 
            	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag)
-           );
-           var(Ag)},
+           )},
         pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
-        { (var(Ag),
-           denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag));
-          \+ var(Ag)}.
+        { nonvar(Ag);
+          (
+          	var(Ag),
+           	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag) 
+           )}.
 
 % essa regra eh para produzir texto sobre substantivos indefinidos
 sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
@@ -173,6 +175,10 @@ sn(coord:nao ..id:Ag ..pessoa:prim ..indefinido:nao ..produzindo:ProduzindoTexto
 	{ nonvar(Ag), nonvar(ProduzindoTexto) },
 	[eu].
 
+sn(coord:nao ..id:Ag ..pessoa:P ..num:N ..gen:N):-
+	sadvb(id:Ag),
+	{ ignore(np(id:Ag ..num:N ..pessoa:P ..gen:N)) }.
+
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:
 % verbo transitivo direto (ex: verbos que não exigem preposição antes do objeto, pegar '' a faca)
@@ -191,6 +197,7 @@ sv(puxa_pron:nao ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..
 	{ \+ compound(T); is_list(T) },
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
 	sp(id:Complemento ..prep:P ..indefinido:IsIndefinido).
+
 
 % VERBO TRANSITIVO INDIRETO onde o OBJETO foi determinado antes 
 % nesse caso, o substantivo determina o AGENTE
@@ -246,7 +253,7 @@ sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pesso
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..indefinido:IsIndefinido).
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
-sp(id:I .. prep:_ ..indefinido:_)-->
+sp(id:I .. prep:P ..indefinido:_)-->
 	sadvb(id:I).
 	
 sp(id:I .. prep:P ..indefinido:IsIndefinido) -->
@@ -258,8 +265,7 @@ sadvb(id:I) -->
     { denota_lugar(A, I) }.
 
 spro(id:I) -->
-    pro(tipo_pro: relativo ..pron:A),
-    { denota_lugar(A, I) }.
+    pro(tipo_pro: relativo ..pron:I).
     
 spro(id:[]) -->
     pro(tipo_pro: pron_ninguem(onde) ..pron:A),

@@ -1,6 +1,5 @@
 :-[gulp].
 
-
 %%%% ADJETIVOS
 
 a(adj:sem_fio ..gen:_ ..num:_) --> [sem], [fio].
@@ -156,6 +155,8 @@ np(id:T ..indefinido:sim) --> [T].
 pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem ..pron:ela) --> [ela].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
+pro(tipo_pro:reto .. num:plural .. pessoa:terc ..gen:fem ..pron:ela) --> [elas].
+pro(tipo_pro:reto .. num:plural .. pessoa:terc ..gen:masc ..pron:ele) --> [eles].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce_resp) --> [voce].
 pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
@@ -188,6 +189,7 @@ pro(tipo_pro:relativo ..pron:onde) --> [onde].
 
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
+advb(tipo_adv:lugar ..adv:la) --> [la].
 advb(tipo_adv:negacao ..adv:nao) --> [nao].
 advb(tipo_adv:positivo ..adv:sim) --> [].
 
@@ -199,11 +201,9 @@ advb(tipo_adv:positivo ..adv:sim) --> [].
 
 % VERBO: ESTAR
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
-		{  member(G, [estah, esta]) },
-        [G].
+        [estah].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim) --> 
-		{ member(G, [estah, esta]) },
-        [G].
+        [estah].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
         [estao].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 

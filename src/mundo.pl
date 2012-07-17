@@ -276,7 +276,7 @@ ser(voce, narrador):-
 
 ser(voce, X):-
         falando_com(voce, X).        
-%ser(L,L).        
+ser(L,L).        
 
 /* diferenca entre pessoas e objetos */
 

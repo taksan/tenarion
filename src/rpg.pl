@@ -4,10 +4,9 @@
 :-[gramatica].
 :-[io].
 
-:-dynamic contexto/2.
+:-dynamic contexto/3, contexto_atual/1.
 /*
  Programa principal que controla o jogo
-
  Para executar, é só escrever a consulta "jogar".
 */
 
@@ -33,15 +32,23 @@ jogar:-
 		assert(jogador(Nome)),!,
         dialogo.
 
+seta_contexto(Ctx):-
+	retractall(contexto_atual(_)),
+	assertz(contexto_atual(Ctx)).
+
 dialogo:-
     once(readLine(P)),
-%	contexto_pronomial(jogador),
+	seta_contexto(jogador),
 	s(Sem,P,[]),
-	once(atualiza_contexto(Sem, [])),!,	
+	seta_contexto(computador),
+	once(atualiza_contexto(Sem)),!,
+		
 	processar(Sem,Resposta),!,
- %   	contexto_pronomial(computador),
+
 	s(Resposta,R,[]),
-	once(atualiza_contexto([], Resposta)),!,
+	seta_contexto(jogador),
+	once(atualiza_contexto(Resposta)),
+	
 	writeLine(R),
 	continuar(Sem).
 
@@ -177,102 +184,126 @@ filtrar([X],X):-!.
 filtrar(X,X):-!.
 
 /* Resolucao e manutencao de contexto */
+%contexto_atual(jogador).
 
 %% mantem mapeamento para ultimas referencias por genero
-contexto((classe:pro ..tipo_pro:voce) , X):-
+% aqui eh igual para o computador e para o jogador
+
+	
+contexto(jogador, (tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce) , X):-
 	falando_com(voce, X).
-contexto((classe:advb ..tipo_adv:lugar ..adv:aqui),Lugar):-
-	estar(voce, Lugar).	
-%contexto((pessoa:terc ..gen:fem ..num:sing), quem).
-%contexto((pessoa:terc ..gen:masc ..num:sing), quem).
-contexto((classe:np ..pessoa:prim ..num:sing), voce). 
+	
+% qdo o jogador usa pronome "eu"
+contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), voce).% 
+
+contexto(jogador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
+	estar(voce, Lugar).		
+
+% contexto do computador
+contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),voce).
+contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),jogador).
+	
+contexto(computador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
+	estar(voce, Lugar).		
+	
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
-atualiza_pron_voce(vindo_de_pergunta):-
-	atualiza_pessoa((classe:pro ..tipo_pro:voce) , voce),
-	atualiza_advb_aqui.
-	
-atualiza_pron_voce(vindo_de_resposta):-
-	falando_com(voce, X),
-	atualiza_pessoa((classe:pro ..tipo_pro:voce) , X),
-	atualiza_advb_aqui.	
-
 atualiza_advb_aqui:-
-	contexto((classe:advb ..tipo_adv:relativo ..adv:aqui),_);
 	(
+		contexto_atual(Ctx),
 		estar(voce, Lugar),
-		asserta(contexto((classe:advb ..tipo_adv:lugar ..adv:aqui), Lugar))
+		\+contexto(Ctx, (tipo_adv:lugar ..adv:aqui), Lugar),
+		asserta(contexto(Ctx, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar))
 	).
+atualiza_advb_aqui:-
+	true.
 	
-atualiza_contexto([], []).
+atualiza_contexto((agente:incog(_) ..tema:_)):-
+	atualiza_advb_aqui.        
 
-atualiza_contexto((agente:incog(_) ..tema:_), []):-
-	atualiza_pron_voce(vindo_de_pergunta).        
+% se o jogador perguntou onde estah,remove _aqui_ do contexto
+atualiza_contexto((agente:_ ..tema:incog(onde))):-
+	atualiza_advb_aqui,
+	contexto_atual(Ctx),
+	retractall(contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui),_)).
 
-atualiza_contexto((agente:_ ..tema:incog(onde)), []):-
-	atualiza_pron_voce(vindo_de_pergunta),
-	contexto((classe:advb ..tipo_adv:lugar ..adv:aqui),Local),
-	retractall(contexto(_,Local)).
+atualiza_contexto((agente:_ ..tema:incog(_))):-
+	atualiza_advb_aqui.
 
+atualiza_contexto((agente:AgResp ..tema:TemaResp)):-
+	atualiza_contexto_denotado_por(AgResp),
+	atualiza_contexto_denotado_por(TemaResp),
+	atualiza_advb_aqui.
 
-atualiza_contexto((agente:_ ..tema:incog(_)), []):-
-	atualiza_pron_voce(vindo_de_pergunta).
+atualiza_contexto_denotado_por([]).
 
-atualiza_contexto((agente:AgPerg ..tema:TemaPerg), []):-
-        quem_denota(TracosPessoa1, AgPerg),  atualiza_pessoa(TracosPessoa1, AgPerg),
-        quem_denota(TracosPessoa2, TemaPerg), atualiza_pessoa(TracosPessoa2, TemaPerg),
-	atualiza_pron_voce(vindo_de_pergunta).        
+atualiza_contexto_denotado_por(TemaOuAgente):-
+	\+ is_list(TemaOuAgente),
+	quem_denota(Tracos , TemaOuAgente),  
+	atualiza_pessoa(Tracos , TemaOuAgente).
 
-atualiza_contexto([], (agente:AgResp ..tema:TemaResp)):-
-        quem_denota(TracosPessoa3, AgResp),  atualiza_pessoa(TracosPessoa3, AgResp),
-        quem_denota(TracosPessoa4, TemaResp), atualiza_pessoa(TracosPessoa4, TemaResp),
-	atualiza_pron_voce(vindo_de_resposta).        
+atualiza_contexto_denotado_por([jogador|Resto]):-
+	atualiza_contexto_denotado_por(Resto).
 
+atualiza_contexto_denotado_por([TemaOuAgente|Resto]):-
+	atualiza_contexto_denotado_por(TemaOuAgente),
+	atualiza_contexto_denotado_por(Resto).
+
+atualiza_contexto_denotado_por(_).
+	
+atualiza_pessoa((tipo_pro:voce),_).
+atualiza_pessoa(_,voce).
+	
 atualiza_pessoa(Pessoa, NovoValor):-
         nonvar(NovoValor),
-        retractall(contexto(_, NovoValor)),
-        retractall(contexto(Pessoa, _)),
-        asserta(contexto(Pessoa, NovoValor)).
+		nonvar(Pessoa),
+        contexto_atual(Ctx),
+        retractall(contexto(Ctx, Pessoa, _)),
+        asserta(contexto(Ctx, Pessoa, NovoValor)).
 
 atualiza_pessoa(_ , _).
 
 
+% DENOTA EH SEMPRE USADO PARA DETERMINAR O USO DE PRONOME
 %% determinacao do agente baseado no contexto
-denota((classe:pro ..tipo_pro:voce), jogador).
+valida_locutor(Ag):-
+	falando_com(voce, Interlocutor),
+	member(Ag, [voce,Interlocutor]).
+
+%denota((tipo_pro:voce), jogador).
 denota((tipo_pro:pron_ninguem(quem)), ninguem).
 denota((tipo_pro:pron_ninguem(oque)), nada).
 denota((tipo_pro:relativo ..pron:onde), onde).
-denota((classe:C ..tipo_pro:relativo ..pron:P), Alvo):-
-	contexto((classe:C ..tipo_pro:relativo ..pron:P), Alvo).
 	
+% vai determinar se o Ag vai usar o pronome "eu" para se designar.
 denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
-	\+ denota_lugar(aqui, Ag),
-        contexto((num:sing ..pessoa:prim ..gen:G), Ag).
+	contexto_atual(Ctx),
+    contexto(Ctx,(tipo_pro:reto.. num:sing ..pessoa:prim ..gen:G), Ag),
+	valida_locutor(Ag).
         
-denota((classe:C ..tipo_pro:voce), X):-
-	contexto((classe:C.. tipo_pro:voce), X).	
+% vai determinar quem "voce" designa
+denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
+	contexto_atual(Ctx),
+	contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem).
 	
-denota((tipo_pro:reto ..num:sing ..pessoa:prim), voce).
+denota((tipo_pro:pron_qu ..pron:Pron), P):-
+	nonvar(Pron),
+	P=Pron.
 	
-denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
-	contexto((num:N ..gen:G ..pessoa:terc), X),!.
-
-denota((tipo_pro:pron_qu ..pron:P), P).
-
-
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
-	\+ compound(X),
+	\+ compound(X), 
 	nonvar(X),
-        np((num:N ..gen:G), [X], []).
+    np((num:N ..gen:G ..indefinido:nao), [X], []).
 
-quem_denota(Tracos, Substantivo):-
-	denota(Tracos, Substantivo).
+quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc ..indefinido:sim), X):-
+	\+ compound(X), 
+	nonvar(X),
+    np((num:N ..gen:G ..indefinido:sim), [X], []).
 
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
-	contexto((classe:advb ..tipo_adv:lugar ..adv:aqui), L).
-
-denota_lugar(onde, onde).
+	contexto_atual(Ctx),
+	contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), L).
 
 denota_lugar(nenhum, []).
 
