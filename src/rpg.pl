@@ -174,6 +174,8 @@ ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
 traduz_agente_para_evitar_ambiguidade([],[]).
 traduz_agente_para_evitar_ambiguidade(voce, jogador).
+traduz_agente_para_evitar_ambiguidade(A,A):-
+	\+ is_list(A).
 traduz_agente_para_evitar_ambiguidade([voce|Resto], [jogador|Resto]).
 traduz_agente_para_evitar_ambiguidade([Alguem|Resto], [Alguem|RestoRes]):-
 	\+ Alguem = voce,
@@ -220,8 +222,9 @@ atualiza_advb_aqui:-
 	
 atualiza_contexto((agente:AgResp ..tema:TemaResp)):-
 	atualiza_advb_aqui,
-	atualiza_contexto_denotado_por(AgResp),
-	atualiza_contexto_denotado_por(TemaResp).
+	atualiza_contexto_denotado_por(TemaResp),
+	atualiza_contexto_denotado_por(AgResp).
+	% o agente eh usado por segundo para preferir usar o pronome para designar o agente
 
 atualiza_contexto_denotado_por([]).
 
@@ -275,14 +278,28 @@ denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
     contexto(Ctx,(tipo_pro:reto.. num:sing ..pessoa:prim ..gen:G), Ag),
 	valida_locutor(Ag).
         
-% vai determinar quem "voce" designa
+% vai determinar quem o pronome designa OU qual pronome designa Quem
 denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
+	nonvar(Quem),
+	contexto_atual(Ctx),
+	contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem),
+	% se acabou de determinar o pronome para Quem, evita que seja usado de novo
+	% consecutivamente na mesma sentenca, solucionado o problema de responder "o que ela eh?"
+	retract(contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem)).
+
+denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
+	var(Quem),
 	contexto_atual(Ctx),
 	contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem).
+
 	
 denota((tipo_pro:pron_qu ..pron:Pron), P):-
 	nonvar(Pron),
 	P=Pron.
+
+% para aceitar o pronome prp.dito
+denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
+	pro((tipo_pro:T ..gen:G ..num:N ..pessoa:P ..pron:Pron),[Quem],[]).
 	
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
 	\+ compound(X), 

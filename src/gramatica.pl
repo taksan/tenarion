@@ -28,11 +28,10 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsIndefinido) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
-	sv(puxa_pron:nao ..omite:_ ..acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
-        pontuacao_opcional(_).
+	sv(acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
+    pontuacao_opcional(_).
 	%,{ determina_indefinido(T, IsIndefinido, EI) }.
 
-% 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..indefinido:IsIndefinido ) -->
         spro(id:PronRelativo),
         sv(puxa_pron:sim ..acao:X ..tema:A ..indefinido:IsIndefinido),
@@ -190,6 +189,29 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:nao) -->
 	{ var(T) },
 	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P).
 
+%% IMPORTANTE:
+%%% o verbo transitivo direto TEM que ser testado antes do indireto, pois no caso de verbos
+%%% que possuem as duas formas com conotações diferentes(ex: ser no sentido de ser ou de pertencer)
+%%% ele deve preferir tentar o que nao tem a preposição
+
+% VERBO TRANSITIVO DIRETO onde o OBJETO foi determinado antes
+% exemplo onde a faca está? (nesse caso o complemento é ONDE)
+% Nesses casos, o tema do sintagma verbal será o AGENTE  
+sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) -->
+	{ \+ compound(T); is_list(T) },
+	sn(id:Agente ..pessoa:P ..num:N ..indefinido:IsIndefinido),
+	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
+
+% VERBO TRANSITIVO DIRETO
+% verbo que exige substantivo depois (ex.: pegar, "pegar o ...")
+% AGENTE: externo (num:N ..pessoa:Pess)
+sv(puxa_pron:nao ..omite:O ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
+	{ \+ compound(T); is_list(T) },
+	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	sn(id:Complemento ..indefinido:IsIndefinido).
+	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
+	% e o sn represta o tema 
+
 % VERBO TRANSITIVO INDIRETO
 % verbo que exige preposicao e substantivo - tb chamdo de objeto indireto (ex.: estar em, "o barco esta _no_ ...")
 % AGENTE: externo (num:N ..pessoa:Pess)
@@ -197,7 +219,6 @@ sv(puxa_pron:nao ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..
 	{ \+ compound(T); is_list(T) },
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
 	sp(id:Complemento ..prep:P ..indefinido:IsIndefinido).
-
 
 % VERBO TRANSITIVO INDIRETO onde o OBJETO foi determinado antes 
 % nesse caso, o substantivo determina o AGENTE
@@ -213,25 +234,6 @@ sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) --
 	sn(id:Agente ..num:N ..pessoa:Pess ..indefinido:IsIndefinido),
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]).
 	
-	
-
-% VERBO TRANSITIVO DIRETO
-% verbo que exige substantivo depois (ex.: pegar, "pegar o ...")
-% AGENTE: externo (num:N ..pessoa:Pess)
-sv(puxa_pron:nao ..omite:O ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
-	{ \+ compound(T); is_list(T) },
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:Complemento ..indefinido:IsIndefinido).
-	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
-	% e o sn represta o tema 
-
-% VERBO TRANSITIVO DIRETO onde o OBJETO foi determinado antes
-% exemplo onde a faca está? (nesse caso o complemento é ONDE)
-% Nesses casos, o tema do sintagma verbal será o AGENTE  
-sv(puxa_pron:sim ..omite:O ..acao:A .. tema:Agente ..indefinido:IsIndefinido) -->
-	{ \+ compound(T); is_list(T) },
-	sn(id:Agente ..pessoa:P ..num:N ..indefinido:IsIndefinido),
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
 
 % VERBO BITRANSITIVO 
 % seria o caso bitransitivo, exigindo um objeto direto e um indireto
@@ -239,21 +241,21 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	{ \+ compound(T); is_list(T) },
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
 	sn(id:T ..indefinido:IsIndefinido),
-    	sp(prep:Prep ..indefinido:IsIndefinido).
+   	sp(prep:Prep ..indefinido:IsIndefinido).
 
 
 % ex.: o que eh ...
 sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:pron_qu ..pron:Pronome),
-	sv(omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..indefinido:IsIndefinido).
+	sv(puxa_pron:nao ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..indefinido:IsIndefinido).
 
 sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pessoa:P ..indefinido:IsIndefinido) -->
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..indefinido:IsIndefinido).
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
-sp(id:I .. prep:P ..indefinido:_)-->
+sp(id:I .. prep:_ ..indefinido:_)-->
 	sadvb(id:I).
 	
 sp(id:I .. prep:P ..indefinido:IsIndefinido) -->
@@ -339,5 +341,8 @@ equivale(dos, [de, os]).
 equivale(comigo, [em, eu]).
 equivale(contigo, [em, voce]).
 equivale(nele, [em, ele]).
-
+equivale(dele, [de, ele]).
+equivale(dela, [de, ela]).
+equivale(deles, [de, eles]).
+equivale(delas, [de, elas]).
 

@@ -222,7 +222,6 @@ v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
 
-v(omite:nao ..acao:pertencer .. num:sing ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sou].
 v(omite:nao ..acao:pertencer .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
 v(omite:nao ..acao:pertencer .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
 
