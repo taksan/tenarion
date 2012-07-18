@@ -41,7 +41,6 @@ convertWord(+OldWord,-NewWord)
    non-alphabetic characters.
 
 ========================================================================*/
-:-[strings].
 
 readText(WordList):-
    readWords(Words),
