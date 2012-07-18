@@ -399,11 +399,20 @@ cortar(mao, serrote):-
         assertz(injuriado(voce)).
 
 /* execucao da acao de consertar: somente para buraco/barco */
+poder_consertar(voce, X):-
+	poder_consertar(X).
+
+poder_consertar(X):-
+        dono(voce, X),
+		ter(voce,pregos),
+		ter(voce,tabuas),
+		ter(voce,martelo).
+
 consertar(voce, X):-
         consertar(X).
 
 consertar(barco):-
-        dono(voce, barco), !,
+        poder_consertar(barco),
         retract(defeito(barco, [buraco])),
         retract(estar(buraco, barco)).
 
@@ -412,8 +421,7 @@ consertar(barco):-
 pregar_em_com(prego, X, martelo):-
         estar_em(martelo, voce), !, 
         estar_em(pregos, voce),!,
-        estar_em(voce, CenaAtual),!,
-        estar_em(X, CenaAtual),
+        mesmo_lugar(voce, X),!,
         assertz(estar_em(pregos, X)).
         
 pregar_em_com(prego, X, Y, martelo):-
@@ -504,12 +512,18 @@ examinar(Oque, [obj(Objetos), def(Defeitos)]):-
                     retract(invisivel(X))), _).
 
 /* conversar -- inicia dialogo com Pessoa */
+poder_conversar(voce, X):-
+	poder_conversar_com(X).
+
+poder_conversar_com(X):-
+        racional(Pessoa), !, 
+        \+ falando_com(voce, Pessoa).
+
 conversar(voce, X):-
         conversar_com(X).
 
 conversar_com(Pessoa):-
-        racional(Pessoa), !, 
-        \+ falando_com(voce, Pessoa),
+		poder_conversar_com(Pessoa),
         assertz(falando_com(voce, Pessoa)).
 
 finaliza_conversa(Pessoa):-

@@ -28,7 +28,7 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..indefinido:IsIndefinido) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
-	sv(acao:X ..tema:T ..pessoa:P ..indefinido:IsIndefinido),
+	sv(acao:X ..tema:T ..pessoa:P ..indefinido:nao),
     pontuacao_opcional(_).
 	%,{ determina_indefinido(T, IsIndefinido, EI) }.
 
@@ -128,11 +128,6 @@ sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..indefinido:nao) -->
            	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag) 
            )}.
 
-% essa regra eh para produzir texto sobre substantivos indefinidos
-sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
-	{ nonvar(Texto) },
-	sn_indef(coord:nao ..id:Texto ..pessoa:terc).
-
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..indefinido:nao) -->
         { (\+ var(I); \+ is_list(I)) },
     	ident(gen:G .. num:N ..tipo:T),
@@ -178,6 +173,11 @@ sn(coord:nao ..id:Ag ..pessoa:P ..num:N ..gen:N):-
 	sadvb(id:Ag),
 	{ ignore(np(id:Ag ..num:N ..pessoa:P ..gen:N)) }.
 
+% essa regra eh para produzir texto sobre substantivos indefinidos
+sn(coord:nao .. id:Texto ..indefinido:sim ..pessoa:terc) -->
+	{ nonvar(Texto) },
+	sn_indef(coord:nao ..id:Texto ..pessoa:terc).
+
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:
 % verbo transitivo direto (ex: verbos que não exigem preposição antes do objeto, pegar '' a faca)
@@ -211,6 +211,11 @@ sv(puxa_pron:nao ..omite:O ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..ind
 	sn(id:Complemento ..indefinido:IsIndefinido).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn represta o tema 
+
+sv(puxa_pron:nao ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..indefinido:IsIndefinido) -->
+	{ \+ compound(T); is_list(T) },
+	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[advb]),
+	sadvb(id:Complemento).
 
 % VERBO TRANSITIVO INDIRETO
 % verbo que exige preposicao e substantivo - tb chamdo de objeto indireto (ex.: estar em, "o barco esta _no_ ...")
