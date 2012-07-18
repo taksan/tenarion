@@ -97,12 +97,12 @@ processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxil
 % perguntas qu
 
 processar(
-	(ato_fala:interro_tema_desconhecido ..indefinido:sim ..agente:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	(ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
 	(ato_fala:recusar 
-		..indefinido:sim 
+		..desconhecido:sim 
 		..acao:entender
 		..num:sing
-		..tema:(acao:ser ..pessoa:terc ..num:Num ..tema:indefinido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
+		..tema:(acao:ser ..pessoa:terc ..num:Num ..tema:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
 		..agente:narrador
 		..pessoa:prim
 		)):-
@@ -119,7 +119,7 @@ processar((ato_fala:interro_tema_desconhecido ..agente:Agent ..acao:Relacao ..te
         ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
         filtrar(L1,TS).
 
-processar((ato_fala:interro_tema_desconhecido ..indefinido:nao ..agente:Agent .. acao:Relacao .. tema:incog(_)),
+processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente:Agent .. acao:Relacao .. tema:incog(_)),
           (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
 	\+ compound(Agent),
 	% TODO: o tipo do tema pode ser usado para restringir as respostas
@@ -130,7 +130,7 @@ processar((ato_fala:interro_tema_desconhecido ..indefinido:nao ..agente:Agent ..
 
 % o que ou quem        
 
-processar((ato_fala:interro_agente_desconhecido ..indefinido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
+processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
    (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema:T ..pessoa:terc ..entidade:Tipo)):-
 	ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
         PredAcao =.. [RelacaoAjustada, A, T],
@@ -304,13 +304,13 @@ denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
 	\+ compound(X), 
 	nonvar(X),
-    np((id:X ..num:N ..gen:G ..indefinido:nao), Texto, []),
+    np((id:X ..num:N ..gen:G ..desconhecido:nao), Texto, []),
 	nonvar(Texto).
 
-quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc ..indefinido:sim), X):-
+quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc ..desconhecido:sim), X):-
 	\+ compound(X), 
 	nonvar(X),
-    np((num:N ..gen:G ..indefinido:sim), [X], []).
+    np((num:N ..gen:G ..desconhecido:sim), [X], []).
 
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
