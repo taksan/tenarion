@@ -200,17 +200,21 @@ advb(tipo_adv:positivo ..adv:sim) --> [].
 % BITRANSITIVO        : subcat[sn, sp(prep:P)] P = preposição exigida para o 2o objeto
 
 % VERBO: ESTAR
+v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[advb] ..poss:nao) --> 
+        [estah].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estah].
-v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)]..poss:sim) --> 
-        [estah].
+v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[advb]..poss:nao) --> 
+        [estao].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
         [estao].
+v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[advb] ..poss:nao) --> 
+        [estou].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
         [estou].
-v(omite:_ ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:com)] ..poss:sim) --> 
-        [estou].
 v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
+        [estamos].
+v(omite:_ ..acao:estar ..num:plur ..pessoa: prim ..subcat:[advb] ..poss:nao) --> 
         [estamos].
 v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [estar].
 
@@ -373,9 +377,11 @@ v(omite:sim ..acao:ter ..num:sing ..pessoa: prim ..subcat:[]) --> [tenho].
 v(omite:nao ..acao:ter ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho].
 v(omite:_ ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
 
+% onde ter tem sentido de estar
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[advb]) --> [tem].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
 v(omite:sim ..acao:estar ..num:sing ..pessoa: terc ..subcat:[]) --> [tem].
+
 v(omite:nao ..acao:ter ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
 v(omite:nao ..acao:ter ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].
 
