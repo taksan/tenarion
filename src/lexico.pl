@@ -122,7 +122,7 @@ np(id:botoes .. tipo:nc ..num:plur ..gen:masc ..indefinido:nao) --> [botoes].
 np(id:buraco .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [buraco].
 np(id:carteira .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [carteira].
 np(id:caixa_registradora .. tipo:nc ..num:sing ..gen:fem ..indefinido:nao) --> [caixa],[registradora].
-np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [cartao], [de],[credito].
+np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [cartao],[de],[credito].
 np(id:cartao_credito .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [cartao].
 np(id:chiclete .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [chiclete].
 np(id:circulo_de_velas .. tipo:nc ..num:sing ..gen:masc ..indefinido:nao) --> [circulo],[de],[velas].
@@ -155,8 +155,8 @@ np(id:T ..indefinido:sim) --> [T].
 pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem ..pron:ela) --> [ela].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
-pro(tipo_pro:reto .. num:plural .. pessoa:terc ..gen:fem ..pron:ela) --> [elas].
-pro(tipo_pro:reto .. num:plural .. pessoa:terc ..gen:masc ..pron:ele) --> [eles].
+pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:fem ..pron:ela) --> [elas].
+pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:masc ..pron:ele) --> [eles].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce_resp) --> [voce].
 pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].

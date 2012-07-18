@@ -218,24 +218,18 @@ atualiza_advb_aqui:-
 atualiza_advb_aqui:-
 	true.
 	
-atualiza_contexto((agente:incog(_) ..tema:_)):-
-	atualiza_advb_aqui.        
-
-% se o jogador perguntou onde estah,remove _aqui_ do contexto
-atualiza_contexto((agente:_ ..tema:incog(onde))):-
-	atualiza_advb_aqui,
-	contexto_atual(Ctx),
-	retractall(contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui),_)).
-
-atualiza_contexto((agente:_ ..tema:incog(_))):-
-	atualiza_advb_aqui.
-
 atualiza_contexto((agente:AgResp ..tema:TemaResp)):-
+	atualiza_advb_aqui,
 	atualiza_contexto_denotado_por(AgResp),
-	atualiza_contexto_denotado_por(TemaResp),
-	atualiza_advb_aqui.
+	atualiza_contexto_denotado_por(TemaResp).
 
 atualiza_contexto_denotado_por([]).
+
+% se o jogador perguntou onde estah,remove _aqui_ do contexto
+atualiza_contexto_denotado_por(incog(onde)):-
+	contexto_atual(Ctx),
+	contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui),Local),
+	retractall(contexto(Ctx,_,Local)).
 
 atualiza_contexto_denotado_por(TemaOuAgente):-
 	\+ is_list(TemaOuAgente),
@@ -293,7 +287,8 @@ denota((tipo_pro:pron_qu ..pron:Pron), P):-
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
 	\+ compound(X), 
 	nonvar(X),
-    np((num:N ..gen:G ..indefinido:nao), [X], []).
+    np((id:X ..num:N ..gen:G ..indefinido:nao), Texto, []),
+	nonvar(Texto).
 
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc ..indefinido:sim), X):-
 	\+ compound(X), 
