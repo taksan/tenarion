@@ -23,7 +23,7 @@ ultima_tabua(1).
 
 /* DETERMINA O QUE O OBJETO X TEM */
 ter(Quem, Oque):-
-	\+ racional(Oque),
+	( var(Oque); \+ racional(Oque) ),
 	estar(Oque, Quem).
 	
 pertencer(Oque,A_Quem):-
@@ -297,6 +297,7 @@ racional(zulu).
 racional(mateo).
 
 racional(peixe_voador).
+
 
 /* pertinencia */
 
