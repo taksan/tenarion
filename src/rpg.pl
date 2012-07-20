@@ -133,7 +133,6 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente:Agent 
 processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
    (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema:T ..pessoa:terc ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
-    write(RelacaoAjustada),nl,
     PredAcao =.. [RelacaoAjustada, A, T],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
     ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
@@ -326,12 +325,19 @@ denota_lugar(nenhum, []).
 adiciona_termo_a_definir(Termo, Definicao).
 
 roda_testes:-
+	cleanup_player,
+	assert(jogador('foo')),
     dado_pergunta_espero_resposta(['o','que','tem','aqui','?'], [o,barco,,,uma,corda,,,algumas,minhocas,,,uma,vara,de,pescar,e,algumas,tabuas,estao,em,o,ancoradouro,.]).
 
 dado_pergunta_espero_resposta(Pergunta,Resposta):-
+    seta_contexto(jogador),
     s(Sem, Pergunta, []),
+    seta_contexto(computador),
+    once(atualiza_contexto(Sem)),!,
     processar(Sem,Resp),
-    s(Resp, Resposta, []).
+    s(Resp, Resposta, []),
+    seta_contexto(jogador),
+    once(atualiza_contexto(Resposta)).
 
 determina_agente((pessoa:indic ..num:sing), voce).
 determina_agente(A,A).

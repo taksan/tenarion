@@ -268,12 +268,14 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) 
    	sp(prep:Prep ..desconhecido:IsDesconhecido).
 
 % ex.: sv onde o tema eh uma acao
-sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
-sv(omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..desconhecido:IsDesconhecido).
 
