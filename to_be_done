@@ -1,5 +1,25 @@
 ============================
 
+É possível determinar as consequências de um ato usando o clause:
+
+?- clause(cortar(mao,serrote), R).
+R = assertz(injuriado(voce)).
+ 
+?- clause(cortar(corda,serrote), R).
+R = (poder_cortar(corda, serrote), retract(estar(corda, _G540))).
+
+================================
+
+Zulu é o dono do barco
+       ^^^^^^^^^
+
+"o dono do" é complemento nominal.
+
+http://www.lpeu.com.br/a/Complemento-nominal-e-Adjunto-adnominal.html
+
+
+============================
+
 Permitir a pergunta "por que eu nao posso X"
 Ver: http://www.csupomona.edu/~jrfisher/www/prolog_tutorial/2_18.html
 
