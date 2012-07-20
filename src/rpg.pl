@@ -84,13 +84,13 @@ processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
 
 processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:positivo)):-
-    concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
+    concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
     PredAcao.
 
 processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:negativo)):-
-    concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
+    concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
     \+ PredAcao.
 
@@ -109,12 +109,20 @@ processar(
     adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 % encontra possibilidades de poder fazer alguma coisa
-processar((ato_fala:interro_tema_desconhecido ..agente:Agent ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
-       (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
-    nonvar(AcaoAuxiliar),
+processar((ato_fala:interro_tema_desconhecido
+           ..acao:Relacao
+		   ..agente:Agent
+		   ..tema: (
+		   		tema:incog(onde)..
+				subtema: (num:sing..pessoa:indic..subcat:sp(prep:para)..acao:AcaoAlvo..tema_eh_agente_ou_complemento:a_definir))
+		),
+		(ato_fala:informar .. agente:Agent .. acao:Relacao ..pessoa:terc
+			..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:indic))
+		):-
     nonvar(Relacao),
-    concat_atom([AcaoAuxiliar, '_', Relacao], RelacaoAuxiliar),
-    PredAcao =.. [RelacaoAuxiliar, A, T],
+    nonvar(AcaoAlvo),
+    concat_atom([Relacao, '_', AcaoAlvo], RelacaoAuxiliar),
+    PredAcao =.. [RelacaoAuxiliar, Agent, T],
     findall(T, (PredAcao), L),
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
     filtrar(L1,TS).

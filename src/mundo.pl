@@ -5,7 +5,7 @@
 :- dynamic(estar/2), dynamic(ultima_tabua/1),
    dynamic(falando_com/2), dynamic(defeito/2),
    dynamic(comprimento/2), dynamic(invisivel/1),
-   dynamic(jogador/1).
+   dynamic(jogador/1),dynamic(estado).
 
 /**** Predicados auxiliares para informacao ****/
 
@@ -342,6 +342,9 @@ flutua(placa_nome_loja).
 flutua(vaso_ming).
 flutua(vara_pescar).
 
+tamanho(barco, grande).
+estado(barco, quebrado).
+
 /* indica que X esta unido a Y */
 unido(X, Y):-
         estar_em(Z, X),
@@ -359,8 +362,8 @@ comprimento(remo, 60).
 
 /* acoes de deslocamento */
 poder_ir(voce, X):-
-        estar(voce, CenaAtual),!,
-        local(X),!,
+        estar(voce, CenaAtual),
+        local(X),
         conectado(CenaAtual, X).
 
 ir(voce, X):-

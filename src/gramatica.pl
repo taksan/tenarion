@@ -266,18 +266,11 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
-sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido
-		..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ) -->
-	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
-	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..desconhecido:IsDesconhecido).
-
 sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido 
 		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
-
 
 sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).
