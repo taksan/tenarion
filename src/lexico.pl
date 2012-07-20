@@ -411,7 +411,7 @@ v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
 v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
 
 % VERBO: entender
-v(acao:entender ..num:sing ..pessoa:indic..subcat:[pro(pron:oque),sn]) --> [saber].
-v(acao:entender ..num:sing ..pessoa:prim ..subcat:[pro(pron:oque),sn]) --> [sei].
-v(acao:entender ..num:sing ..pessoa:terc ..subcat:[pro(pron:oque),sn]) --> [sabe].
+v(acao:saber ..num:sing ..pessoa:indic..subcat:[pro(pron:oque),sn]) --> [saber].
+v(acao:saber ..num:sing ..pessoa:prim ..subcat:[pro(pron:oque),sn]) --> [sei].
+v(acao:saber ..num:sing ..pessoa:terc ..subcat:[pro(pron:oque),sn]) --> [sabe].
 

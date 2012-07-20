@@ -1,5 +1,6 @@
 /*********************** Gramatica *********************/
 :-[gulp].
+:-[apoio_gramatical].
 :- dynamic(np_desconhecido/2).
 
 /*
@@ -40,12 +41,19 @@ s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-        spro(id:PronRelativo),
-        sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
-        pontuacao_opcional(_),
+    spro(id:PronRelativo),
+    sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
+    pontuacao_opcional(_),
 	{ 
 	  determina_desconhecido(A, IsDesconhecido, Ag)
 	}.
+
+s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
+    spro(id:PronRelativo),
+	sn(id:Ag),
+    sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Tema ..desconhecido:IsDesconhecido),
+    pontuacao_opcional(_).
+
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
@@ -59,7 +67,7 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 
 /* informar / mandar */
 % sentenca para agente singular
-s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:nao) -->
+s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:_) -->
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes), 
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
@@ -74,39 +82,26 @@ s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 	%<{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca onde o agente eh "ninguem" ou "nada". (ex: nada estah aqui)
-s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:nao) -->
+s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:_) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
         pontuacao_opcional('.').
 	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
-s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P ..desconhecido:nao) -->
+s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
         pontuacao_opcional('.').
 	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
-s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconhecido:nao) -->
+s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconhecido:_) -->
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
 	pontuacao_opcional('.').
 %,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
-% perguntas cujas respostas serao sim ou nao, do tipo "a faca estah aqui?" - acho que a regra de cima cobre essa regra
-%s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:IsDesconhecido) -->
-%        { \+compound(T), (member(Tipo, [np,nc]))},
-%	sv(tema_eh_agente_ou_complemento:complemento ..agente:A ..tipo:Tipo ..omite:nao ..acao:X .. tema:T),
-%        ['?'],
-%	{ determina_desconhecido(T, IsDesconhecido, EI) }.
-
 /* atos de fala diversos */
-% funciona para produzir resposta do tipo "voce nao pode pegar X."
-s(ato_fala:recusar ..positivo:IsPositivo ..agente:A ..acao:X .. tema:T ..desconhecido:nao ..pessoa:Pessoa) -->
-	sn(coord:nao ..id:A),
-%        [nao], [pode],
-	sv(tema_eh_agente_ou_complemento:complemento positivo:IsPositivo ..acao:X .. tema:T ..pessoa: Pessoa),
-        pontuacao_opcional('.').
 
 % funciona para resposta do tipo tipo "eu nao sei o que eh faca"
 s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:Pessoa) -->
@@ -115,10 +110,6 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
         pontuacao_opcional('.').
 
 % SINTAGMA NOMINAL
-sn_indef(coord:nao .. id:desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -->
-    ident(gen:G .. num:N ..tipo:nc),
-	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
-
 % casa com pronomes: eu, ele, voce
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
         { \+ is_list(Ag) },
@@ -183,9 +174,10 @@ sn(coord:nao ..id:Ag ..pessoa:prim ..desconhecido:nao ..produzindo:ProduzindoTex
 %	{ ignore(np((id:Ag ..num:N ..pessoa:P ..gen:N),_,[]) }.
 
 % essa regra eh para produzir texto sobre substantivos desconhecidos
-sn(coord:nao .. id:Texto ..desconhecido:sim ..pessoa:terc) -->
-	{ nonvar(Texto) },
-	sn_indef(coord:nao ..id:Texto ..pessoa:terc).
+sn(coord:nao .. id:Id ..desconhecido:sim) -->
+	{ nonvar(Id), Id=desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)  },
+    ident(gen:G .. num:N ..tipo:nc),
+	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
 
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:
@@ -266,23 +258,29 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) 
 	sn(id:T ..desconhecido:IsDesconhecido),
    	sp(prep:Prep ..desconhecido:IsDesconhecido).
 
-% ex.: sv onde o tema eh uma acao
-sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+% ex.: sv onde o tema eh uma acao .. nesse caso, vai ser usado para "eu NAO SEI O QUE <verbo>"
+sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido
+		..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T)) -->
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
-sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido
+		..tema:(acao:AX ..pessoa:P ..num:N ..tema:T) ) -->
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..desconhecido:IsDesconhecido).
 
-sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido 
+		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite: O ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido).
+	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
 
+
+sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
 sp(id:I .. prep:_ ..desconhecido:_)-->
@@ -336,53 +334,3 @@ mod(_) --> sp(_).
 mod(_) --> [].
 
 pontuacao_opcional(P) --> [P];[].
-
-% tratamento de casos desconhecidos
-is_positivo(np([],_), nao).
-is_positivo(_, sim).
-
-cria_np_desconhecido(IsDesconhecido,_, _, _, _):-
-	var(IsDesconhecido),
-	IsDesconhecido = nao.
-
-cria_np_desconhecido(sim, Texto, T, G, N):-
-	nonvar(T), nonvar(G), nonvar(N), nonvar(Texto),
-	asserta(np_desconhecido(Texto, desconhecido(texto: Texto ..tipo:T ..gen:G ..num:N))).
-
-cria_np_desconhecido(IsDesconhecido,Texto, _, _, _):-
-	( var(IsDesconhecido) ; IsDesconhecido = nao ),
-	clause(np_desconhecido, _),
-	np_desconhecido(Texto, _),
-	retract(np_desconhecido(Texto, _)).
-	
-cria_np_desconhecido(_,_,_,_,_).
-
-determina_desconhecido(IdentidadeDesconhecido, sim, Tracos):-
-	np_desconhecido(IdentidadeDesconhecido, Tracos),!,
-	retract(np_desconhecido(IdentidadeDesconhecido, _)).
-
-determina_desconhecido(IdentidadeDesconhecido, nao, IdentidadeDesconhecido):-
-	\+ np_desconhecido(IdentidadeDesconhecido, _).
-
-determina_desconhecido(A, _,A):-
-	\+ compound(A),
-	retractall(np_desconhecido).
-
-%%%%%%%% Utilizado para contracoes/quebra
-%% eh usado no IO
-equivale(na, [em, a]).
-equivale(numa, [em, uma]).
-equivale(no, [em, o]).
-equivale(num, [em, um]).
-equivale(da, [de, a]).
-equivale(das, [de, as]).
-equivale(do, [de, o]).
-equivale(dos, [de, os]).
-equivale(comigo, [em, eu]).
-equivale(contigo, [em, voce]).
-equivale(nele, [em, ele]).
-equivale(dele, [de, ele]).
-equivale(dela, [de, ela]).
-equivale(deles, [de, eles]).
-equivale(delas, [de, elas]).
-

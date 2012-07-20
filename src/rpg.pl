@@ -100,7 +100,7 @@ processar(
     (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
     (ato_fala:recusar 
         ..desconhecido:sim 
-        ..acao:entender
+        ..acao:saber
         ..num:sing
         ..tema:(acao:ser ..pessoa:terc ..num:Num ..tema:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
         ..agente:narrador
