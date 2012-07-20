@@ -146,10 +146,16 @@ processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
         notrace(PredAcao).
 
 processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
-          (ato_fala:recusar .. agente:jogador .. acao:Relacao .. tema:T)):-
+          (ato_fala:informar
+		   ..agente:voce
+		   ..acao:poder 
+		   ..positivo:nao 
+		   ..pessoa:terc
+		   ..tema:(acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
+		  )):-
     determina_agente(A, Ag),
-        PredAcao =.. [Relacao, Ag, T],
-        \+ notrace(PredAcao).
+    PredAcao =.. [Relacao, Ag, T],
+    \+ notrace(PredAcao).
 
 %%% acao cujo resultado eh descritivo
 processar((ato_fala:informar ..agente:A .. acao:Relacao .. tema:T),

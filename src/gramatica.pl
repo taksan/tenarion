@@ -59,10 +59,10 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 
 /* informar / mandar */
 % sentenca para agente singular
-s(ato_fala:informar ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:nao) -->
+s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:nao) -->
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes), 
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
+	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
     	pontuacao_opcional('.').
 	%,{ determina_desconhecido(A, IsDesconhecido, EI) }.
 
@@ -102,22 +102,21 @@ s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconheci
 
 /* atos de fala diversos */
 % funciona para produzir resposta do tipo "voce nao pode pegar X."
-s(ato_fala:recusar ..agente:A ..acao:X .. tema:T ..desconhecido:nao ..pessoa:Pessoa) -->
-	sn(coord:nao ..id:A ..pessoa:Pessoa),
-        [nao], [pode],
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:_ ..acao:X .. tema:T ..pessoa: indic),
+s(ato_fala:recusar ..positivo:IsPositivo ..agente:A ..acao:X .. tema:T ..desconhecido:nao ..pessoa:Pessoa) -->
+	sn(coord:nao ..id:A),
+%        [nao], [pode],
+	sv(tema_eh_agente_ou_complemento:complemento positivo:IsPositivo ..acao:X .. tema:T ..pessoa: Pessoa),
         pontuacao_opcional('.').
 
 % funciona para resposta do tipo tipo "eu nao sei o que eh faca"
 s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:Pessoa) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa ..tipo:_ ..produzindo:sim),
-%        [nao], 
-	sv(positivo:nao ..tema_eh_agente_ou_complemento:complemento ..omite:_ ..acao:X .. tema:Tema ..pessoa: Pessoa ..desconhecido:sim),
+	sv(positivo:nao ..tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Tema ..pessoa: Pessoa ..desconhecido:sim),
         pontuacao_opcional('.').
 
 % SINTAGMA NOMINAL
 sn_indef(coord:nao .. id:desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)) -->
-    ident(gen:G .. num:N ..tipo:Tipo),
+    ident(gen:G .. num:N ..tipo:nc),
 	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
 
 % casa com pronomes: eu, ele, voce
@@ -278,6 +277,12 @@ sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:P ..num:N ..t
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:AX ..subcat:[sv] ..pessoa:P),
 	sv(omite: O ..acao:A ..tema:T .. num:N ..pessoa:indic ..desconhecido:IsDesconhecido).
+
+sv(positivo:IsPositivo ..omite:O ..acao:A ..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+	negacao(positivo:IsPositivo),
+	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
+	sv(tema_eh_agente_ou_complemento:complemento ..omite: O ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido).
+
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
 sp(id:I .. prep:_ ..desconhecido:_)-->
