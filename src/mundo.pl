@@ -48,13 +48,15 @@ perto(X, Y):-
 
 
 /* LOCAL: JOGO  -- todos os cenarios do jogo */
-estar(Obj, aqui):-
-	mesmo_lugar(voce, Obj).
-
 estar(ancoradouro, jogo).
 estar(carpintaria, jogo).
 estar(lago, jogo).
 estar(ilha, jogo).
+estar(Obj, aqui):-
+	var(Obj),
+	mesmo_lugar(voce, Obj).
+
+
 
 /* LOCAL ONDE VOCE SE ENCONTRA */
 estar(voce, ancoradouro).
@@ -170,8 +172,8 @@ estar_em(X, Y):-
         estar_em(X, Y).
 
 mesmo_lugar(X, Y):-
-    estar_em(X, Local), !,
-    estar_em(Y, Local).
+    estar(X, Local), !,
+    estar(Y, Local).
 
 
 /* *** PROPRIEDADES DOS OBJETOS */
@@ -308,7 +310,10 @@ comprimento(remo, 60).
 
 /* acoes de deslocamento */
 poder_ir(voce, barco):-
-	dono(voce, barco).
+	dono(voce, barco),
+    estar(voce, CenaAtual),
+    local(X),
+    perto(CenaAtual, X).
 
 poder_ir(voce, lago):-
 	estar(voce, barco),
@@ -316,6 +321,7 @@ poder_ir(voce, lago):-
 	ter(voce, remo).
 
 poder_ir(voce, X):-
+		\+ member(X,[barco,lago]),
         estar(voce, CenaAtual),
         local(X),
         perto(CenaAtual, X).
@@ -432,14 +438,13 @@ largar(X):-
 /* pegar */
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	dono(Quem, Oque),
 	mesmo_lugar(Quem, Oque),
 	pegavel(Oque),
-	\+ ter(Quem,Oque).
+	\+ ter(Quem,Oque),
+	dono(Quem, Oque).
 
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	\+ ter(Quem,Oque), 
 	mesmo_lugar(Quem, Oque),
 	pegavel(Oque),
 	\+ ter(Quem,Oque),
