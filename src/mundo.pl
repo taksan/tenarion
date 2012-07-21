@@ -27,36 +27,34 @@ ter(Quem, Oque):-
 	estar(Oque, Quem).
 	
 pertencer(Oque,A_Quem):-
-	ter(A_Quem, Oque).	
+    ter(A_Quem, Oque).
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
 
 adjacente(ancoradouro, carpintaria).
-
 adjacente(barco, lago).
-
 adjacente(lago, ilha).
 
-conectado(X, Y):-
+perto(X, Y):-
         adjacente(X,Y).
 
-conectado(X, Y):-
+perto(X, Y):-
         adjacente(Y,X).
 
-conectado(X, Y):-
+perto(X, Y):-
         estar(Y, X).
 
-conectado(X, Y):-
+perto(X, Y):-
         estar(X, Y).
 
 
 /* LOCAL: JOGO  -- todos os cenarios do jogo */
+estar(Obj, aqui):-
+	mesmo_lugar(voce, Obj).
+
 estar(ancoradouro, jogo).
-
 estar(carpintaria, jogo).
-
 estar(lago, jogo).
-
 estar(ilha, jogo).
 
 /* LOCAL ONDE VOCE SE ENCONTRA */
@@ -65,45 +63,31 @@ estar(voce, ancoradouro).
 /* LOCAL: Inventario */
 
 estar(identidade, voce).
-
 estar(cartao_credito, voce).
-
 estar(sua(mao), voce).
 
 /* LOCAL: ANCORADOURO */
 
 estar((tabua, 1), ancoradouro).
-
 estar(vara_pescar, ancoradouro).
-
 estar(minhocas, ancoradouro).
-
 estar(barco, ancoradouro).
-
 estar(zulu, ancoradouro).
-
 estar(corda, ancoradouro).
 
 /* BARCO */
 estar(buraco, barco).
-
 estar(pregos, barco).
-
 estar(corda, barco).
+estar(agua, barco).
 
 /* LOCAL: CARPINTARIA */
 estar(mateo, carpintaria).
-
 estar(caixa_eletronico, carpintaria).
-
 estar(placa_nome_loja, carpintaria).
-
 estar(balcao, carpintaria).
-
 estar(estande, carpintaria).
-
 estar(carteira, carpintaria).
-
 estar(poster, carpintaria).
 
 /* ESTANDE */
@@ -115,9 +99,7 @@ estar(tesoura, estande).
 
 /* BALCAO */
 estar(caixa_registradora, balcao).
-
 estar(vaso_ming, balcao).
-
 estar(circulo_de_velas, balcao).
 
 /* CIRCULO DE VELAS */
@@ -138,19 +120,15 @@ estar(feiticeira, poster).
 
 /* caixa eletronico */
 estar(dinheiro, caixa_eletronico).
-
 estar(botoes, caixa_eletronico).
-
 estar(tela, caixa_eletronico).
 
 /* LOCAL: LAGO */
 estar(agua_do_lago, lago).
-
 estar(peixe_voador, lago).
 
 /* AGUA DO LAGO */
 estar(peixe, agua_do_lago).
-
 estar(vitoria_regia, agua_do_lago).
 
 /* Verificacao sobre um conjunto de objetos */
@@ -193,8 +171,8 @@ estar_em(X, Y):-
         estar_em(X, Y).
 
 mesmo_lugar(X, Y):-
-	estar_em(X, Local), !,
-	estar_em(Y, Local).
+    estar_em(X, Local), !,
+    estar_em(Y, Local).
 
 
 /* *** PROPRIEDADES DOS OBJETOS */
@@ -210,64 +188,36 @@ estado(X, bom):-
 /* indica se objeto e invisivel */
 
 invisivel(chiclete).
-
 invisivel(pregos).
-
 invisivel(buraco).
-
 invisivel(dinheiro).
-
 invisivel(peixe).
 
 /* pegavel */
 
 pegavel((vela, _)).
-
 pegavel(martelo).
-
 pegavel(identidade).
-
 pegavel(carta_credito).
-
 pegavel(sua(mao)).
-
 pegavel((tabua, _)).
-
 pegavel(vara_pescar).
-
 pegavel(minhocas).
-
 pegavel(pregos).
-
 pegavel(poster).
-
 pegavel(serrote).
-
 pegavel(tesoura).
-
 pegavel(vaso_ming).
-
 pegavel(santo_do_pau_oco).
-
 pegavel(chiclete).
-
 pegavel(dinheiro).
 
 /* indica que e um local e que o personagem pode "ir para" ele */
-
 local(ancoradouro).
-
 local(carpintaria).
-
-local(lago):-
-        navegavel(barco),
-        estar_em(remo, voce).
-
 local(ilha).
-
-local(barco):-
-        dono(voce, barco).
-
+local(lago).
+local(barco).
 local(caixa_eletronico).
 
 /* identidade */
@@ -275,7 +225,7 @@ ser(voce, narrador):-
         \+ falando_com(voce, _).
 
 ser(voce, X):-
-        falando_com(voce, X).        
+        falando_com(voce, X).
 ser(L,L).        
 
 /* diferenca entre pessoas e objetos */
@@ -353,21 +303,27 @@ unido(X, Y):-
 /* determina tamanho dos elementos do jogo */
 
 comprimento((tabua, 1), 100).
-
 comprimento(buraco, 8).
-
 comprimento(remo, 60).
 
 /* ACOES: define acoes que podem ser realizadas SOBRE os objetos */
 
 /* acoes de deslocamento */
+poder_ir(voce, barco):-
+	dono(voce, barco).
+
+poder_ir(voce, lago):-
+	estar(voce, barco),
+	\+ quebrado(barco),
+	ter(voce, remo).
+
 poder_ir(voce, X):-
         estar(voce, CenaAtual),
         local(X),
-        conectado(CenaAtual, X).
+        perto(CenaAtual, X).
 
 ir(voce, X):-
-		poder_ir(voce, X),!,
+        poder_ir(voce, X),!,
         retract(estar(voce, _)),
         assert(estar(voce, X)).
 
@@ -390,27 +346,44 @@ cortar_com((tabua, X), serrote):-
         estar_em(voce, CenaAtual),
         assertz(estar((tabua, NovaUltima), CenaAtual)).
 
-poder_cortar(ObjACortar, ObjParaCortar):-
-	estar(voce, CenaAtual),
-	(estar_em(ObjACortar, voce) ; estar(ObjACortar, CenaAtual)),!,
-	estar_em(ObjParaCortar, voce).
+objeto_A_corta_B(faca,corda).
+objeto_A_corta_B(serrote,tabua).
+objeto_A_corta_B(serrote,barco).
 
-cortar(corda, serrote):-
-        poder_cortar(corda, serrote),
+poder_cortar(voce, ObjACortar, ObjParaCortar):-
+    estar(ObjACortar, aqui),
+    ter(voce, ObjParaCortar),
+    objeto_A_corta_B(ObjParaCortar,ObjParaCortar).
+
+poder_cortar(voce, Oque, ComOQue):-
+    var(Oque), Oque=oque,
+    var(ComOQue), ComOQue=oque.
+
+cortar(voce, Oque, ComOQue):-
+    var(Oque), Oque=oque,
+    var(ComOQue), ComOQue=oque.
+
+cortar(voce, corda, tesoura):-
+        poder_cortar(voce, corda, tesoura),
         retract(estar(corda, _)).
 
-cortar(mao, serrote):-
+cortar(voce, mao, serrote):-
         assertz(injuriado(voce)).
+
+amarrar(voce, Oque, [NoQue,ENoQue]):-
+	poder_amarrar(voce, corda, [barco,ancoradouro]),
+	assertz(estar(corda, barco)),
+	assertz(estar(corda, ancoradouro)),
 
 /* execucao da acao de consertar: somente para buraco/barco */
 poder_consertar(voce, X):-
-	poder_consertar(X).
+    poder_consertar(X).
 
 poder_consertar(X):-
         dono(voce, X),
-		ter(voce,pregos),
-		ter(voce,tabuas),
-		ter(voce,martelo).
+        ter(voce,pregos),
+        ter(voce,tabuas),
+        ter(voce,martelo).
 
 consertar(voce, X):-
         consertar(X).
@@ -423,11 +396,11 @@ consertar(barco):-
 
 /* pregar: aplicavel a qualquer objeto */
 pregar_em_com(prego, X, martelo):-
-        estar_em(martelo, voce), !, 
-        estar_em(pregos, voce),!,
-        mesmo_lugar(voce, X),!,
+        ter(voce, martelo), !, 
+        ter(voce, prego),!,
+        estar(X, aqui),!,
         assertz(estar_em(pregos, X)).
-        
+
 pregar_em_com(prego, X, Y, martelo):-
         estar_em(martelo, voce), !, 
         estar_em(pregos, voce), !,
@@ -438,16 +411,17 @@ pregar_em_com(prego, X, Y, martelo):-
         assertz(estar(prego, Y)).
 
 /* colocar objeto X em objeto Y */
+poder_colocar(voce, OQue, Onde):-
+	ter(voce, X),
+	(estar(voce, Onde); mesmo_lugar(voce, Onde)).
+
 colocar(voce, X, Y):-
-        colocar(X, Y).
+	poder_colocar(voce, OQue, Onde),
+    colocar(X, Y).
 
 colocar(X, Y):-
-        estar_em(X, voce), !, 
-        estar_em(voce, CenaAtual), !,
-        (estar_em(Y, CenaAtual);
-         Y = CenaAtual), !, 
-        assertz(estar(X, Y)),
-        retract(estar(X, voce)).
+    retract(estar(X, voce)),
+    assertz(estar(X, Y)).
 
 /* larga o objeto e o coloca na cena atual */
 soltar(voce, X):-
@@ -460,10 +434,10 @@ largar(X):-
 /* pegar */
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	(dono(Oque, Quem); \+ dono(Oque, _)), !,
-	\+ estar_em(Oque, Quem), !,
-	mesmo_lugar(Quem, Oque), !,
-	pegavel(Oque).
+    (dono(Oque, Quem); \+ dono(Oque, _)), !,
+    \+ estar_em(Oque, Quem), !,
+    mesmo_lugar(Quem, Oque), !,
+    pegavel(Oque).
 
 pegar(voce, X):-
         pegar(X).
@@ -476,7 +450,7 @@ pegar(X):-
 /* vedar -- para vedar buracos */
 vedar(buraco, X):-
         (X = vela ; X = chiclete),
-        estar_em(X, voce),!,
+        ter(voce,X),!,
         unido(barco, (tabua, _)),!,
         consertar(barco),
         retract(estar(X, voce)).
@@ -489,9 +463,18 @@ vedar(barco, X):-
         retract(estar(X, voce)).
 
 /* fazer remo */
+poder_fazer(voce, remo):-
+	ter(voce, tabua),
+	ter(voce, serrote).	
+
+fazer(voce, remo):-
+	poder_fazer(voce,remo),
+    retract(estar((tabua, X), voce)),
+    assert(estar(remo, voce)).
+
 fazer(remo, (tabua, X)):-
-        estar((tabua, X), voce),
-        estar(serrote, voce),
+        ter(voce, (tabua, X)),
+        ter(voce,serrote),
         comprimento((tabua, X), Comp),
         Comp > 50,
         retract(estar((tabua, X), voce)),
@@ -517,7 +500,7 @@ examinar(Oque, [obj(Objetos), def(Defeitos)]):-
 
 /* conversar -- inicia dialogo com Pessoa */
 poder_conversar(voce, X):-
-	poder_conversar_com(X).
+    poder_conversar_com(X).
 
 poder_conversar_com(X):-
         racional(Pessoa), !, 
@@ -527,7 +510,7 @@ conversar(voce, X):-
         conversar_com(X).
 
 conversar_com(Pessoa):-
-		poder_conversar_com(Pessoa),
+        poder_conversar_com(Pessoa),
         assertz(falando_com(voce, Pessoa)).
 
 finaliza_conversa(Pessoa):-
@@ -540,14 +523,18 @@ finaliza_conversa(Pessoa):-
 
 /* acoes provenientes do lexico */
 
-
-
 /* --- acoes de conversa com personagens --- */
 
 /* comprar objeto da pessoa */
-comprar([voce, Objeto], Pessoa):-
-        comprar_de(Objeto, Pessoa).
-
-comprar_de(Objeto, Pessoa):-
-        falando_com(voce, Pessoa), !, 
+poder_comprar(voce,Objeto):-
+        dono(Objeto, Pessoa),
+        falando_com(voce, Pessoa), 
         aceitar_vender(Pessoa, Objeto).
+    
+comprar(voce, Objeto):-
+        poder_comprar(voce,Objeto),
+        retractall(dono(_,Objeto)),
+        assertz(dono(voce,Objeto)),
+        assertz(estar(Objevo,voce)).
+
+digitar(voce, Oque, NoQue):-
