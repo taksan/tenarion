@@ -113,11 +113,11 @@ processar((ato_fala:interro_tema_desconhecido
            ..acao:Relacao
 		   ..agente:Agent
 		   ..tema: (
-		   		tema:incog(onde)..
-				subtema: (num:sing..pessoa:indic..subcat:sp(prep:para)..acao:AcaoAlvo..tema_eh_agente_ou_complemento:a_definir))
+		   		tema:incog(_)..%oque,quem,onde
+				subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo))
 		),
 		(ato_fala:informar .. agente:Agent .. acao:Relacao ..pessoa:terc
-			..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:indic))
+			..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
 		):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),

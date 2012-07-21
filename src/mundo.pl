@@ -1,7 +1,6 @@
 /************************************************
 *          MODULO DE DESCRICAO DO MUNDO         *
 ************************************************/
-
 :- dynamic(estar/2), dynamic(ultima_tabua/1),
    dynamic(falando_com/2), dynamic(defeito/2),
    dynamic(comprimento/2), dynamic(invisivel/1),
@@ -250,11 +249,6 @@ racional(peixe_voador).
 
 
 /* pertinencia */
-
-% voce
-dono(X, voce):-
-        estar(X, voce).
-
 % zulu
 dono(zulu, barco).
 dono(zulu, vara_de_pescar).
@@ -271,6 +265,10 @@ dono(mateo, estande).
 dono(mateo, carpintaria).
 dono(mateo, santo_do_pau_oco).
 dono(mateo, carteira).
+% voce
+dono(X, voce):-
+	nonvar(X),
+    estar(X, voce).
 
 /* quem conhece quem*/
 conhecer(zulu, mateo).
@@ -434,10 +432,18 @@ largar(X):-
 /* pegar */
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-    (dono(Oque, Quem); \+ dono(Oque, _)), !,
-    \+ estar_em(Oque, Quem), !,
-    mesmo_lugar(Quem, Oque), !,
-    pegavel(Oque).
+	dono(Quem, Oque),
+	mesmo_lugar(Quem, Oque),
+	pegavel(Oque),
+	\+ ter(Quem,Oque).
+
+poder_pegar(Quem,Oque):-
+    %   \+ invisivel(X),
+	\+ ter(Quem,Oque), 
+	mesmo_lugar(Quem, Oque),
+	pegavel(Oque),
+	\+ ter(Quem,Oque),
+	\+ dono(_, Oque).
 
 pegar(voce, X):-
         pegar(X).
@@ -537,4 +543,8 @@ comprar(voce, Objeto):-
         assertz(dono(voce,Objeto)),
         assertz(estar(Objevo,voce)).
 
+poder_digitar(voce, senha, caixa_eletronico).
+
 digitar(voce, Oque, NoQue):-
+	poder_digitar(voce, Oque, NoQue),
+	assertz(digitado(Oque, NoQue).

@@ -41,7 +41,8 @@ s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-    spro(id:PronRelativo),
+	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:P), 
+%    spro(id:PronRelativo),
     sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_),
 	{ 
@@ -49,7 +50,8 @@ s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRel
 	}.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
-    spro(id:PronRelativo),
+	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:P), 
+%    spro(id:PronRelativo),
 	sn(id:Ag),
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Tema ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
