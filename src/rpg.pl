@@ -3,6 +3,7 @@
 :-[lexico].
 :-[gramatica].
 :-[io].
+:-[auxiliar].
 
 :-dynamic contexto/3, contexto_atual/1.
 /*
@@ -111,14 +112,14 @@ processar(
 % encontra possibilidades de poder fazer alguma coisa
 processar((ato_fala:interro_tema_desconhecido
            ..acao:Relacao
-		   ..agente:Agent
-		   ..tema: (
-		   		tema:incog(_)..%oque,quem,onde
-				subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo))
-		),
-		(ato_fala:informar .. agente:Agent .. acao:Relacao ..pessoa:terc
-			..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
-		):-
+           ..agente:Agent
+           ..tema: (
+                   tema:incog(_)..%oque,quem,onde
+                subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo))
+        ),
+        (ato_fala:informar .. agente:Agent .. acao:Relacao ..pessoa:terc
+            ..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
+        ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),
     concat_atom([Relacao, '_', AcaoAlvo], RelacaoAuxiliar),
@@ -150,20 +151,24 @@ processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente:inco
 processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
           (ato_fala:responder .. mensagem:ok)):-
     determina_agente(A, Ag),
-        PredAcao =.. [Relacao, Ag, T],
-        notrace(PredAcao).
+    PredAcao =.. [Relacao, Ag, T],
+    notrace(PredAcao).
 
 processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
           (ato_fala:informar
-		   ..agente:voce
-		   ..acao:poder 
-		   ..positivo:nao 
-		   ..pessoa:terc
-		   ..tema:(acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
-		  )):-
+           ..agente:voce
+           ..acao:poder 
+           ..positivo:nao 
+           ..pessoa:terc
+           ..tema:(acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
+		   ..porque:Porque
+          )):-
     determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
-    \+ notrace(PredAcao).
+    \+ notrace(PredAcao),
+	concat_atom(poder_,Relacao, PoderRelacao),
+	determina_predicados_que_falharam(PoderRelacao, Failed),
+	gera_porque(Failed,Porque).
 
 %%% acao cujo resultado eh descritivo
 processar((ato_fala:informar ..agente:A .. acao:Relacao .. tema:T),
@@ -339,8 +344,8 @@ denota_lugar(nenhum, []).
 adiciona_termo_a_definir(Termo, Definicao).
 
 roda_testes:-
-	cleanup_player,
-	assert(jogador('foo')),
+    cleanup_player,
+    assert(jogador('foo')),
     dado_pergunta_espero_resposta(['o','que','tem','aqui','?'], [o,barco,,,uma,corda,,,algumas,minhocas,,,uma,vara,de,pescar,e,algumas,tabuas,estao,em,o,ancoradouro,.]).
 
 dado_pergunta_espero_resposta(Pergunta,Resposta):-
@@ -355,3 +360,23 @@ dado_pergunta_espero_resposta(Pergunta,Resposta):-
 
 determina_agente((pessoa:indic ..num:sing), voce).
 determina_agente(A,A).
+
+gera_porque([],[]).
+
+gera_porque((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
+	Pred =..[Acao,Agente,Tema],
+	gera_porque(RestoPredicados,Resto).
+
+gera_porque((Pred,RestoPredicados),[(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+	Pred =..[Acao,Agente,Tema],
+	gera_porque(RestoPredicados,Resto).
+
+
+gera_porque([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
+	Pred =..[Acao,Agente,Tema],
+	gera_porque(RestoPredicados,Resto).
+
+gera_porque([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+	Pred =..[Acao,Agente,Tema],
+	gera_porque(RestoPredicados,Resto).
+

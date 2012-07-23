@@ -8,6 +8,9 @@
 
 /**** Predicados auxiliares para informacao ****/
 
+nao(Predicado):-
+	\+ Predicado.
+
 inventario(Obj):-
         examinar(voce, Obj).
 
@@ -282,6 +285,9 @@ conhecer(peixe_voador, mateo).
 defeito(barco, [buraco]).
 defeito(tesoura, [semfio]).
 
+quebrado(OQue):-
+	defeito(OQue, _).
+
 /* capacidade de flutuar */
 flutua(zulu).
 flutua(mateo).
@@ -312,19 +318,18 @@ comprimento(remo, 60).
 poder_ir(voce, barco):-
 	dono(voce, barco),
     estar(voce, CenaAtual),
-    local(X),
-    perto(CenaAtual, X).
+    perto(CenaAtual, barco).
 
 poder_ir(voce, lago):-
 	estar(voce, barco),
-	\+ quebrado(barco),
+	nao(quebrado(barco)),
 	ter(voce, remo).
 
 poder_ir(voce, X):-
-		\+ member(X,[barco,lago]),
         estar(voce, CenaAtual),
         local(X),
-        perto(CenaAtual, X).
+        perto(CenaAtual, X),
+		\+ member(X,[barco,lago]).
 
 ir(voce, X):-
         poder_ir(voce, X),!,
@@ -552,4 +557,4 @@ poder_digitar(voce, senha, caixa_eletronico).
 
 digitar(voce, Oque, NoQue):-
 	poder_digitar(voce, Oque, NoQue),
-	assertz(digitado(Oque, NoQue).
+	assertz(digitado(Oque, NoQue)).

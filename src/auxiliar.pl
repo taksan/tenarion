@@ -3,6 +3,9 @@ determina_predicados_que_falharam(Predicate, Failed):-
 	clause(Predicate, R),
 	determina_falha(R, Failed).
 
+determina_falha((A),[A]):-
+	A.
+
 determina_falha(((A;B),_), [A]):-
 	\+ A,
 	\+ B.
