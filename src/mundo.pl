@@ -273,7 +273,7 @@ dono(mateo, carpintaria).
 dono(mateo, santo_do_pau_oco).
 dono(mateo, carteira).
 % voce
-dono(X, voce):-
+dono(voce, X):-
 	nonvar(X),
     estar(X, voce).
 
@@ -327,9 +327,10 @@ poder_ir(voce, lago):-
 	ter(voce, remo).
 
 poder_ir(voce, X):-
-        estar(voce, CenaAtual),
+		estar(voce, Aqui),
+		nao(estar(voce, X)),
         local(X),
-        perto(CenaAtual, X),
+        perto(Aqui, X),
 		\+ member(X,[barco,lago]).
 
 ir(voce, X):-
@@ -387,18 +388,12 @@ amarrar(voce, Oque, [NoQue,ENoQue]):-
 
 /* execucao da acao de consertar: somente para buraco/barco */
 poder_consertar(voce, X):-
-    poder_consertar(X).
-
-poder_consertar(X):-
         dono(voce, X),
         ter(voce,pregos),
         ter(voce,tabuas),
         ter(voce,martelo).
 
-consertar(voce, X):-
-        consertar(X).
-
-consertar(barco):-
+consertar(voce, barco):-
         poder_consertar(barco),
         retract(defeito(barco, [buraco])),
         retract(estar(buraco, barco)).
@@ -444,17 +439,17 @@ largar(X):-
 /* pegar */
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	mesmo_lugar(Quem, Oque),
 	pegavel(Oque),
-	\+ ter(Quem,Oque),
-	dono(Quem, Oque).
+	nao(ter(Quem,Oque)),
+	dono(Quem, Oque),
+	mesmo_lugar(Quem, Oque).
 
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	mesmo_lugar(Quem, Oque),
 	pegavel(Oque),
-	\+ ter(Quem,Oque),
-	\+ dono(_, Oque).
+	nao(ter(Quem,Oque)),
+	nao(dono(_, Oque)),
+	mesmo_lugar(Quem, Oque).
 
 pegar(voce, X):-
         pegar(X).

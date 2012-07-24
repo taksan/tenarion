@@ -365,6 +365,9 @@ dado_pergunta_espero_resposta(Pergunta,Resposta):-
 determina_agente((pessoa:indic ..num:sing), voce).
 determina_agente(A,A).
 
+gera_explicacao_falhas(Pred,Explicao):-
+	determina_predicados_que_falharam(Pred, Causa), gera_porque(Causa,Explicao).
+
 gera_porque([],[]).
 
 gera_porque((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
@@ -379,6 +382,11 @@ gera_porque((Pred,RestoPredicados),[(predicado:Acao ..positivo:nao ..agente:Agen
 gera_porque([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
 	gera_porque(RestoPredicados,Resto).
+
+gera_porque([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+	Pred =..[Acao,Agente],
+	gera_porque(RestoPredicados,Resto).
+
 
 gera_porque([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
