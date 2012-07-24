@@ -34,15 +34,14 @@ s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X 
 
 
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
-s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:IsDesconhecido) -->
+s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:_) -->
 	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
 	sv(acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:P), 
-%    spro(id:PronRelativo),
+	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
     sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_),
 	{ 
@@ -50,9 +49,8 @@ s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRel
 	}.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
-	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:P), 
-%    spro(id:PronRelativo),
-	sn(id:Ag),
+	sn(tipo: _ .. coord:nao ..id:PronRelativo),% casa com ONDE
+	sn(id:Ag),%casa com o sujeito
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Tema ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 
@@ -87,14 +85,14 @@ s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:_) -->
 	sn(tipo: pron_ninguem(E) .. coord:nao),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-        pontuacao_opcional('.').
+    pontuacao_opcional('.').
 	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
-s(ato_fala:informar .. agente:[A1|A2] .. acao:X .. tema:T ..pessoa:P) -->
-	sn(coord:sim .. id:[A1|A2] ..pessoa:P),
+s(ato_fala:informar .. agente:[A1|ATail] .. acao:X .. tema:T ..pessoa:P) -->
+	sn(coord:sim .. id:[A1|ATail] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
-        pontuacao_opcional('.').
+    pontuacao_opcional('.').
 	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
@@ -113,7 +111,7 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
 
 % SINTAGMA NOMINAL
 % casa com pronomes: eu, ele, voce
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
         { \+ is_list(Ag) },
         { (
         	var(Ag); 
@@ -126,6 +124,10 @@ sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -
           	var(Ag),
            	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag) 
            )}.
+
+sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
+	[lugar],
+	pro(tipo_pro:pron_ninguem(onde)).
 
 sn(coord:nao ..positivo:nao ..id:np([],TipoQuem) ..desconhecido:nao)-->
 	pro(tipo_pro:pron_ninguem(TipoQuem)).
@@ -148,22 +150,22 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesc
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ var(P) },
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..aceita_pron:nao),
 	[e],
-	sn(id:A2 .. coord:nao).
+	sn(id:A2 .. coord:nao ..aceita_pron:nao).
 
 % gera frases com conjuntos de substantivos, levando em consideracao a preposicao correta
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ nonvar(P) },
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..aceita_pron:nao),
 	[e],
-	sp(id:A2 .. prep:P).
+	sp(id:A2 .. prep:P ..aceita_pron:nao).
 
 % reconhece/gera listas de substantivos
 sn(coord:sim ..id:[A1|Resto] .. num:plur ..prep:P) -->
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..aceita_pron:nao),
 	[,],
-	sn(coord:sim .. id:Resto ..prep:P).
+	sn(coord:sim .. id:Resto ..prep:P ..aceita_pron:nao).
 
 % usado tao somente para imprimir "eu" sempre que o narrador for o agente da resposta
 % so deve ser usado para produzir texto
@@ -268,8 +270,10 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
-sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido 
+%TODO num? (agente veio de fora, entao concordancia)
+sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
 		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
+	{ is_positivo(T, IsPositivo) },
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
@@ -281,9 +285,9 @@ sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subc
 sp(id:I .. prep:_ ..desconhecido:_)-->
 	sadvb(id:I).
 	
-sp(id:I .. prep:P ..desconhecido:IsDesconhecido) -->
+sp(id:I .. prep:P ..desconhecido:IsDesconhecido ..aceita_pron:AceitaPron) -->
     prep(prep:P),
-    sn(id:I ..desconhecido:IsDesconhecido ..prep:P).
+    sn(id:I ..desconhecido:IsDesconhecido ..prep:P ..aceita_pron:AceitaPron).
 
 sadvb(id:I) -->
     advb(tipo_adv:lugar ..adv:A),
@@ -297,13 +301,12 @@ negacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-spro(id:I) -->
-    pro(tipo_pro: relativo ..pron:I).
+%spro(id:I) -->
+%    pro(tipo_pro: relativo ..pron:I).
     
-spro(id:[]) -->
-    pro(tipo_pro: pron_ninguem(onde) ..pron:A),
-    { denota_lugar(A, _) }.
-    
+%spro(id:[]) -->
+%    pro(tipo_pro: pron_ninguem(onde) ..pron:A),
+%    { denota_lugar(A, _) }.
 
 det(gen:G .. num:N ..tipo:T) --> 
        quant(gen:G .. num:N),

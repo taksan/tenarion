@@ -1,6 +1,32 @@
 % tratamento de casos desconhecidos
-is_positivo(np([],_), nao).
-is_positivo(_, sim).
+is_positivo(T, _):-
+	var(T).
+
+is_positivo(T, nao):-
+	nonvar(T),
+	T=np([],_).
+
+is_positivo(T, nao):-
+	nonvar(T),
+	T=(tema:np([],_)).
+
+is_positivo(TX, IsPositivo):-
+	nonvar(TX),
+	TX=(tema:T),
+	is_positivo(T, IsPositivo).
+
+is_positivo(T, sim):-
+	nonvar(T),
+	is_list(T).
+
+is_positivo(T,sim):-
+	nonvar(T),
+	\+compound(T).
+
+is_positivo(T,sim):-
+	nonvar(T),
+	\+is_list(T).
+
 
 cria_np_desconhecido(IsDesconhecido,_, _, _, _):-
 	var(IsDesconhecido),

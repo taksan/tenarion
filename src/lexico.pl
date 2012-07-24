@@ -221,7 +221,9 @@ v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [e
 % VERBO: SER
 v(omite:_   ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: indic ..subcat:[sn]) --> [ser].
+v(omite:nao ..acao:ser .. num:plur ..pessoa: terc ..subcat:[sn]) --> [sao].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sn]) --> [sou].
+% exige adjetivo
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].

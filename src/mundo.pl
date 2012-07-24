@@ -189,6 +189,8 @@ navegavel(X):-
 estado(X, bom):-
         \+ defeito(X, _).
 
+estado(barco, quebrado).
+
 /* indica se objeto e invisivel */
 
 invisivel(chiclete).
@@ -299,7 +301,6 @@ flutua(vaso_ming).
 flutua(vara_pescar).
 
 tamanho(barco, grande).
-estado(barco, quebrado).
 
 /* indica que X esta unido a Y */
 unido(X, Y):-
@@ -380,9 +381,9 @@ cortar(voce, mao, serrote):-
         assertz(injuriado(voce)).
 
 amarrar(voce, Oque, [NoQue,ENoQue]):-
-	poder_amarrar(voce, corda, [barco,ancoradouro]),
-	assertz(estar(corda, barco)),
-	assertz(estar(corda, ancoradouro)),
+	poder_amarrar(voce, Oque, [NoQue,ENoQue]),
+	assertz(estar(Oque, NoQue)),
+	assertz(estar(Oque, ENoQue)).
 
 /* execucao da acao de consertar: somente para buraco/barco */
 poder_consertar(voce, X):-
@@ -421,12 +422,12 @@ pregar_em_com(prego, X, Y, martelo):-
 
 /* colocar objeto X em objeto Y */
 poder_colocar(voce, OQue, Onde):-
-	ter(voce, X),
+	ter(voce, OQue),
 	(estar(voce, Onde); mesmo_lugar(voce, Onde)).
 
-colocar(voce, X, Y):-
+colocar(voce, OQue, Onde):-
 	poder_colocar(voce, OQue, Onde),
-    colocar(X, Y).
+    colocar(OQue, Onde).
 
 colocar(X, Y):-
     retract(estar(X, voce)),
@@ -485,7 +486,7 @@ poder_fazer(voce, remo):-
 
 fazer(voce, remo):-
 	poder_fazer(voce,remo),
-    retract(estar((tabua, X), voce)),
+    retract(estar((tabua, _), voce)),
     assert(estar(remo, voce)).
 
 fazer(remo, (tabua, X)):-
@@ -518,7 +519,7 @@ examinar(Oque, [obj(Objetos), def(Defeitos)]):-
 poder_conversar(voce, X):-
     poder_conversar_com(X).
 
-poder_conversar_com(X):-
+poder_conversar_com(Pessoa):-
         racional(Pessoa), !, 
         \+ falando_com(voce, Pessoa).
 
@@ -551,7 +552,7 @@ comprar(voce, Objeto):-
         poder_comprar(voce,Objeto),
         retractall(dono(_,Objeto)),
         assertz(dono(voce,Objeto)),
-        assertz(estar(Objevo,voce)).
+        assertz(estar(Objeto,voce)).
 
 poder_digitar(voce, senha, caixa_eletronico).
 

@@ -114,10 +114,14 @@ processar((ato_fala:interro_tema_desconhecido
            ..acao:Relacao
            ..agente:Agent
            ..tema: (
-                   tema:incog(_)..%oque,quem,onde
-                subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo))
+                tema:incog(TipoNp)..%oque,quem,onde
+                subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo)
+				)
         ),
-        (ato_fala:informar .. agente:Agent .. acao:Relacao ..pessoa:terc
+        (ato_fala:informar 
+			..agente:Agent 
+			..acao:Relacao 
+			..pessoa:terc
             ..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
         ):-
     nonvar(Relacao),
@@ -126,7 +130,7 @@ processar((ato_fala:interro_tema_desconhecido
     PredAcao =.. [RelacaoAuxiliar, Agent, T],
     findall(T, (PredAcao), L),
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-    filtrar(L1,TS).
+    filtrar(TipoNp, L1,TS).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente:Agent .. acao:Relacao .. tema:incog(TipoNp)),
           (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
