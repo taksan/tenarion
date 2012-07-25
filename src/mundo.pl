@@ -9,7 +9,7 @@
 /**** Predicados auxiliares para informacao ****/
 
 nao(Predicado):-
-	\+ Predicado.
+    \+ Predicado.
 
 inventario(Obj):-
         examinar(voce, Obj).
@@ -25,9 +25,9 @@ ultima_tabua(1).
 
 /* DETERMINA O QUE O OBJETO X TEM */
 ter(Quem, Oque):-
-	( var(Oque); \+ racional(Oque) ),
-	estar(Oque, Quem).
-	
+    ( var(Oque); \+ racional(Oque) ),
+    estar(Oque, Quem).
+    
 pertencer(Oque,A_Quem):-
     ter(A_Quem, Oque).
 
@@ -55,10 +55,6 @@ estar(ancoradouro, jogo).
 estar(carpintaria, jogo).
 estar(lago, jogo).
 estar(ilha, jogo).
-estar(Obj, aqui):-
-	var(Obj),
-	mesmo_lugar(voce, Obj).
-
 
 
 /* LOCAL ONDE VOCE SE ENCONTRA */
@@ -134,6 +130,10 @@ estar(peixe_voador, lago).
 /* AGUA DO LAGO */
 estar(peixe, agua_do_lago).
 estar(vitoria_regia, agua_do_lago).
+
+estar(Objeto,aqui):-
+    estar(voce, Aqui),!,
+    estar(Objeto,Aqui).
 
 /* Verificacao sobre um conjunto de objetos */
 estar(QueCoisas, Lug):-
@@ -274,7 +274,7 @@ dono(mateo, santo_do_pau_oco).
 dono(mateo, carteira).
 % voce
 dono(voce, X):-
-	nonvar(X),
+    nonvar(X),
     estar(X, voce).
 
 /* quem conhece quem*/
@@ -288,7 +288,7 @@ defeito(barco, [buraco]).
 defeito(tesoura, [semfio]).
 
 quebrado(OQue):-
-	defeito(OQue, _).
+    defeito(OQue, _).
 
 /* capacidade de flutuar */
 flutua(zulu).
@@ -317,21 +317,21 @@ comprimento(remo, 60).
 
 /* acoes de deslocamento */
 poder_ir(voce, barco):-
-	dono(voce, barco),
+    dono(voce, barco),
     estar(voce, CenaAtual),
     perto(CenaAtual, barco).
 
 poder_ir(voce, lago):-
-	estar(voce, barco),
-	nao(quebrado(barco)),
-	ter(voce, remo).
+    estar(voce, barco),
+    nao(quebrado(barco)),
+    ter(voce, remo).
 
 poder_ir(voce, X):-
-		estar(voce, Aqui),
-		nao(estar(voce, X)),
+        estar(voce, Aqui),
+        nao(estar(voce, X)),
         local(X),
         perto(Aqui, X),
-		\+ member(X,[barco,lago]).
+        \+ member(X,[barco,lago]).
 
 ir(voce, X):-
         poder_ir(voce, X),!,
@@ -382,16 +382,20 @@ cortar(voce, mao, serrote):-
         assertz(injuriado(voce)).
 
 amarrar(voce, Oque, [NoQue,ENoQue]):-
-	poder_amarrar(voce, Oque, [NoQue,ENoQue]),
-	assertz(estar(Oque, NoQue)),
-	assertz(estar(Oque, ENoQue)).
+    poder_amarrar(voce, Oque, [NoQue,ENoQue]),
+    assertz(estar(Oque, NoQue)),
+    assertz(estar(Oque, ENoQue)).
 
 /* execucao da acao de consertar: somente para buraco/barco */
-poder_consertar(voce, X):-
-        dono(voce, X),
-        ter(voce,pregos),
-        ter(voce,tabuas),
-        ter(voce,martelo).
+poder_consertar(voce, barco):-
+    estar(barco, aqui),
+    dono(voce, barco),
+    ter(voce,ferramentas).
+
+ter(voce, ferramentas):-
+    ter(voce,pregos),
+    ter(voce,tabuas),
+    ter(voce,martelo).
 
 consertar(voce, barco):-
         poder_consertar(barco),
@@ -407,21 +411,20 @@ pregar_em_com(prego, X, martelo):-
         assertz(estar_em(pregos, X)).
 
 pregar_em_com(prego, X, Y, martelo):-
-        estar_em(martelo, voce), !, 
-        estar_em(pregos, voce), !,
-        estar_em(voce, CenaAtual),!,
-        estar_em(X, CenaAtual),!,
-        estar_em(Y, CenaAtual),!,
-        assertz(estar(prego, X)),
-        assertz(estar(prego, Y)).
+    ter(voce, martelo),
+    ter(voce, pregos),
+    estar(X, aqui),
+    estar(Y, aqui),
+    assertz(estar(prego, X)),
+    assertz(estar(prego, Y)).
 
 /* colocar objeto X em objeto Y */
 poder_colocar(voce, OQue, Onde):-
-	ter(voce, OQue),
-	(estar(voce, Onde); mesmo_lugar(voce, Onde)).
+    ter(voce, OQue),
+    (estar(voce, Onde); estar(Onde,aqui)).
 
 colocar(voce, OQue, Onde):-
-	poder_colocar(voce, OQue, Onde),
+    poder_colocar(voce, OQue, Onde),
     colocar(OQue, Onde).
 
 colocar(X, Y):-
@@ -439,20 +442,21 @@ largar(X):-
 /* pegar */
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	pegavel(Oque),
-	nao(ter(Quem,Oque)),
-	dono(Quem, Oque),
-	mesmo_lugar(Quem, Oque).
+    pegavel(Oque),
+    nao(ter(Quem,Oque)),
+    estar(Oque,aqui),
+    dono(Quem, Oque).
 
 poder_pegar(Quem,Oque):-
     %   \+ invisivel(X),
-	pegavel(Oque),
-	nao(ter(Quem,Oque)),
-	nao(dono(_, Oque)),
-	mesmo_lugar(Quem, Oque).
+    pegavel(Oque),
+    nao(ter(Quem,Oque)),
+    nao(dono(_, Oque)),
+    mesmo_lugar(Quem, Oque).
 
 pegar(voce, X):-
-        pegar(X).
+	poder_pegar(voce, X),
+    pegar(X).
 
 pegar(X):-
      poder_pegar(voce, X),!,
@@ -476,21 +480,16 @@ vedar(barco, X):-
 
 /* fazer remo */
 poder_fazer(voce, remo):-
-	ter(voce, tabua),
-	ter(voce, serrote).	
+    ter(voce, (tabua,_)),
+    ter(voce, serrote).
 
 fazer(voce, remo):-
-	poder_fazer(voce,remo),
+    poder_fazer(voce,remo),
     retract(estar((tabua, _), voce)),
-    assert(estar(remo, voce)).
-
-fazer(remo, (tabua, X)):-
-        ter(voce, (tabua, X)),
-        ter(voce,serrote),
-        comprimento((tabua, X), Comp),
-        Comp > 50,
-        retract(estar((tabua, X), voce)),
-        assert(estar(remo, voce)).
+	comprimento((tabua, X), Comp),
+	Comp > 50,
+	retract(estar((tabua, X), voce)),
+	assert(estar(remo, voce)).
 
 /* Examinar */
 
@@ -552,5 +551,5 @@ comprar(voce, Objeto):-
 poder_digitar(voce, senha, caixa_eletronico).
 
 digitar(voce, Oque, NoQue):-
-	poder_digitar(voce, Oque, NoQue),
-	assertz(digitado(Oque, NoQue)).
+    poder_digitar(voce, Oque, NoQue),
+    assertz(digitado(Oque, NoQue)).

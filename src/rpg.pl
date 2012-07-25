@@ -172,7 +172,7 @@ processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
     \+ notrace(PredAcao),
 	concat_atom(poder_,Relacao, PoderRelacao),
 	determina_predicados_que_falharam(PoderRelacao, Failed),
-	gera_porque(Failed,Porque).
+	gera_porque_nao(Failed,Porque).
 
 %%% acao cujo resultado eh descritivo
 processar((ato_fala:informar ..agente:A .. acao:Relacao .. tema:T),
@@ -365,30 +365,45 @@ dado_pergunta_espero_resposta(Pergunta,Resposta):-
 determina_agente((pessoa:indic ..num:sing), voce).
 determina_agente(A,A).
 
-gera_explicacao_falhas(Pred,Explicao):-
-	determina_predicados_que_falharam(Pred, Causa), gera_porque(Causa,Explicao).
+gera_explicacao_falhas(Pred,Explicacao):-
+	determina_predicados_que_falharam(Pred, Causa), gera_porque_nao(Causa,ExplicacaoDesnormalizada),
+	normaliza_explicacao(ExplicacaoDesnormalizada, Explicacao).
 
-gera_porque([],[]).
+gera_porque_nao([],[]).
 
-gera_porque((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
+gera_porque_nao((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:sim ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
-	gera_porque(RestoPredicados,Resto).
+	gera_porque_nao(RestoPredicados,Resto).
 
-gera_porque((Pred,RestoPredicados),[(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+gera_porque_nao((Pred,RestoPredicados),[(predicado:Acao ..positivo:nao ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
-	gera_porque(RestoPredicados,Resto).
+	gera_porque_nao(RestoPredicados,Resto).
 
 
-gera_porque([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:sim ..agente:Agente ..tema:Tema)|Resto]):-
+gera_porque_nao([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:sim ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
-	gera_porque(RestoPredicados,Resto).
+	gera_porque_nao(RestoPredicados,Resto).
 
-gera_porque([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+gera_porque_nao([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente],
-	gera_porque(RestoPredicados,Resto).
+	gera_porque_nao(RestoPredicados,Resto).
 
 
-gera_porque([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema:Tema)|Resto]):-
+gera_porque_nao([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
-	gera_porque(RestoPredicados,Resto).
+	gera_porque_nao(RestoPredicados,Resto).
 
+normaliza_explicacao([],[]).
+
+normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
+	Normalizado=(predicado:Acao ..acao:Acao ..tema_possivel:Tema ..tema:Tema),
+	eh_verbo(Acao),
+	normaliza_explicacao(RestoDesnormalizado, Resto).
+
+normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
+	Normalizado=(predicado:Predicado ..acao:ser ..tema_possivel:Tema ..tema:Predicado ..complemento_nominal:Tema ),
+	\+ eh_verbo(Predicado),
+	normaliza_explicacao(RestoDesnormalizado, Resto).
+
+eh_verbo(Verbo):-
+	v(acao:Verbo, _, []).
