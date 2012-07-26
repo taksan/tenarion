@@ -21,6 +21,9 @@ substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido 
 	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido).
 
 substitui_pronome(TalvezPronome, Traduzido):-
+	denota_lugar(TalvezPronome, Traduzido).
+
+substitui_pronome(TalvezPronome, Traduzido):-
 	\+ is_composto(TalvezPronome),
 	nonvar(TalvezPronome),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome),_,[]),
@@ -50,8 +53,10 @@ institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agent
 	institui_pronome(AgenteReal, AgenteReferenciado).
 
 institui_pronome(TemaReal, TemaReferenciado):-
+	denota_lugar(TemaReferenciado, TemaReal).
+
+institui_pronome(TemaReal, TemaReferenciado):-
 	\+ is_composto(TemaReal),
-	quem_denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P),TemaReal),
 	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).
 

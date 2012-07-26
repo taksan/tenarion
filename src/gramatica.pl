@@ -259,8 +259,7 @@ sp(id:I .. prep:P ..desconhecido:IsDesconhecido) -->
     sn(id:I ..desconhecido:IsDesconhecido ..prep:P).
 
 sadvb(id:I) -->
-    advb(tipo_adv:lugar ..adv:A),
-    { denota_lugar(A, I) }.
+    advb(tipo_adv:lugar ..adv:I).
 
 negacao(positivo: IsPositivo) -->
 	{ nonvar(IsPositivo) },

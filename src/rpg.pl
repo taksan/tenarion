@@ -23,6 +23,20 @@ jogar:-
         write('Bem Vindo ao mundo de Fagageh!'),
         nl,
         write('Qual o seu sexo (F/M/I)? '),
+        readText([Sex|_]),
+        assert(sexoJogador(Sex)),
+        ((Sex = 'm', T='aventureiro'); (T='aventureira')),
+        write('Digite seu nome, nobre '),
+        write(T), write(': '),
+        readText([Nome|_]),
+        assert(jogador(Nome)),!,
+        dialogo.
+
+testar:-
+        once(cleanup_player),
+        write('Bem Vindo ao mundo de Fagageh!'),
+        nl,
+        write('Qual o seu sexo (F/M/I)? '),
 %        readText([Sex|_]),
         Sex='m',
         assert(sexoJogador(Sex)),
@@ -33,6 +47,8 @@ jogar:-
         Nome='Fulk',
         assert(jogador(Nome)),!,
         dialogo.
+
+
 
 seta_contexto(Ctx):-
     retractall(contexto_atual(_)),
