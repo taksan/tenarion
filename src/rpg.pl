@@ -321,7 +321,7 @@ denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
     contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem).
 
     
-denota((tipo_pro:pron_qu ..pron:Pron), P):-
+denota((tipo_pro:relativo ..pron:Pron), P):-
     nonvar(Pron),
     P=Pron.
 

@@ -163,11 +163,6 @@ pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[] ..pron:mim) --> [mim].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv] ..pron:me) --> [me].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:seg ..pron:te) -->  [te].
-pro(tipo_pro:pron_qu ..pron:quem) --> [quem].
-pro(tipo_pro:pron_qu ..pron:que) --> [que].
-pro(tipo_pro:pron_qu ..pron:oque) --> [o],[que].
-pro(tipo_pro:pron_qu ..pron:qual ..num:sing ) --> [qual].
-pro(tipo_pro:pron_qu ..pron:qual ..num:plur ) --> [quais].
 pro(tipo_pro:pron_ninguem(quem) ..pron:ninguem) --> [ninguem].
 pro(tipo_pro:pron_ninguem(oque) ..pron:nada)--> [nada].
 pro(tipo_pro:pron_ninguem(onde) ..pron:nenhum)--> [nenhum].
@@ -185,6 +180,12 @@ pro(tipo_pro:demonstrativo ..pron:aquela ..gen:fem.. num:sing) --> [aquela].
 pro(tipo_pro:demonstrativo ..pron:aqueles ..gen:masc.. num:plur) --> [aqueles].
 pro(tipo_pro:demonstrativo ..pron:aquelas ..gen:fem.. num:plur) --> [aquelas].
 pro(tipo_pro:demonstrativo ..pron:aquilo ..gen:masc.. num:sing) --> [aquilo].
+
+pro(tipo_pro:relativo ..pron:quem) --> [quem].
+pro(tipo_pro:relativo ..pron:que) --> [que].
+pro(tipo_pro:relativo ..pron:oque) --> [o],[que].
+pro(tipo_pro:relativo ..pron:qual ..num:sing ) --> [qual].
+pro(tipo_pro:relativo ..pron:qual ..num:plur ) --> [quais].
 pro(tipo_pro:relativo ..pron:onde) --> [onde].
 
 %%%% ADVERBIOS

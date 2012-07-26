@@ -28,25 +28,25 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 
 % ex.: o que EU tenho (EU eh agente)
 s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:_) -->
-	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
+	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
 
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:_) -->
-	sn(tipo: pron_qu .. coord:nao ..id:Id ..pessoa:P), 
-	sv(acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
+	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
-s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-	sn(tipo:_ .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
-    sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
-    pontuacao_opcional(_),
-	{ 
-	  determina_desconhecido(A, IsDesconhecido, Ag)
-	}.
+%s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
+%	sn(tipo:relativo .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
+%    sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
+%    pontuacao_opcional(_),
+%	{ 
+%	  determina_desconhecido(A, IsDesconhecido, Ag)
+%	}.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
@@ -280,7 +280,7 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 		..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T)) -->
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
-	pro(tipo_pro:pron_qu ..pron:Pronome),
+	pro(tipo_pro:relativo ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
 
