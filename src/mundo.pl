@@ -131,9 +131,9 @@ estar(peixe_voador, lago).
 estar(peixe, agua_do_lago).
 estar(vitoria_regia, agua_do_lago).
 
-estar(Objeto,aqui):-
-    estar(voce, Aqui),!,
-    estar(Objeto,Aqui).
+%estar(Objeto,aqui):-
+%    estar(voce, Aqui),!,
+%    estar(Objeto,Aqui).
 
 /* Verificacao sobre um conjunto de objetos */
 estar(QueCoisas, Lug):-
@@ -328,9 +328,9 @@ poder_ir(voce, lago):-
 
 poder_ir(voce, X):-
         estar(voce, Aqui),
+        perto(Aqui, X),
         nao(estar(voce, X)),
         local(X),
-        perto(Aqui, X),
         \+ member(X,[barco,lago]).
 
 ir(voce, X):-

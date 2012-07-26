@@ -112,6 +112,9 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
 % SINTAGMA NOMINAL
 % casa com pronomes: eu, ele, voce
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
+	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
+
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
         { \+ is_list(Ag) },
         { (
         	var(Ag); 
@@ -187,6 +190,15 @@ sn(coord:nao .. id:Id ..desconhecido:sim) -->
 % tipos de verbos a serem tratados:
 % verbo transitivo direto (ex: verbos que não exigem preposição antes do objeto, pegar '' a faca)
 % verbo bitransitivo direto e indireto (ex.:preferir)
+
+%%
+sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
+		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
+	{ ignore((var(IsPositivo),is_positivo(T, IsPositivo))) },
+	negacao(positivo:IsPositivo),
+	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
+	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
+
 
 % VERBO INTRANSITIVO
 % verbos intransitivos: verbo ou forma do verbo que nao exige nenhum complemento (ex.: pescar em, "eu pesco.")
@@ -270,13 +282,6 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 	pro(tipo_pro:pron_qu ..pron:Pronome),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
-%TODO num? (agente veio de fora, entao concordancia)
-sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
-		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
-	{ is_positivo(T, IsPositivo) },
-	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
-	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
 
 sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).

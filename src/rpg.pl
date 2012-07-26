@@ -41,11 +41,13 @@ dialogo:-
     once(readLine(P)),
     seta_contexto(jogador),
     s(Sem,P,[]),
+    dereferencia_pronomes_na_sentenca(Sem),
     seta_contexto(computador),
     once(atualiza_contexto(Sem)),!,
         
     processar(Sem,Resposta),!,
 
+	referencia_com_pronomes_na_sentenca(Resposta),
     s(Resposta,R,[]),
     seta_contexto(jogador),
     once(atualiza_contexto(Resposta)),
@@ -71,25 +73,25 @@ continuar(_):-
 
 processar([],[]).
 
-processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
           (ato_fala:responder .. mensagem:positivo)):-
         \+ compound(T),
         PredAcao =.. [Relacao, A, T],
         PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:T),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
           (ato_fala:responder .. mensagem:negativo)):-
         \+ compound(T),
         PredAcao =.. [Relacao, A, T],
         \+ PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:positivo)):-
     concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
     PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema:T)),
           (ato_fala:responder .. mensagem:negativo)):-
     concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
@@ -98,7 +100,7 @@ processar((ato_fala:int_sim_nao ..agente:A ..acao:Relacao ..tema:(acao:AcaoAuxil
 % perguntas qu
 
 processar(
-    (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+    (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
     (ato_fala:recusar 
         ..desconhecido:sim 
         ..acao:saber
@@ -112,7 +114,7 @@ processar(
 % encontra possibilidades de poder fazer alguma coisa
 processar((ato_fala:interro_tema_desconhecido
            ..acao:Relacao
-           ..agente:Agent
+           ..agente_real:Agent
            ..tema: (
                 tema:incog(TipoNp)..%oque,quem,onde
                 subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo)
@@ -132,8 +134,8 @@ processar((ato_fala:interro_tema_desconhecido
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
     filtrar(TipoNp, L1,TS).
 
-processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente:Agent .. acao:Relacao .. tema:incog(TipoNp)),
-          (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema:TS ..pessoa:terc)):-
+processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema:incog(TipoNp)),
+          (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema_real:TS ..pessoa:terc)):-
     \+ compound(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
     PredAcao =.. [Relacao, Agent, TemaSolucao],
@@ -143,8 +145,8 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente:Agent 
 
 % o que ou quem        
 
-processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente:incog(Tipo) ..acao:Relacao ..tema:T),
-   (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema:T ..pessoa:terc ..entidade:Tipo)):-
+processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:T),
+   (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:T ..pessoa:terc ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
     PredAcao =.. [RelacaoAjustada, A, T],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
@@ -152,30 +154,30 @@ processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente:inco
     filtrar(L1,W),
     traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
 
-processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
+processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:responder .. mensagem:ok)):-
     determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
     notrace(PredAcao).
 
-processar((ato_fala:informar .. agente:A .. acao:Relacao .. tema:T),
+processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:informar
            ..agente:voce
            ..acao:poder 
            ..positivo:nao 
            ..pessoa:terc
-           ..tema:(acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
+           ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
 		   ..porque:Porque
           )):-
     determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
     \+ notrace(PredAcao),
-	concat_atom(poder_,Relacao, PoderRelacao),
-	determina_predicados_que_falharam(PoderRelacao, Failed),
-	gera_porque_nao(Failed,Porque).
+	concat_atom([poder_,Relacao], PoderRelacao),
+	PredPoder=..[PoderRelacao, Ag, T],
+	gera_explicacao_falhas(PredPoder, Porque).
 
 %%% acao cujo resultado eh descritivo
-processar((ato_fala:informar ..agente:A .. acao:Relacao .. tema:T),
+processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:descrever ..mensagem:R)):-
         PredAcao =.. [Relacao, A, T, R],
         notrace(PredAcao).
@@ -183,7 +185,7 @@ processar((ato_fala:informar ..agente:A .. acao:Relacao .. tema:T),
 processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)).
 
 processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder .. mensagem:oi)).
-processar((ato_fala:responder ..mensagem:oi ..tema:T),(ato_fala:responder .. mensagem:oi)):-
+processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .. mensagem:oi)):-
     falando_com(voce, T).
 
 % se o processar falhar
@@ -246,7 +248,7 @@ atualiza_advb_aqui:-
 atualiza_advb_aqui:-
     true.
     
-atualiza_contexto((agente:AgResp ..tema:TemaResp)):-
+atualiza_contexto((agente:AgResp ..tema_real:TemaResp)):-
     atualiza_advb_aqui,
     atualiza_contexto_denotado_por(TemaResp),
     atualiza_contexto_denotado_por(AgResp).
@@ -396,14 +398,27 @@ gera_porque_nao([Pred|RestoPredicados], [(predicado:Acao ..positivo:nao ..agente
 normaliza_explicacao([],[]).
 
 normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
-	Normalizado=(predicado:Acao ..acao:Acao ..tema_possivel:Tema ..tema:Tema),
+	Normalizado=(predicado:Acao ..acao:Acao ..tema_possivel:Tema ..tema_real:Tema),
 	eh_verbo(Acao),
 	normaliza_explicacao(RestoDesnormalizado, Resto).
 
 normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
-	Normalizado=(predicado:Predicado ..acao:ser ..tema_possivel:Tema ..tema:Predicado ..complemento_nominal:Tema ),
+	Normalizado=(predicado:Predicado ..acao:ser ..tema_possivel:Tema ..tema_real:Predicado ..complemento_nominal:Tema ),
 	\+ eh_verbo(Predicado),
 	normaliza_explicacao(RestoDesnormalizado, Resto).
 
 eh_verbo(Verbo):-
 	v(acao:Verbo, _, []).
+
+dereferencia_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
+	dereferencia_pronome(TemaTalvezPronome,TemaTraduzido),
+	dereferencia_pronome(AgenteTalvezPronome,AgenteTraduzido).
+
+dereferencia_pronome(TalvezPronome, Traduzido):-
+	\+ compound(TalvezPronome),
+	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome),_,[]),
+	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome), Traduzido).
+
+dereferencia_pronome(NaoPronome, NaoPronome).
+
+referencia_com_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
