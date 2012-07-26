@@ -28,12 +28,29 @@ substitui_pronome(TalvezPronome, Traduzido):-
 
 substitui_pronome(NaoPronome, NaoPronome).
 
+institui_pronomes_na_sentenca(tema_real:TemaComposto ..tema:TemaComposto ..agente_real:AgenteComposto ..agente:AgenteComposto):-
+	is_composto(TemaComposto), is_composto(AgenteComposto),
+	institui_pronomes_na_sentenca(TemaComposto),
+	institui_pronomes_na_sentenca(AgenteComposto).
+
+institui_pronomes_na_sentenca(tema_real:TemaComposto ..tema:TemaComposto ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
+	is_composto(TemaComposto), \+is_composto(AgenteReal),
+	institui_pronomes_na_sentenca(TemaComposto),
+	institui_pronome(AgenteReal,AgenteReferenciado).
+
+institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteComposto ..agente:AgenteComposto):-
+	\+ is_composto(TemaReal), is_composto(AgenteComposto),
+	institui_pronome(TemaReal,TemaReferenciado),
+	institui_pronomes_na_sentenca(AgenteComposto).
+
+
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
+	\+ is_composto(TemaReal), \+ is_composto(AgenteReal),
 	institui_pronome(TemaReal, TemaReferenciado),
 	institui_pronome(AgenteReal, AgenteReferenciado).
 
 institui_pronome(TemaReal, TemaReferenciado):-
-	\+ compound(TemaReal),
+	\+ is_composto(TemaReal),
 	quem_denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P),TemaReal),
 	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).

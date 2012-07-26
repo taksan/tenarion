@@ -410,5 +410,3 @@ normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
 
 eh_verbo(Verbo):-
 	v(acao:Verbo, _, []).
-
-
