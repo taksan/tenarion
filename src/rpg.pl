@@ -4,6 +4,7 @@
 :-[gramatica].
 :-[io].
 :-[auxiliar].
+:-[resolucao_pronomes].
 
 :-dynamic contexto/3, contexto_atual/1.
 /*
@@ -85,13 +86,13 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
         PredAcao =.. [Relacao, A, T],
         \+ PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema_real:T)),
           (ato_fala:responder .. mensagem:positivo)):-
     concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
     PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema_real:T)),
           (ato_fala:responder .. mensagem:negativo)):-
     concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
     PredAcao =.. [RelacaoAuxiliar, A, T],
@@ -105,7 +106,7 @@ processar(
         ..desconhecido:sim 
         ..acao:saber
         ..num:sing
-        ..tema:(acao:ser ..pessoa:terc ..num:Num ..tema:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
+        ..tema:(acao:ser ..pessoa:terc ..num:Num ..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
         ..agente:narrador
         ..pessoa:prim
         )):-
@@ -116,7 +117,7 @@ processar((ato_fala:interro_tema_desconhecido
            ..acao:Relacao
            ..agente_real:Agent
            ..tema: (
-                tema:incog(TipoNp)..%oque,quem,onde
+                tema_real:incog(TipoNp)..%oque,quem,onde
                 subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo)
 				)
         ),
@@ -124,7 +125,7 @@ processar((ato_fala:interro_tema_desconhecido
 			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
-            ..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
+            ..tema:(acao:AcaoAlvo ..tema_real:TS ..pessoa:PX))
         ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),
@@ -134,7 +135,7 @@ processar((ato_fala:interro_tema_desconhecido
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
     filtrar(TipoNp, L1,TS).
 
-processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema:incog(TipoNp)),
+processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
           (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS ..pessoa:terc)):-
     \+ compound(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
@@ -166,7 +167,7 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
            ..acao:poder 
            ..positivo:nao 
            ..pessoa:terc
-           ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema:T)
+           ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
 		   ..porque:Porque
           )):-
     determina_agente(A, Ag),
@@ -409,33 +410,5 @@ normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
 
 eh_verbo(Verbo):-
 	v(acao:Verbo, _, []).
-
-substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
-	substitui_pronome(TemaTalvezPronome,TemaTraduzido),
-	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido).
-
-substitui_pronome(TalvezPronome, Traduzido):-
-	\+ compound(TalvezPronome),
-	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome),_,[]),
-	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome), Traduzido).
-
-substitui_pronome(NaoPronome, NaoPronome).
-
-institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
-	institui_pronome(TemaReal, TemaReferenciado),
-	institui_pronome(AgenteReal, AgenteReferenciado).
-
-institui_pronome(TemaReal, TemaReferenciado):-
-	\+ compound(TemaReal),
-	quem_denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P),TemaReal),
-	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
-	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).
-
-institui_pronome(TemaReal, TemaReal).
-
-institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
-
-
-
 
 
