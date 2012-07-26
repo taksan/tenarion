@@ -248,7 +248,7 @@ atualiza_advb_aqui:-
 atualiza_advb_aqui:-
     true.
     
-atualiza_contexto((agente:AgResp ..tema_real:TemaResp)):-
+atualiza_contexto((agente_real:AgResp ..tema_real:TemaResp)):-
     atualiza_advb_aqui,
     atualiza_contexto_denotado_por(TemaResp),
     atualiza_contexto_denotado_por(AgResp).

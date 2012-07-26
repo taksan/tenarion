@@ -79,7 +79,7 @@ estar(corda, ancoradouro).
 estar(buraco, barco).
 estar(pregos, barco).
 estar(corda, barco).
-estar(agua, barco).
+estar(agua_do_lago, barco).
 
 /* LOCAL: CARPINTARIA */
 estar(mateo, carpintaria).

@@ -155,8 +155,8 @@ np(id:T ..desconhecido:sim) --> [T].
 pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:fem ..pron:ela) --> [ela].
 pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
-pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:fem ..pron:ela) --> [elas].
-pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:masc ..pron:ele) --> [eles].
+pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:fem ..pron:elas) --> [elas].
+pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:masc ..pron:eles) --> [eles].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce_resp) --> [voce].
 pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
