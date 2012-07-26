@@ -41,7 +41,7 @@ s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-	sn(tipo: _ .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
+	sn(tipo:_ .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
     sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_),
 	{ 
@@ -49,7 +49,7 @@ s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRel
 	}.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
-	sn(tipo: _ .. coord:nao ..id:PronRelativo),% casa com ONDE
+	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
 	sn(id:Ag),%casa com o sujeito
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Tema ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
@@ -74,18 +74,18 @@ s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pesso
     	pontuacao_opcional('.').
 	%,{ determina_desconhecido(A, IsDesconhecido, EI) }.
 
-s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
-        {\+ is_list(A)},
-	sn(id:A .. num: N),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..(acao:X .. tema:T .. num:N)),
-    	pontuacao_opcional('.').
-	%<{ determina_desconhecido(T, IsDesconhecido, EI) }.
+%s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
+%        {\+ is_list(A)},
+%	sn(id:A .. num: N),
+%	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..(acao:X .. tema:T .. num:N)),
+%   	pontuacao_opcional('.').
+%	%<{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca onde o agente eh "ninguem" ou "nada". (ex: nada estah aqui)
-s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:_) -->
-	sn(tipo: pron_ninguem(E) .. coord:nao),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
-    pontuacao_opcional('.').
+%s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:_) -->
+%	sn(tipo: pron_ninguem(E) .. coord:nao),
+%	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
+ %   pontuacao_opcional('.').
 	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
@@ -111,9 +111,10 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
 
 % SINTAGMA NOMINAL
 % casa com pronomes: eu, ele, voce
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
 	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
 
+/*
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
         { \+ is_list(Ag) },
         { (
@@ -127,7 +128,7 @@ sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..
           	var(Ag),
            	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag) 
            )}.
-
+*/
 sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
 	[lugar],
 	pro(tipo_pro:pron_ninguem(onde)).

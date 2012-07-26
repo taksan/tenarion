@@ -1,69 +1,73 @@
-% File GULP3.PL
+% GULP 3 for SWI-Prolog.
+% Can be altered to suit other Prolog systems.
+
+% NOTE -- THIS VERSION IS NOT ENTIRELY COMPATIBLE WITH SWI-PROLOG 5.
+% You can use it for backward compatibility, but the module system,
+% as well as edit/1, spy/1, and possibly other builtins will not work.
+% FOR BETTER RESULTS USE GULP4SWI.PL INSTEAD.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% File GULP3SWI.PL
 % Michael A. Covington
 % Artificial Intelligence Center
 % The University of Georgia
 % Athens, Georgia 30602-7415
-% July 28, 1994
-
+% July 28, 1994; April 18, 2001; January 30, 2003; August 9, 2004; March 28, 2005; April 19, 2007
+%
+%---------------------------------------------------------------------------%
+%
 %   GULP -- Graph Unification and Logic Programming
-%   Version 3.1a
-
+%   Version 3.1d  (with module support turned on and {} defined)
+%
 %   CONDITIONS OF DISTRIBUTION:
-%   Copyright (C) 1994 Michael A. Covington.
+%   Copyright (C) 2005 Michael A. Covington.
 %   Portions copyright 1988 Quintus Computer Systems, Inc.
 %   GULP is distributed with no warranty.
-
+%
 %   For documentation see "GULP 3.1: An Extension of Prolog
 %   for Unification-Based Grammar," available as a research
 %   report from the above address.
-
+%
+%%  Modified for use with SWI-Prolog 2.x September 1995.  Most of my
+%%  changes can be found by searching for `%%  ' and/or `gulp__'.
+%%  Last modified March 1996 by martin.jansche@urz.uni-heidelberg.de
+%
+%%  Modified March 2005 to make the operator declarations pertain to
+%%  the "user" (global) module, and to do the same for
+%%  term_expansion/2 and portray/1.
+%
+%---------------------------------------------------------------------------%
+%
 % HOW TO RUN GULP:
 %  The simplest way is to simply consult gulp3.pl into Prolog.
 %  However, you can also build executable versions of Prolog
 %  (including the compiler) in which GULP is built-in.
-
-% TO BUILD THE QUINTUS VERSION (tested in Quintus Prolog 3.1.4):
+%
+%  ... non-SWI instructions deleted here ...
+%
+%
+% TO BUILD THE SWI-PROLOG VERSION (tested in SWI-Prolog 2.1.14 and 2.5.2):
 %   (1) Edit this file:
-%        Change all '%%Q%%' to '/*Q*/'.   (Except these instructions!)
-%        Change all '/*L*/' to '%%L%%'.
-%   (2) In Quintus Prolog:
-%        ?- compile('gulp3.pl').    % this file
-%        ?- save_program('gulp').
+%        Uncomment SWI-Prolog specific code both at the beginning
+%        and at the end of this file.
+%   (2) From your shell:
+%        prompt$ plcon -O -o gulp -c gulp3swi.pl
+%                                    ^^^^^^^^^^^ this file 
 %       Then use file 'gulp' as the executable.  It is a script
-%       which will call Quintus Prolog with GULP loaded into it.
-%   (3) If you use the Quintus Gnu Emacs interface, add the following
-%       line to your .emacs file, or to the default.el file for the
-%       whole site:
-%  (setq auto-mode-alist (cons '("\\.glp$" . prolog-mode) auto-mode-alist))
-%       That will cause the Emacs interface to wake up in Prolog mode
-%       for files whose names end in .glp as well as .pl.  You can use
-%       GULP under Prolog under Gnu Emacs like this:
-%         unix% gulp + myfile.glp
-%       We have not tried the Unipress Emacs interface.
-
-
-% TO BUILD AND INSTALL THE LPA VERSION (LPA 386-Prolog 2.3 for Windows):
-%   (1) Edit this file:
-%        Change all '%%L%%' to '/*L*/'.   (Except these instructions!)
-%        Change all '/*Q*/' to '%%Q%%'.
-%   (2) In LPA Prolog:
-%        ?- compile('gulp3.pl.').   % this file
-%        ?- save_state(gulp,g_handler,abort_handler).
-%        This operation generates GULP.OVL in your LPA Prolog directory.
-%   (3) Make copies of PRO386W.EXE and PRO386W.EXP, named
-%        GULP.EXE and GULP.EXP respectively, in the same directory
-%        as GULP.OVL.
-%   (3) Copy GULP.ICO (supplied herewith) into that directory also.
-%   (4) Make a Program Manager item for GULP.EXE, with GULP.ICO as its icon.
-
-% -----------------------------------------------------------------
-
+%       which will call SWI-Prolog with GULP loaded into it.
+%   (3) If you use the Quintus Gnu Emacs interface that comes with
+%       SWI-Prolog, cf. item (3) in the above instructions for building
+%       the Quintus version.
+%
+%---------------------------------------------------------------------------%
+%
 % New in Version 3.1:
-%   O'Keefe's DCG translator is built into GULP and is used in place
+%   R. O'Keefe's DCG translator is built into GULP and is used in place
 %     of whatever may be built into the implementation.
 %     This gives greater portability and tighter integration of
 %     GULP with the Prolog environment.
-
+%
 % New in Version 3.0:
 %   GULP translation is performed automatically
 %     by consult, reconsult, and compile.  The old user interface
@@ -72,7 +76,7 @@
 %     feature structures internally.
 %   Declarations (g_features) are still optional, but there is a gain
 %     in efficiency if some or all features are declared.
-
+%
 % New in Version 2.0:
 %   The separator for feature-value pairs is .. rather than ::. For
 %     compatibility, :: is still accepted.
@@ -87,61 +91,184 @@
 %   Nested loads are now supported. That is, a file being loaded can
 %     contain a directive such as ':- load file2.' which will be
 %     executed correctly.  /* Dropped in GULP 3. */
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/*******************************
- * Source file integrity check *
- *******************************/
+
+/*****************************
+ * Source file compatibility *
+ *****************************/
 
 % Make sure the right lines are commented out.
 
-/*Q*/ :- write('This is the Quintus Prolog source code.'), nl.
-%%L%% :- write('This is the LPA Prolog source code.'), nl.
 
-/*Q*/ %%L%%  :- write('This file was not correctly prepared!'), nl.
+%%  Quintus Prolog
+%%
+/***************************************************************************
 
-/**********************
- * Version identifier *
- **********************/
+% :- write('This is the Quintus Prolog source code.'), nl.
 
-%/*Q*/  g_version('GULP 3.1a for Quintus Prolog, 28 July 1994').
-%%L%%  g_version('GULP 3.1a for LPA 386-Prolog, 28 July 1994').
+g_version('GULP 3.1a for Quintus Prolog, 28 July 1994, 30 January 2003').
 
-%/*Q*/  :- g_version(X), version(X).
+:- g_version(X), version(X).
+
+:- public g_translate/2.
+:- public g_display/1.
+:- public display_feature_structure/1.
+:- public g_fs/1.
+:- public g_not_fs/1.
+:- public g_vl/1.
+:- public g_printlength/2.
+:- public writeln/1.
+:- public member/2.
+:- public remove_duplicates/2.
+:- public call_if_possible/1.
+:- public g_herald/0.
+
+
+gulp__dont_translate(Term) :-
+	( var(Term)
+	; atom(Term)
+	; number(Term)
+	).
+
+member(A,B) :- gulp__member(A,B).
+%%  or :- use_module(library(basics), [member/2]).
+
+call_if_possible(A) :- gulp__call_if_possible(A).
+
+gulp__window_title.
+
+***************************************************************************/
+
+
+%%  LPA Prolog
+%%
+/***************************************************************************
+
+:- write('This is the LPA Prolog source code.'), nl.
+
+g_version('GULP 3.1a for LPA 386-Prolog, 28 July 1994').
+
+gulp__dont_translate(Term) :-
+	( var(Term)
+	; atom(Term)
+	; number(Term)
+	; string(Term)
+	).
+
+call_if_possible(A) :- call(A).
+
+gulp__window_title :-
+	(  wtext((0,0), `GULP + LPA 386-Prolog`)  % main window title
+	-> true
+	;  true
+	).
+
+***************************************************************************/
+
+
+%%  SWI-Prolog 2.0 and above
+%%
+
+
+
+%%  Uncomment this part if you want module support (probably unstable).
+%%
+%%  N.B.: No clause or directive may precede the :-module/2 directive.
+%%
+
+:- module(gulp3,
+	  [g_translate/2,
+	   g_display/1,
+	   display_feature_structure/1,
+	   g_fs/1,
+	   g_not_fs/1,
+	   g_vl/1,
+	   g_printlength/2,
+	   remove_duplicates/2,
+	   call_if_possible/1,
+	   g_herald/0,
+	   {}/1           % new in 2007
+	  ]).
+
+:- module_transparent call_if_possible/1,{}/1.   %%  meta predicates
+
+'{}'(Goals) :- call(Goals).                 %% formerly built in, now needed (2007)
+
+
+
+%   :- format('This is the SWI-Prolog source code.~n').
+
+g_version('GULP 3.1d for SWI-Prolog, 19 April 2007').
+
+gulp__dont_translate(Term) :-
+	var(Term),
+	!.
+gulp__dont_translate(Term) :-
+	atomic(Term),
+	!.
+gulp__dont_translate(Module:_) :-
+	current_module(Module).
+	%%  If Module is the name of a new module -- such as in
+	%%  assert(foo:baz), which creates a module `foo' if that did
+	%%  not exist before -- we are in trouble.
+
+call_if_possible(A) :- gulp__call_if_possible(A).
+
+gulp__window_title.
+
+
+
+
+
+%%***************************************************************************/
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/************************
+ * Start of GULP proper *
+ ************************/
+
 
 /*************************
  * Operator declarations *
  *************************/
 
-% These are repeated in the LPA Prolog initialization, below (at end).
+:- op(600, xfy, user:(:)).
+:- op(602, xfy, user:(..)).
+:- op(602, xfy, user:(::)).    %  "user:" added 2005 Mar 22
 
-:- op(600,xfy,':').
-:- op(602,xfy,'..').
-:- op(602,xfy,'::').
+
+/**********************
+ * Other declarations *
+ **********************/
+
+:- dynamic   g_features/1.
+:- multifile g_features/1.
+
+:- dynamic g_forward_schema/3.
+:- dynamic g_backward_schema/2.
 
 
 /******************************************************************
  * Translation of feature structures to value lists or vice versa *
  ******************************************************************/
 
-:- dynamic g_features/1.
-:- multifile g_features/1.   
-
-
-%/*Q*/ :- public g_translate/2.
-
 g_translate(X,X) :-
-        var(X),
-        !.       /* Rare case, but not covered by other clauses */
+	var(X),
+	!.       /* Rare case, but not covered by other clauses */
 
 g_translate(Structure,List) :-
-        var(List),
-        !,
-        nonvar(Structure),
-        g_tf(Structure,List).
+	var(List),
+	!,
+	nonvar(Structure),
+	g_tf(Structure,List).
 
 g_translate(Structure,List) :-
-        nonvar(List),
-        g_tb(Structure,List).
+	nonvar(List),
+	g_tb(Structure,List).
 
 
 /*************************************************************
@@ -155,34 +282,26 @@ g_translate(Structure,List) :-
  */
 
 
-g_tb(Value,Value) :-
-        (
-		var(Value)
-		;
-		atom(Value)
-		;
-		number(Value)
-%%L%%           ;
-%%L%%           string(Value)
-	),
+g_tb(Value, Value) :-
+	gulp__dont_translate(Value),
         !.
 
         /* Variables and atomic terms do not need any conversion. */
 
 g_tb(FS,Term) :-
 	\+ functor(Term,g__,_),
-        !,
-        Term =.. [Functor | Args],
-        g_tb_list(NewArgs,Args),
-        FS =.. [Functor | NewArgs].
+	!,
+	Term =.. [Functor | Args],
+	g_tb_list(NewArgs,Args),
+	FS =.. [Functor | NewArgs].
 
         /* Term is a structure, but not a value list.
            Recursively convert all its arguments, which
            may be, or contain, value lists. */
 
 g_tb(FS,Term) :-
-        call(g_backward_schema(RawFS,Term)),
-        g_tb_fixup(RawFS,FS).
+	call(g_backward_schema(RawFS,Term)),   %%  Why is call/1 here?
+	g_tb_fixup(RawFS,FS).
 
         /* If we get here, we know Term is a value list. */
 
@@ -196,21 +315,21 @@ g_tb(FS,Term) :-
  */
 
 g_tb_fixup(F:V,Result) :-                  /* Singleton case */
-        g_tb_fixup_rest(F:V,_,Result).
+	g_tb_fixup_rest(F:V,_,Result).
 
 g_tb_fixup(F:V..Rest,Result) :-
-        g_tb(BTV,V),
-        g_tb_add(F:BTV,_,FV),
-        g_tb_fixup_rest(Rest,FV,Result).   /* Start the recursion */
+	g_tb(BTV,V),
+	g_tb_add(F:BTV,_,FV),
+	g_tb_fixup_rest(Rest,FV,Result).   /* Start the recursion */
 
 g_tb_fixup_rest(F:V..Rest,ResultSoFar,Result) :-
-        g_tb(BTV,V),
-        g_tb_add(F:BTV,ResultSoFar,FVR),
-        g_tb_fixup_rest(Rest,FVR,Result).  /* Continue the recursion */
+	g_tb(BTV,V),
+	g_tb_add(F:BTV,ResultSoFar,FVR),
+	g_tb_fixup_rest(Rest,FVR,Result).  /* Continue the recursion */
 
 g_tb_fixup_rest(F:V,ResultSoFar,FVR) :-
-        g_tb(BTV,V),
-        g_tb_add(F:BTV,ResultSoFar,FVR).   /* End the recursion */
+	g_tb(BTV,V),
+	g_tb_add(F:BTV,ResultSoFar,FVR).   /* End the recursion */
 
 
 g_tb_add(_:V,R,R)          :- var(V), !.   /* Unmentioned variable */
@@ -228,8 +347,8 @@ g_tb_add(F:g_(V),R,F:V..R) :- nonvar(R).   /* Ordinary case */
 g_tb_list([],[]).
 
 g_tb_list([FH|FT],[VH|VT]) :-
-        g_tb(FH,VH),
-        g_tb_list(FT,VT).
+	g_tb(FH,VH),
+	g_tb_list(FT,VT).
 
 
 
@@ -254,45 +373,37 @@ g_tb_list([FH|FT],[VH|VT]) :-
 
 
 g_tf(Term,Term) :-
-        (
-		var(Term)
-		;
-		atom(Term)
-		;
-		number(Term)
-%%L%%           ;
-%%L%%           string(Term)
-	),
+	gulp__dont_translate(Term),
         !.
 
         /* Simplest and most frequent case: Term is atomic. */
 
 g_tf(Term,_) :-
-        g_not_fs(Term),
-        functor(Term,X,_),
-        (X = ':' ; X = '..' ; X = '::'),
-        !,
-        g_error(['Invalid GULP punctuation: ' ,Term]).
+	g_not_fs(Term),
+	functor(Term,X,_),
+	(X = ':' ; X = '..' ; X = '::'),
+	!,
+	g_error(['Invalid GULP punctuation: ' ,Term]).
 
         /* If Term is a structure with a colon as its functor,
            but is not a valid feature structure, then we have
            a syntax error. */
 
 g_tf(Term,NewTerm) :-
-        g_not_fs(Term),
-        !,
-        Term =.. [Functor|Args],
-        g_tf_list(Args,NewArgs),
-        NewTerm =.. [Functor|NewArgs].
+	g_not_fs(Term),
+	!,
+	Term =.. [Functor|Args],
+	g_tf_list(Args,NewArgs),
+	NewTerm =.. [Functor|NewArgs].
 
         /* Term is a structure, but not a feature structure.
            Recurse on all its arguments, which may be, or
            contain, feature structures. */
 
 g_tf(Feature:Value,ValueList) :-
-        !,
-        g_tf(Value,NewValue),
-        g_tfsf(Feature,g_(NewValue),ValueList).
+	!,
+	g_tf(Value,NewValue),
+	g_tfsf(Feature,g_(NewValue),ValueList).
 
         /* We have a Feature:Value pair. Recursively
            translate the value, which may itself be
@@ -306,10 +417,10 @@ g_tf(Feature:Value,ValueList) :-
 
 
 g_tf(FeatureStructure .. Rest,ValueList) :-
-        !,
-        g_tf(FeatureStructure,VL1),
-        g_tf(Rest,VL2),
-        g_unify(FeatureStructure..Rest,VL1,VL2,ValueList).
+	!,
+	g_tf(FeatureStructure,VL1),
+	g_tf(Rest,VL2),
+	g_unify(FeatureStructure..Rest,VL1,VL2,ValueList).
 
         /* A compound feature structure is handled by
            translating all the feature structures
@@ -318,7 +429,7 @@ g_tf(FeatureStructure .. Rest,ValueList) :-
 
 
 g_tf(FeatureStructure :: Rest,ValueList) :-
-        g_tf(FeatureStructure .. Rest,ValueList).
+	g_tf(FeatureStructure .. Rest,ValueList).
 
         /* Older notation is still accepted for
            compatibility. */
@@ -334,8 +445,8 @@ g_tf(FeatureStructure :: Rest,ValueList) :-
 g_tf_list([],[]).
 
 g_tf_list([H|T],[NewH|NewT]) :-
-        g_tf(H,NewH),
-        g_tf_list(T,NewT).
+	g_tf(H,NewH),
+	g_tf_list(T,NewT).
 
 
 /*
@@ -348,21 +459,19 @@ g_tf_list([H|T],[NewH|NewT]) :-
 
 /*  Totally new in version 2.0  */
 
-:- dynamic g_forward_schema/3.
-
 g_tfsf(Keyword,Value,ValueList) :-
-        call_if_possible(g_forward_schema(Keyword,Value,ValueList)),
+	call_if_possible(g_forward_schema(Keyword,Value,ValueList)),
         !.
 
 g_tfsf(Keyword,Value,ValueList) :-
-        writeln(['% Generating declaration for feature: ',Keyword]),
-        ( retract(g_features(List)) ; List = [] ),
-        !,   /* the above line should not generate alternatives */
-        append(List,[Keyword],NewList),
-        asserta(g_features(NewList)),
+	writeln(['% Generating declaration for feature: ',Keyword]),
+	( retract(g_features(List)) ; List = [] ),
+	!,   /* the above line should not generate alternatives */
+	append(List,[Keyword],NewList),
+	asserta(g_features(NewList)),
 	g_add_another_feature(Keyword),
-        !,
-        g_tfsf(Keyword,Value,ValueList).
+	!,
+	g_tfsf(Keyword,Value,ValueList).
              /* Try again, and this time succeed! */
 
 
@@ -379,8 +488,6 @@ g_tfsf(Keyword,Value,ValueList) :-
  *
  */
 
-%/*Q*/ :- public g_display/1.
-
 g_display(X) :- display_feature_structure(X).
 
 
@@ -392,11 +499,9 @@ g_display(X) :- display_feature_structure(X).
  *   or internal representation.
  */
 
-%/*Q*/ :- public display_feature_structure/1.
-
 display_feature_structure(Term) :-
-        g_tb(FS,Term), /* Convert value lists into feature structures */
-        g_di(0,0,FS).  /* Display them */
+	g_tb(FS,Term), /* Convert value lists into feature structures */
+	g_di(0,0,FS).  /* Display them */
 
 
 /*
@@ -410,39 +515,39 @@ display_feature_structure(Term) :-
 % arguments so that indexing on the first argument would work.
 
 g_di(CurPos,Indent,Variable) :-
-        var(Variable),
-        !,
-        g_di_tab(Indent,CurPos),
-        write(Variable),
-        nl.
+	var(Variable),
+	!,
+	g_di_tab(Indent,CurPos),
+	write(Variable),
+	nl.
 
 g_di(CurPos,Indent,F:V..Rest) :-
-        !,
-        g_di(CurPos,Indent,F:V),
-        g_di(0,Indent,Rest).
+	!,
+	g_di(CurPos,Indent,F:V),
+	g_di(0,Indent,Rest).
 
 g_di(CurPos,Indent,F:V::Rest) :-
-        !,
-        g_di(CurPos,Indent,F:V..Rest).  /* For compatibility */
+	!,
+	g_di(CurPos,Indent,F:V..Rest).  /* For compatibility */
 
 g_di(CurPos,Indent,F:V) :-
-        !,
-        g_di_tab(Indent,CurPos),
-        write(F), write(': '),
-        g_printlength(F,PL),
-        NewIndent is Indent+PL+2,
-        g_di(NewIndent,NewIndent,V).
+	!,
+	g_di_tab(Indent,CurPos),
+	write(F), write(': '),
+	g_printlength(F,PL),
+	NewIndent is Indent+PL+2,
+	g_di(NewIndent,NewIndent,V).
 
 g_di(CurPos,Indent,OrdinaryTerm) :-
-        g_di_tab(Indent,CurPos),
-        write(OrdinaryTerm),
-        nl.
+	g_di_tab(Indent,CurPos),
+	write(OrdinaryTerm),
+	nl.
 
 
 
 g_di_tab(Indent,CurPos) :-
-        Tabs is Indent-CurPos,
-        tab(Tabs).
+	Tabs is Indent-CurPos,
+	tab(Tabs).
 
 
 /**************************************
@@ -458,26 +563,25 @@ g_di_tab(Indent,CurPos) :-
  */
 
 g_make_backward_schema :-
-        retractall(g_backward_schema(_,_)),
-        bagof((Feature:Value)/Schema,
-                g_forward_schema(Feature,Value,Schema),
-                [((F:V)/S)|Rest]),
-        g_make_whole_aux(Rest,F:V,S).
+	retractall(g_backward_schema(_,_)),
+	bagof((Feature:Value)/Schema,
+	      g_forward_schema(Feature,Value,Schema),
+	      [((F:V)/S)|Rest]),
+	g_make_whole_aux(Rest,F:V,S).
 
 
 g_make_whole_aux([],FSSoFar,SchemaSoFar) :-
-        assert(g_backward_schema(FSSoFar,SchemaSoFar)).
+	assertz(g_backward_schema(FSSoFar,SchemaSoFar)).
 
 g_make_whole_aux([((F:V)/S)|Rest],FSSoFar,SchemaSoFar) :-
-        NewFS = (F:V .. FSSoFar),
-        SchemaSoFar = S,  /* unify SchemaSoFar with S */
-        g_make_whole_aux(Rest,NewFS,SchemaSoFar).
+	NewFS = (F:V .. FSSoFar),
+	SchemaSoFar = S,  /* unify SchemaSoFar with S */
+	%%  Why is explicit unification used in this case?
+	g_make_whole_aux(Rest,NewFS,SchemaSoFar).
 
 /*
  * Defaults, in case the user never declares any features
  */
-
-:- dynamic g_backward_schema/2.
 
 g_backward_schema('no features declared',g__(_)).
 
@@ -546,18 +650,14 @@ g_add_another_feature_aux([_|Hook],Value) :-
  *   Succeeds if X is a feature structure.
  */
 
-%/*Q*/ :- public g_fs/1.
-
-g_fs(X:_) :- atom(X).
-g_fs(X..Y) :- g_fs(X), g_fs(Y).
-g_fs(X::Y) :- g_fs(X), g_fs(Y).  /* For compatibility */
+g_fs(X : _)  :- atom(X).
+g_fs(X .. Y) :- g_fs(X), g_fs(Y).
+g_fs(X :: Y) :- g_fs(X), g_fs(Y).  /* For compatibility */
 
 /*
  * g_not_fs(X)   "Not a Feature Structure"
  *  (Avoids use of "not" in compiled Arity Prolog.)
  */
-
-%/*Q*/ :- public g_not_fs/1.
 
 g_not_fs(X) :- g_fs(X), !, fail.
 g_not_fs(_).
@@ -568,8 +668,6 @@ g_not_fs(_).
  *
  *   Succeeds if X is a value list.
  */
-
-%/*Q*/ :- public g_vl/1.
 
 g_vl(Term) :- functor(Term,g__,_).
 
@@ -585,7 +683,7 @@ g_unify(_,X,X,X) :- !.
 
 g_unify(Text,X,Y,_) :-
 	\+ (X = Y),
-        g_error(['Inconsistency in ',Text]).
+	g_error(['Inconsistency in ',Text]).
 
 
 /*
@@ -594,11 +692,10 @@ g_unify(Text,X,Y,_) :-
  *     N is the length of the printed representation of Term.
  */
 
-%/*Q*/ :- public g_printlength/2.
-
-g_printlength(Term,N) :-  name(Term,List),
-                          !,
-                          length(List,N).
+g_printlength(Term, N) :-
+	name(Term, List),
+	!,
+	length(List, N).
 
 g_printlength(_,0).  /* if not easily computable, we probably don't
                         need an accurate value anyhow */
@@ -609,32 +706,24 @@ g_printlength(_,0).  /* if not easily computable, we probably don't
  *    then displays a message and aborts program.
  */
 
-g_error(List) :- repeat,
-                   seen,
-                   seeing(user),
-                 !,
-                 repeat,
-                   told,
-                   telling(user),
-                 !,
-                 writeln(['GULP ERROR: '|List]),
-                 abort.
+g_error(List) :-
+	repeat,
+	  seen,
+	  seeing(user),
+	!,
+	repeat,
+	  told,
+	  telling(user),
+	!,
+	writeln(['GULP ERROR: '|List]),
+	abort.
 
 
 /**************************************
  *           I/O utilities            *
  **************************************/
 
-/*
- *  g_clear_screen
- */
-
-% No longer needed.
-% g_clear_screen :-
-% /*Q*/             nl,nl,nl,nl,nl,nl,nl,nl,
-% %%L%%             nl,nl,nl,nl,nl,nl,nl,nl,   % is there a better way?
-%                   true.
-
+:- redefine_system_predicate(writeln(_)).  % new 2003
 
 /*
  * writeln(List)
@@ -645,10 +734,7 @@ g_error(List) :- repeat,
  *   to Feature:Value notation.
  */
 
-
-%/*Q*/ :- public writeln/1.
-
-redefine_system_predicate(writeln(X) :- g_tb(TranslatedX,X), writeln_aux(TranslatedX)).
+writeln(X) :- g_tb(TranslatedX,X), writeln_aux(TranslatedX).
 
 writeln_aux(X) :- var(X), !, write(X), nl.
 writeln_aux([]) :- !, nl.
@@ -670,12 +756,9 @@ writeln_aux(X) :- write(X), nl.
  *   Has interchangeability of unknowns.
  */
 
-% Built into both Quintus and LPA.
-
-%          :- public append/3.
-%          :- visible append/3.
-%   append([],X,X).
-%   append([H|T],X,[H|Y]) :- append(T,X,Y).
+gulp__append([],   X, X).
+gulp__append([H|T],X, [H|Y]) :-
+	gulp__append(T, X, Y).
 
 
 /*
@@ -684,12 +767,9 @@ writeln_aux(X) :- write(X), nl.
  *   Has interchangeability of unknowns.
  */
 
-% Built into LPA.
-
-%/*Q*/ :- public member/2.
-%
-%/*Q*/ member(X,[X|_]).
-%/*Q*/ member(X,[_|Y]) :- member(X,Y).
+gulp__member(X, [X|_]).
+gulp__member(X, [_|Y]) :-
+	gulp__member(X,Y).
 
 /*
  * remove_duplicates(List1,List2)
@@ -698,20 +778,18 @@ writeln_aux(X) :- write(X), nl.
  *    List1 must be instantiated at time of call.
  */
 
-%/*Q*/ :- public remove_duplicates/2.
-
 remove_duplicates(X,Y) :-
-        rem_dup_aux(X,Y,[]).
+	rem_dup_aux(X,Y,[]).
 
 rem_dup_aux([],[],_).
 
 rem_dup_aux([H|T],X,Seen) :-
-        member(H,Seen),
-        !,
-        rem_dup_aux(T,X,Seen).
+	member(H,Seen),
+	!,
+	rem_dup_aux(T,X,Seen).
 
 rem_dup_aux([H|T],[H|X],Seen) :-
-        rem_dup_aux(T,X,[H|Seen]).
+	rem_dup_aux(T,X,[H|Seen]).
 
 
 /*
@@ -720,13 +798,8 @@ rem_dup_aux([H|T],[H|X],Seen) :-
  *    Always succeeds.
  */
 
-% Built into both Quintus and LPA.
-
-%         :- public retractall/1.
-%         :- visible retractall/1.
-
-%  retractall(Head) :- functor(Head,Functor,Arity),
-%                      abolish(Functor/Arity).
+gulp__retractall(Head) :-
+	\+ ( clause(Head,_,Ref), \+ erase(Ref) ).
 
 
 /*
@@ -736,17 +809,10 @@ rem_dup_aux([H|T],[H|X],Seen) :-
  *   equivalent to ?- s([the,dog,barks],[]).
  */
 
-% Built into both Quintus and LPA.
-%  See also the DCG translator, below.
-
-%   +A          :- public phrase/2.
-%   +A          :- visible phrase/2.
-
-%   -Q phrase(X,Y) :- X =.. XL,
-%   -Q               append(XL,[Y,[]],GL),
-%   -Q               Goal =.. GL,
-%   -Q               call(Goal).
-
+gulp__phrase(PhraseType, InputString) :-
+	call(PhraseType, InputString, []).
+%%  if your Prolog does not support call/[2-6] use
+%%	apply(PhraseType, [InputString, []]).
 
 
 /*
@@ -756,40 +822,35 @@ rem_dup_aux([H|T],[H|X],Seen) :-
  *   the call fails but an error condition is not raised.
  */
 
-%/*-L*/          /*Q*/ :- public call_if_possible/1.
-%   +A          :- visible call_if_possible/1.
-
-
-call_if_possible(Goal) :-
-%   -Q          call(Goal).
-/*+Q*/          current_predicate(_,Goal), call(Goal).
+gulp__call_if_possible(Goal) :-
+	current_predicate(_, Goal),
+	call(Goal).
 
 
 /**********
  * Herald *
  **********/
 
-%/*Q*/ :- public g_herald/0.
-
-g_herald :- % put(13),
-%%L%%       (wtext((0,0),`GULP + LPA 386-Prolog`);true),  % main window title
-            nl,
-            g_herald_line(64),
-            g_version(X),
-            write(X), nl,
-            write('Copyright 1994 Michael A. Covington'), nl,
-            write('Portions copyright 1988 Quintus Computer Systems, Inc.'), nl,
-            write('and used by permission'), nl,
-            g_herald_line(64).
+g_herald :-
+	gulp__window_title,
+	nl,
+	g_herald_line(64),
+	g_version(X),
+	write(X), nl,
+	write('Copyright 1994 Michael A. Covington'), nl,
+	write('Portions copyright 1988 Quintus Computer Systems, Inc.'), nl,
+	write('and used by permission'), nl,
+	g_herald_line(64),
+	nl.
 
 g_herald_line(0) :- !, nl.
 g_herald_line(N) :- N>0, write('-'), NewN is N-1, g_herald_line(NewN).
 
-%/*Q*/ :- g_herald.
-
 /**********************
  * End of GULP proper *
  **********************/
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /***********************
  * DCG rule translator *
@@ -838,9 +899,9 @@ g_herald_line(N) :- N>0, write('-'), NewN is N-1, g_herald_line(NewN).
 
     The predicates are all named dcg_<something>/<some arity> in order
     to keep out of the way, with the exception of phrase/2 and phrase/3
-    which bear their proper names.  Only phrase/[2,3] and dcg_rule/2
-    are meant to be called directly, and dcg_rule/2 is meant to be called
-    from expand_term/2.  You need to keep dcg_body/4 and its dependents
+|   which bear their proper names.  Only phrase/[2,3] and dcg_rule/2
+|   are meant to be called directly, and dcg_rule/2 is meant to be called
+|   from expand_term/2.  You need to keep dcg_body/4 and its dependents
     around at run time so that variables as nonterminals in DCG rule bodies
     will work correctly.
 
@@ -1005,27 +1066,32 @@ dcg_CONJ(A, C, (A,C)).
 %%%	T0 = S0, T = S,
 %%%	NT.
 
-portable_expand_term(-->(H,B),Clause):-!,
-	(	dcg_rule(-->(H,B),Clause)->true
-	;	write('dcg_expansion_error->'),write(H),nl,fail
+portable_expand_term(-->(H,B), Clause) :- !,
+	(  dcg_rule( -->(H,B), Clause)
+	-> true
+	;  write('dcg_expansion_error->'),
+	   write(H), nl,
+	   fail
 	).
-portable_expand_term(C,C).
+portable_expand_term(C, C).
 
 %%% End of DCG-rule translator.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/********************************
- * QUINTUS AND LPA PROLOG HOOKS *
- ********************************/
+/*******************
+ * Hook predicates *
+ *******************/
 
 % Display feature structures as such in interactive debugging:
 
-portray(X) :- g_vl(X), g_tb(FS,X), write(FS).    % both Quintus and LPA
+user:portray(X) :- g_vl(X), g_tb(FS,X), write(FS).   %%  Quintus, LPA, and SWI
+
 
 % Translate feature structures to internal form automatically
 % during consult and reconsult, and process g_features/1 properly:
 
-term_expansion(g_features(List),
+user:term_expansion(g_features(List),
          [(:- dynamic g_features/1),g_features(List)]) :-
        !,
        write('% Declared features: '), write(List), nl,
@@ -1038,29 +1104,87 @@ term_expansion(g_features(List),
   % undeclared features and _then_ giving a g_features declaration.
   % This situation should at least be detected, if possible.
 
-term_expansion(Term,Result) :-
-  portable_expand_term(Term,X),
-  g_tf(X,Result).
+user:term_expansion(Term, Result) :-
+	portable_expand_term(Term, X),
+	g_tf(X, Result).
 
 % Unlike expand_term, portable_expand_term does not call term_expansion
 % and hence does not cause endless recursion when called by term_expansion.
 
+
+% Make sure the right lines are commented out.
+
+
+%%  Quintus Prolog
+%%
+/***************************************************************************
+
+:- g_herald.
+
+***************************************************************************/
+
+
+%%  LPA Prolog
+%%
+/***************************************************************************
+
 % Set initialization for LPA Prolog:
 % (not needed if we save state)
       
-%%L%%  :- initialization
-%%L%%                    op(600,xfy,':'),
-%%L%%                    op(602,xfy,'..'),
-%%L%%                    op(602,xfy,'::'),
-%%L%%                    g_version(X),
-%%L%%                    version(X),
-%%L%%                    g_herald.
-
+:- initialization
+	op(600,xfy,':'),
+	op(602,xfy,'..'),
+	op(602,xfy,'::'),
+	g_version(X),
+	version(X),
+	g_herald.
 
 % New top level for LPA Prolog, called from save_state:
 
-%%L%%  g_handler :- g_herald, main_handler.
+g_handler :- g_herald, main_handler.
+
+***************************************************************************/
+
+
+%%  SWI-Prolog 2.0 and above
+%%
+
+
+%%  Uncomment this part if you want module support (probably unstable).
+%%
+%%  add_portray(V, Body) :-
+%%	forall(user:clause(portray(V), Body, Ref), erase(Ref)),
+%%	assertz(:-(user:portray(V), Body)).
+%%
+%%  :- add_portray(A, gulp3:portray(A)).
+%%  :- assertz(:-(user:term_expansion(A,B), gulp3:term_expansion(A,B))).
+%%
+%%  portray/1 and term_expansion/2 cannot be exported via the
+%%  export list of the :-module/2 directive as this would result
+%%  in a name clash if other modules provide their own clauses
+%%  of portray/1 and/or term_expansion/2.
+%%  The `quick 'n' dirty' solution is to hook them directly into
+%%  the user predicate space by using assert with an explicit
+%%  module specification.
+
+:- g_herald.
+
+% :- g_version(V),write('**** '),write(V),write(' ****'),nl,nl.   % Shorter than g_herald.
+
+
+
+
 
 
 % THIS MUST BE THE END OF THE FILE.
 % No part of GULP itself can follow term_expansion.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% EOF %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+

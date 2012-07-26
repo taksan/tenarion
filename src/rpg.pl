@@ -121,7 +121,7 @@ processar((ato_fala:interro_tema_desconhecido
 				)
         ),
         (ato_fala:informar 
-			..agente:Agent 
+			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
             ..tema:(acao:AcaoAlvo ..tema:TS ..pessoa:PX))
@@ -135,7 +135,7 @@ processar((ato_fala:interro_tema_desconhecido
     filtrar(TipoNp, L1,TS).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema:incog(TipoNp)),
-          (ato_fala:informar .. agente:Agent .. acao:Relacao ..tema_real:TS ..pessoa:terc)):-
+          (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS ..pessoa:terc)):-
     \+ compound(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
     PredAcao =.. [Relacao, Agent, TemaSolucao],
@@ -146,12 +146,12 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
 % o que ou quem        
 
 processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:T),
-   (ato_fala:informar .. agente:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:T ..pessoa:terc ..entidade:Tipo)):-
+   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:T ..pessoa:terc ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
     PredAcao =.. [RelacaoAjustada, A, T],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
     ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
-    filtrar(L1,W),
+    filtrar(Tipo,L1,W),
     traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
 
 processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
@@ -162,7 +162,7 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
 
 processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:informar
-           ..agente:voce
+           ..agente_real:voce
            ..acao:poder 
            ..positivo:nao 
            ..pessoa:terc
@@ -198,10 +198,10 @@ processar(_, []):-
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
 traduz_agente_para_evitar_ambiguidade([],[]).
-traduz_agente_para_evitar_ambiguidade(voce, jogador).
+traduz_agente_para_evitar_ambiguidade(voce, voce).
 traduz_agente_para_evitar_ambiguidade(A,A):-
     \+ is_list(A).
-traduz_agente_para_evitar_ambiguidade([voce|Resto], [jogador|Resto]).
+traduz_agente_para_evitar_ambiguidade([voce|Resto], [voce|Resto]).
 traduz_agente_para_evitar_ambiguidade([Alguem|Resto], [Alguem|RestoRes]):-
     \+ Alguem = voce,
     traduz_agente_para_evitar_ambiguidade(Resto, RestoRes).
@@ -421,4 +421,21 @@ dereferencia_pronome(TalvezPronome, Traduzido):-
 
 dereferencia_pronome(NaoPronome, NaoPronome).
 
+referencia_com_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
+	referencia_com_pronome(TemaReal, TemaReferenciado),
+	referencia_com_pronome(AgenteReal, AgenteReferenciado).
+
+referencia_com_pronome(TemaReal, TemaReferenciado):-
+	\+ compound(TemaReal),
+	quem_denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P),TemaReal),
+	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
+	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).
+
+referencia_com_pronome(TemaReal, TemaReal).
+
 referencia_com_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
+
+
+
+
+

@@ -68,6 +68,7 @@ equivale(dos, [de, os]).
 equivale(comigo, [em, eu]).
 equivale(contigo, [em, voce]).
 equivale(nele, [em, ele]).
+equivale(nela, [em, ela]).
 equivale(dele, [de, ele]).
 equivale(dela, [de, ela]).
 equivale(deles, [de, eles]).
