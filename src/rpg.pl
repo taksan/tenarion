@@ -41,13 +41,13 @@ dialogo:-
     once(readLine(P)),
     seta_contexto(jogador),
     s(Sem,P,[]),
-    dereferencia_pronomes_na_sentenca(Sem),
+    substitui_pronomes_na_sentenca(Sem),
     seta_contexto(computador),
     once(atualiza_contexto(Sem)),!,
         
     processar(Sem,Resposta),!,
 
-	referencia_com_pronomes_na_sentenca(Resposta),
+	institui_pronomes_na_sentenca(Resposta),
     s(Resposta,R,[]),
     seta_contexto(jogador),
     once(atualiza_contexto(Resposta)),
@@ -410,30 +410,30 @@ normaliza_explicacao([Normalizado|RestoDesnormalizado],[Normalizado|Resto]):-
 eh_verbo(Verbo):-
 	v(acao:Verbo, _, []).
 
-dereferencia_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
-	dereferencia_pronome(TemaTalvezPronome,TemaTraduzido),
-	dereferencia_pronome(AgenteTalvezPronome,AgenteTraduzido).
+substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
+	substitui_pronome(TemaTalvezPronome,TemaTraduzido),
+	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido).
 
-dereferencia_pronome(TalvezPronome, Traduzido):-
+substitui_pronome(TalvezPronome, Traduzido):-
 	\+ compound(TalvezPronome),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome),_,[]),
 	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TalvezPronome), Traduzido).
 
-dereferencia_pronome(NaoPronome, NaoPronome).
+substitui_pronome(NaoPronome, NaoPronome).
 
-referencia_com_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
-	referencia_com_pronome(TemaReal, TemaReferenciado),
-	referencia_com_pronome(AgenteReal, AgenteReferenciado).
+institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
+	institui_pronome(TemaReal, TemaReferenciado),
+	institui_pronome(AgenteReal, AgenteReferenciado).
 
-referencia_com_pronome(TemaReal, TemaReferenciado):-
+institui_pronome(TemaReal, TemaReferenciado):-
 	\+ compound(TemaReal),
 	quem_denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P),TemaReal),
 	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).
 
-referencia_com_pronome(TemaReal, TemaReal).
+institui_pronome(TemaReal, TemaReal).
 
-referencia_com_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
+institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
 
 
