@@ -40,14 +40,6 @@ s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..
     pontuacao_opcional(_).
 	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
-%s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:incog(PronRelativo) ..desconhecido:IsDesconhecido ) -->
-%	sn(tipo:relativo .. coord:nao ..id:PronRelativo ..pessoa:_),%TODO pessoa?
-%    sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:A ..desconhecido:IsDesconhecido),
-%    pontuacao_opcional(_),
-%	{ 
-%	  determina_desconhecido(A, IsDesconhecido, Ag)
-%	}.
-
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
 	sn(id:Ag),%casa com o sujeito
@@ -73,20 +65,6 @@ s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pesso
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
     	pontuacao_opcional('.').
 	%,{ determina_desconhecido(A, IsDesconhecido, EI) }.
-
-%s(ato_fala:informar .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
-%        {\+ is_list(A)},
-%	sn(id:A .. num: N),
-%	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..(acao:X .. tema:T .. num:N)),
-%   	pontuacao_opcional('.').
-%	%<{ determina_desconhecido(T, IsDesconhecido, EI) }.
-
-% sentenca onde o agente eh "ninguem" ou "nada". (ex: nada estah aqui)
-%s(ato_fala:informar .. agente:[] .. acao:X .. tema:T ..entidade:E ..desconhecido:_) -->
-%	sn(tipo: pron_ninguem(E) .. coord:nao),
-%	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X ..tema:T .. num: sing ..pessoa:terc),
- %   pontuacao_opcional('.').
-	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
 s(ato_fala:informar .. agente:[A1|ATail] .. acao:X .. tema:T ..pessoa:P) -->
@@ -114,24 +92,6 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
 	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
 
-/*
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
-	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
-
-sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
-        { \+ is_list(Ag) },
-        { (
-        	var(Ag); 
-        	(nonvar(Ag); nonvar(T)), 
-           	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag)
-           )},
-        pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), 
-        { nonvar(Ag);
-          (
-          	var(Ag),
-           	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Ag) 
-           )}.
-*/
 sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
 	[lugar],
 	pro(tipo_pro:pron_ninguem(onde)).
@@ -157,22 +117,22 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesc
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ var(P) },
-	sn(id:A1 .. coord:nao ..aceita_pron:nao),
+	sn(id:A1 .. coord:nao),
 	[e],
-	sn(id:A2 .. coord:nao ..aceita_pron:nao).
+	sn(id:A2 .. coord:nao).
 
 % gera frases com conjuntos de substantivos, levando em consideracao a preposicao correta
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ nonvar(P) },
-	sn(id:A1 .. coord:nao ..aceita_pron:nao),
+	sn(id:A1 .. coord:nao),
 	[e],
-	sp(id:A2 .. prep:P ..aceita_pron:nao).
+	sp(id:A2 .. prep:P).
 
 % reconhece/gera listas de substantivos
 sn(coord:sim ..id:[A1|Resto] .. num:plur ..prep:P) -->
-	sn(id:A1 .. coord:nao ..aceita_pron:nao),
+	sn(id:A1 .. coord:nao),
 	[,],
-	sn(coord:sim .. id:Resto ..prep:P ..aceita_pron:nao).
+	sn(coord:sim .. id:Resto ..prep:P).
 
 % usado tao somente para imprimir "eu" sempre que o narrador for o agente da resposta
 % so deve ser usado para produzir texto
@@ -294,9 +254,9 @@ sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subc
 sp(id:I .. prep:_ ..desconhecido:_)-->
 	sadvb(id:I).
 	
-sp(id:I .. prep:P ..desconhecido:IsDesconhecido ..aceita_pron:AceitaPron) -->
+sp(id:I .. prep:P ..desconhecido:IsDesconhecido) -->
     prep(prep:P),
-    sn(id:I ..desconhecido:IsDesconhecido ..prep:P ..aceita_pron:AceitaPron).
+    sn(id:I ..desconhecido:IsDesconhecido ..prep:P).
 
 sadvb(id:I) -->
     advb(tipo_adv:lugar ..adv:A),
