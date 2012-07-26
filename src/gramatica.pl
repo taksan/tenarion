@@ -116,6 +116,9 @@ sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -
 
 /*
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
+	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
+
+sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao ..aceita_pron:sim) -->
         { \+ is_list(Ag) },
         { (
         	var(Ag); 
