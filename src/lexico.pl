@@ -1,4 +1,4 @@
-:-[gulp].
+%:-[gulp].
 
 %%%% ADJETIVOS
 

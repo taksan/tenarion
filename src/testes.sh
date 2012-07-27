@@ -1,0 +1,1 @@
+swipl -qs testes.pl

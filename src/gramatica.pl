@@ -1,5 +1,5 @@
 /*********************** Gramatica *********************/
-:-[gulp].
+%:-[gulp].
 :-[apoio_gramatical].
 :- dynamic(np_desconhecido/2).
 

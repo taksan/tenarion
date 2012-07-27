@@ -27,6 +27,11 @@ ultima_tabua(1).
 ter(Quem, Oque):-
     ( var(Oque); \+ racional(Oque) ),
     estar(Oque, Quem).
+
+ter(voce, ferramentas):-
+    ter(voce,pregos),
+    ter(voce,tabuas),
+    ter(voce,martelo).
     
 pertencer(Oque,A_Quem):-
     ter(A_Quem, Oque).
@@ -388,11 +393,6 @@ poder_consertar(voce, barco):-
     dono(voce, barco),
     ter(voce,ferramentas).
 
-ter(voce, ferramentas):-
-    ter(voce,pregos),
-    ter(voce,tabuas),
-    ter(voce,martelo).
-
 consertar(voce, barco):-
         poder_consertar(barco),
         retract(defeito(barco, [buraco])),
@@ -419,8 +419,7 @@ pregar_em_com(prego, X, Y, martelo):-
 /* colocar objeto X em objeto Y */
 poder_colocar(voce, OQue, Onde):-
     ter(voce, OQue),
-	estar(voce,Onde).
-    (estar(voce, Onde); estar(Onde,aqui)).
+	estar(voce,Onde);(estar(voce,Aqui),estar(Onde,Aqui)).
 
 colocar(voce, OQue, Onde):-
     poder_colocar(voce, OQue, Onde),

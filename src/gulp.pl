@@ -464,7 +464,7 @@ g_tfsf(Keyword,Value,ValueList) :-
         !.
 
 g_tfsf(Keyword,Value,ValueList) :-
-	writeln(['% Generating declaration for feature: ',Keyword]),
+%	writeln(['% Generating declaration for feature: ',Keyword]),
 	( retract(g_features(List)) ; List = [] ),
 	!,   /* the above line should not generate alternatives */
 	append(List,[Keyword],NewList),
