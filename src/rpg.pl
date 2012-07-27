@@ -55,7 +55,6 @@ seta_contexto(Ctx):-
 
 dialogo:-
     once(readLine(P)),
-	write(P),nl,
     seta_contexto(jogador),
     s(Sem,P,[]),
     substitui_pronomes_na_sentenca(Sem),
@@ -69,7 +68,6 @@ dialogo:-
     seta_contexto(jogador),
     once(atualiza_contexto(Resposta)),
     
-	write(R),nl,
     writeLine(R),
     continuar(Sem).
 

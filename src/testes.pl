@@ -39,6 +39,23 @@ teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
 	dado_pergunta_espero_resposta('quem estah em o caixa eletronico?', 'ninguem estah em ele.').
+teste20:-
+	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele nao tem nada.').
+teste21:-
+	dado_pergunta_espero_resposta('eu falo com o zulu.', 'ok').
+teste22:-
+	dado_pergunta_espero_resposta('oi zulu', 'oi').
+teste23:-
+	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu.').
+teste24:-
+	dado_pergunta_espero_resposta('quem sou eu?', 'voce eh o foo.').
+teste25:-
+	dado_pergunta_espero_resposta('onde estah a faca?', 'eu nao sei o que eh uma faca.').
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Daqui para baixo, mecanismos internos para execucao dos testes
