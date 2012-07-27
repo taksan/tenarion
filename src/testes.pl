@@ -118,3 +118,4 @@ toString([H|Tail],String):-
 	concat_atom([H, ' ', StringResto],String).
 
 :-roda_testes.
+:-halt.
