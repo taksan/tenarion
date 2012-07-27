@@ -1,1 +1,1 @@
-swipl -qs testes.pl | ./colorize red '\**FAILED' green PASSED
+swipl -qs testes.pl | sed -n '/started/,$ p' | ./colorize red '\**FAILED.*' green PASSED:

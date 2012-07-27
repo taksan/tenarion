@@ -46,6 +46,7 @@ teste19:-
 roda_testes:-
     cleanup_player,
     assert(jogador('foo')),
+	write('Test execution started'),nl,
 	roda_teste(1),
 	write('Test execution finished'),nl.
 
