@@ -414,12 +414,15 @@ pregar_em_com(prego, X, Y, martelo):-
     assertz(estar(prego, Y)).
 
 /* colocar objeto X em objeto Y */
-poder_colocar(voce, OQue, Onde):-
+poder_colocar(voce, (tema1:OQue ..tema2:Onde)):-
     ter(voce, OQue),
-	estar(voce,Onde);(estar(voce,Aqui),estar(Onde,Aqui)).
+	(	estar(voce,Onde);
+		(estar(voce,Aqui),estar(Onde,Aqui));
+		ter(voce,Onde)
+	).
 
 colocar(voce, (tema1:OQue ..tema2:Onde)):-
-    poder_colocar(voce, OQue, Onde),
+    poder_colocar(voce, (tema1:OQue ..tema2:Onde)),
     colocar(OQue, Onde).
 
 colocar(X, Y):-

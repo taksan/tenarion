@@ -49,9 +49,9 @@ s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(P
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
-	sn(id:A ..num:N),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T ..num:N),
-        ['?'].
+	sn(id:A ..num:N ..pessoa:Pes),
+	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T ..num:N ..pessoa:Pes),
+    ['?'].
 %	{ 
 %		determina_desconhecido(T, IsDesconhecido, EI);
 %	  	determina_desconhecido(A, IsDesconhecido, EI) 
@@ -63,7 +63,7 @@ s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pesso
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes), 
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
-    	pontuacao_opcional('.').
+   	pontuacao_opcional('.').
 	%,{ determina_desconhecido(A, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).

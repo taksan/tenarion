@@ -21,7 +21,7 @@ cleanup_player.
 
 jogar:-
         once(cleanup_player),
-        write('Bem Vindo ao mundo de Fagageh!'),
+        write('Bem Vindo ao mundo de Tenarion!'),
         nl,
         write('Qual o seu sexo (F/M/I)? '),
         readText([Sex|_]),
@@ -174,7 +174,7 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:responder .. mensagem:ok)):-
     determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
-    notrace(PredAcao).
+    PredAcao.
 
 processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:informar
@@ -196,7 +196,7 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
 processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:descrever ..mensagem:R)):-
         PredAcao =.. [Relacao, A, T, R],
-        notrace(PredAcao).
+        PredAcao.
 
 processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)).
 

@@ -53,15 +53,15 @@ teste24:-
 teste25:-
 	dado_pergunta_espero_resposta('onde estah a faca?', 'eu nao sei o que eh uma faca.').
 teste26:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'ok').
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pegar elas porque voce jah tem as minhocas.').
 teste27:-
 	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
 teste28:-
 	dado_pergunta_espero_resposta('eu pego a vara de pescar.', 'ok').
-%teste29:-
-%	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
-%teste30:-
-%	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'as minhocas estao em ela.').
+teste29:-
+	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
+teste30:-
+	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'algumas minhocas estao nela.').
 
 :-roda_testes.
 :-halt.

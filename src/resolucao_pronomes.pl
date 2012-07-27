@@ -21,6 +21,7 @@ substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido 
 	substitui_pronome(TemaTalvezPronome,TemaTraduzido).
 
 substitui_pronome(TalvezPronome, Traduzido):-
+	nonvar(TalvezPronome),
 	denota_lugar(TalvezPronome, Traduzido).
 
 substitui_pronome(TalvezPronome, Traduzido):-
