@@ -1,23 +1,6 @@
 :-[rpg].
 
-roda_testes:-
-    cleanup_player,
-    assert(jogador('foo')),
-	roda_teste(1),
-	write('Test execution finished'),nl.
-
-roda_teste(N):-
-	concat_atom([teste,N],NomeTeste),
-	\+ clause(NomeTeste,_).
-
-roda_teste(N):-
-	concat_atom([teste,N],NomeTeste),
-	clause(NomeTeste,_),
-	T=..[NomeTeste],
-	executa(T),
-	NNext is N+1,
-	roda_teste(NNext).
-
+% Siga a sequencia e nomenclatura, o mecanismo de testes depende delas para funcionar.
 teste1:-
     dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, uma vara de pescar e algumas tabuas estao aqui.').
 teste2:- 
@@ -56,6 +39,27 @@ teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
 	dado_pergunta_espero_resposta('quem estah em o caixa eletronico?', 'ninguem estah em ele.').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Daqui para baixo, mecanismos internos para execucao dos testes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+roda_testes:-
+    cleanup_player,
+    assert(jogador('foo')),
+	roda_teste(1),
+	write('Test execution finished'),nl.
+
+roda_teste(N):-
+	concat_atom([teste,N],NomeTeste),
+	\+ clause(NomeTeste,_).
+
+roda_teste(N):-
+	concat_atom([teste,N],NomeTeste),
+	clause(NomeTeste,_),
+	T=..[NomeTeste],
+	executa(T),
+	NNext is N+1,
+	roda_teste(NNext).
 
 executa(T):-
 	T,

@@ -128,9 +128,9 @@ convertWord([Char|Rest1],[Char|Rest2]):-
 
 writeLine([]).
 writeLine([First|Rest]):-
-        (falando_com(voce, Nome); Nome = narrador),            
-        write(Nome),
-        write(' > '),
+    (falando_com(voce, Nome); Nome = narrador),            
+    write(Nome),
+    write(' > '),
 	capitalize(First,FirstCap),
 	write(FirstCap),
 	writeWords(Rest).
@@ -149,12 +149,12 @@ writeWords(['!'|Rest]):-
 	write('!'),
 	writeWords(Rest).
 writeWords([U,W|Rest]):-
-        equivale(Z, [U,W]),
-        write(' '),
+    equivale(Z, [U,W]),
+    write(' '),
 	write(Z),
 	writeWords(Rest).
 writeWords([W|Rest]):-
-        write(' '),
+    write(' '),
 	write(W),
 	writeWords(Rest).
 
