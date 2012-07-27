@@ -2,8 +2,7 @@ roda_testes:-
     cleanup_player,
     assert(jogador('foo')),
 	write('Test execution started'),nl,
-	roda_teste(1),
-	write('Test execution finished'),nl.
+	roda_teste(1).
 
 roda_teste(N):-
 	concat_atom([teste,N],NomeTeste),
@@ -37,7 +36,8 @@ dado_pergunta_espero_resposta(Pergunta,Resposta):-
 
 processa_pergunta_gera_resposta(PerguntaString1,RespostaString):-
 	adapt_punctuation(PerguntaString1,PerguntaString),
-	atomic_list_concat(Pergunta,' ',PerguntaString),!,
+	atomic_list_concat(PerguntaC,' ',PerguntaString),!,
+	contraido(PerguntaC,Pergunta),
     seta_contexto(jogador),!,
     s(Sem, Pergunta, []),!,
     substitui_pronomes_na_sentenca(Sem),!,
@@ -48,7 +48,8 @@ processa_pergunta_gera_resposta(PerguntaString1,RespostaString):-
     s(Res, Resposta, []),!,
     seta_contexto(jogador),!,
     once(atualiza_contexto(Res)),!,
-	toString(Resposta,RespostaString),!.
+	contraido(RespostaC, Resposta),
+	toString(RespostaC,RespostaString),!.
 
 adapt_punctuation(SIn,SOut):-
 	string_length(SIn,Len), 
@@ -56,6 +57,17 @@ adapt_punctuation(SIn,SOut):-
 	sub_string(SIn, 0, Len1, _, Sub),
 	sub_string(SIn, Len1, 1,_,Punct),
 	concat_atom([Sub,' ',Punct], SOut).
+
+contraido([],[]).
+
+contraido([Contraido|Resto],[A,B|Restocontraidodo]):-
+	equivale(Contraido,[A,B]),
+	contraido(Resto,Restocontraidodo).
+
+contraido([A|Resto],[A|Restocontraidodo]):-
+	contraido(Resto,Restocontraidodo).
+
+contraido([A,B],[A,B]).
 
 toString([],'').
 

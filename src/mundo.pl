@@ -247,11 +247,8 @@ entidade(A, oque):-
 /* racionalidade */
 
 racional(voce).
-
 racional(zulu).
-
 racional(mateo).
-
 racional(peixe_voador).
 
 
@@ -421,7 +418,7 @@ poder_colocar(voce, OQue, Onde):-
     ter(voce, OQue),
 	estar(voce,Onde);(estar(voce,Aqui),estar(Onde,Aqui)).
 
-colocar(voce, OQue, Onde):-
+colocar(voce, (tema1:OQue ..tema2:Onde)):-
     poder_colocar(voce, OQue, Onde),
     colocar(OQue, Onde).
 
@@ -552,3 +549,14 @@ poder_digitar(voce, senha, caixa_eletronico).
 digitar(voce, Oque, NoQue):-
     poder_digitar(voce, Oque, NoQue),
     assertz(digitado(Oque, NoQue)).
+
+poder_pescar(voce, Onde):-
+	Onde = lago,
+	estar(voce,Aqui),
+	perto(Aqui,lago),
+	ter(voce, vara_pescar),
+	estar(minhocas, vara_pescar).
+
+pescar(voce,Onde):-
+	poder_pescar(voce,Onde),
+	assertz(estar(peixe,voce)).

@@ -232,11 +232,11 @@ sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desc
 
 % VERBO BITRANSITIVO 
 % seria o caso bitransitivo, exigindo um objeto direto e um indireto
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(omite:O ..acao:A .. tema:(tema1:T1 ..prep:Prep ..tema2:T2) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
 	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
-	sn(id:T ..desconhecido:IsDesconhecido),
-   	sp(prep:Prep ..desconhecido:IsDesconhecido).
+	sn(id:T1 ..desconhecido:IsDesconhecido),
+   	sp(id:T2 ..prep:Prep ..desconhecido:IsDesconhecido).
 
 % ex.: sv onde o tema eh uma acao .. nesse caso, vai ser usado para "eu NAO SEI O QUE <verbo>"
 sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido

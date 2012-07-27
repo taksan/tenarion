@@ -54,20 +54,20 @@ seta_contexto(Ctx):-
     assertz(contexto_atual(Ctx)).
 
 dialogo:-
-    once(readLine(P)),
+    once(readLine(P)),!,
     seta_contexto(jogador),
     s(Sem,P,[]),
     substitui_pronomes_na_sentenca(Sem),
     seta_contexto(computador),
-    once(atualiza_contexto(Sem)),!,
-        
+    once(atualiza_contexto(Sem)),
+
     processar(Sem,Resposta),!,
 
 	institui_pronomes_na_sentenca(Resposta),
-    s(Resposta,R,[]),
+    s(Resposta,R,[]),!,
     seta_contexto(jogador),
     once(atualiza_contexto(Resposta)),
-    
+
     writeLine(R),
     continuar(Sem).
 

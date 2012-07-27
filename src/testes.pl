@@ -7,13 +7,13 @@ teste1:-
 teste2:- 
     dado_pergunta_espero_resposta('quem estah aqui?', 'voce e o zulu estao aqui.').
 teste3:- 
-    dado_pergunta_espero_resposta('onde eu estou?', 'voce estah em o ancoradouro.').
+    dado_pergunta_espero_resposta('onde eu estou?', 'voce estah no ancoradouro.').
 teste4:-
     dado_pergunta_espero_resposta('onde eu posso ir?', 'voce pode ir para a carpintaria.').
 teste5:-
     dado_pergunta_espero_resposta('o que eu posso pegar?', 'voce pode pegar algumas minhocas, uma vara de pescar e algumas tabuas.').
 teste6:-
-    dado_pergunta_espero_resposta('onde estah a corda?', 'ela estah em o ancoradouro e em o barco.').
+    dado_pergunta_espero_resposta('onde estah a corda?', 'ela estah no ancoradouro e no barco.').
 teste7:-
     dado_pergunta_espero_resposta('eu posso pegar a corda?', 'nao').
 teste8:-
@@ -33,13 +33,13 @@ teste14:-
 teste15:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o barco.').
 teste16:-
-    dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah em o ancoradouro.').
+    dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah no ancoradouro.').
 teste17:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o barco.').
 teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
-	dado_pergunta_espero_resposta('quem estah em o caixa eletronico?', 'ninguem estah em ele.').
+	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah em ele.').
 teste20:-
 	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele nao tem nada.').
 teste21:-
@@ -52,6 +52,16 @@ teste24:-
 	dado_pergunta_espero_resposta('quem sou eu?', 'voce eh o foo.').
 teste25:-
 	dado_pergunta_espero_resposta('onde estah a faca?', 'eu nao sei o que eh uma faca.').
+teste26:-
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'ok').
+teste27:-
+	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
+teste28:-
+	dado_pergunta_espero_resposta('eu pego a vara de pescar.', 'ok').
+%teste29:-
+%	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
+%teste30:-
+%	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'as minhocas estao em ela.').
 
 :-roda_testes.
 :-halt.

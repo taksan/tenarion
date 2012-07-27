@@ -272,23 +272,17 @@ v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [serrar]
 
 % VERBO: PESCAR
 v(omite:nao ..acao:pescar ..num:sing ..pessoa: prim ..subcat:[]) --> [pesco].
-
 v(omite:nao ..acao:pescar ..num:sing ..pessoa: terc ..subcat:[]) --> [pesca].
-
-v(omite:nao ..acao:serrar ..num:sing ..pessoa: indic ..subcat:[]) --> [pescar].
+v(omite:nao ..acao:pescar ..num:sing ..pessoa: indic ..subcat:[]) --> [pescar].
 
 % VERBO: NAVEGAR
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[]) --> [navego].
-
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[]) --> [navega].
-
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[]) --> [navegar].
 
 % VERBO: REMAR
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: prim ..subcat:[]) --> [remo].
-
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: terc ..subcat:[]) --> [rema].
-
 v(omite:nao ..acao:navegar ..num:sing ..pessoa: indic ..subcat:[]) --> [remar].
 
 % VERBO: CONVERSAR
@@ -321,9 +315,7 @@ v(omite:nao ..acao:soltar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [largar]
 
 % VERBO: COLOCAR
 v(omite:nao ..acao:colocar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [coloco].
-
 v(omite:nao ..acao:colocar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [coloca].
-
 v(omite:nao ..acao:colocar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [colocar].
 
 % VERBO: COMPRAR
