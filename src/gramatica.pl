@@ -269,13 +269,6 @@ negacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-%spro(id:I) -->
-%    pro(tipo_pro: relativo ..pron:I).
-    
-%spro(id:[]) -->
-%    pro(tipo_pro: pron_ninguem(onde) ..pron:A),
-%    { denota_lugar(A, _) }.
-
 det(gen:G .. num:N ..tipo:T) --> 
        quant(gen:G .. num:N),
        ident(gen:G .. num:N ..tipo:T),

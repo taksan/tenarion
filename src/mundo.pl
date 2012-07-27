@@ -174,11 +174,6 @@ estar_em(X, Y):-
         member(X, L1),
         estar_em(X, Y).
 
-mesmo_lugar(X, Y):-
-    estar(X, Local), !,
-    estar(Y, Local).
-
-
 /* *** PROPRIEDADES DOS OBJETOS */
 
 navegavel(X):-
@@ -388,7 +383,8 @@ amarrar(voce, Oque, [NoQue,ENoQue]):-
 
 /* execucao da acao de consertar: somente para buraco/barco */
 poder_consertar(voce, barco):-
-    estar(barco, aqui),
+	estar(voce, Aqui),
+	estar(barco, Aqui),
     dono(voce, barco),
     ter(voce,ferramentas).
 
@@ -407,20 +403,23 @@ consertar(voce, barco):-
 pregar_em_com(prego, X, martelo):-
         ter(voce, martelo), !, 
         ter(voce, prego),!,
-        estar(X, aqui),!,
+		estar(voce,Aqui),
+        estar(X,Aqui),!,
         assertz(estar_em(pregos, X)).
 
 pregar_em_com(prego, X, Y, martelo):-
     ter(voce, martelo),
     ter(voce, pregos),
-    estar(X, aqui),
-    estar(Y, aqui),
+	estar(voce,Aqui),
+    estar(X, Aqui),
+    estar(Y, Aqui),
     assertz(estar(prego, X)),
     assertz(estar(prego, Y)).
 
 /* colocar objeto X em objeto Y */
 poder_colocar(voce, OQue, Onde):-
     ter(voce, OQue),
+	estar(voce,Onde).
     (estar(voce, Onde); estar(Onde,aqui)).
 
 colocar(voce, OQue, Onde):-
@@ -452,7 +451,8 @@ poder_pegar(Quem,Oque):-
     pegavel(Oque),
     nao(ter(Quem,Oque)),
     nao(dono(_, Oque)),
-    mesmo_lugar(Quem, Oque).
+    estar(Quem,Aqui),
+	estar(Oque,Aqui).
 
 pegar(voce, X):-
 	poder_pegar(voce, X),
