@@ -13,13 +13,12 @@ R = (poder_cortar(corda, serrote), retract(estar(corda, _G540))).
 Zulu é o dono do barco
        ^^^^^^^^^
 
-"o dono do" é complemento nominal.
+"o dono" é o substantivo.
 
+"do barco" é complemento nominal (porque especifica de qual dono estamos falando).
 http://www.lpeu.com.br/a/Complemento-nominal-e-Adjunto-adnominal.html
 
-
 ser(dono(voce,barco))
-
 
 ============================
 

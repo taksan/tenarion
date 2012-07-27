@@ -15,15 +15,14 @@ contexto(jogador, (tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce) , X):-
 contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), voce).% 
 
 contexto(jogador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
-    estar(voce, Lugar).        
+    estar(voce, Lugar).
 
 % contexto do computador
 contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),voce).
 contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),jogador).
-    
+
 contexto(computador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
-    estar(voce, Lugar).        
-    
+    estar(voce, Lugar).
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
 atualiza_advb_aqui:-
@@ -63,13 +62,14 @@ atualiza_contexto_denotado_por([TemaOuAgente|Resto]):-
     atualiza_contexto_denotado_por(Resto).
 
 atualiza_contexto_denotado_por(_).
-    
+
 atualiza_pessoa((tipo_pro:voce),_).
 atualiza_pessoa(_,voce).
-    
+
 atualiza_pessoa(Pessoa, NovoValor):-
     nonvar(NovoValor),
     nonvar(Pessoa),
+    \+ estar(voce, NovoValor),
     contexto_atual(Ctx),
     retractall(contexto(Ctx, Pessoa, _)),
     asserta(contexto(Ctx, Pessoa, NovoValor)).
@@ -116,7 +116,7 @@ denota((tipo_pro:relativo ..pron:Pron), P):-
 % para aceitar o pronome prp.dito
 denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
     pro((tipo_pro:T ..gen:G ..num:N ..pessoa:P ..pron:Pron),[Quem],[]).
-    
+
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
     \+ compound(X), 
     nonvar(X),
