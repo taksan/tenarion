@@ -195,9 +195,9 @@ pro(tipo_pro:relativo ..pron:onde) --> [onde].
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
 advb(tipo_adv:lugar ..adv:la) --> [lá].
-advb(tipo_adv:afirmacao ..adv:nao) --> [não].
+advb(tipo_adv:afirmacao ..adv:nao) --> [nao].
 advb(tipo_adv:afirmacao ..adv:sim) --> [].
-advb(tipo_adv:afirmacao ..adv:ja) -->[já].
+advb(tipo_adv:afirmacao ..adv:ja) -->[ja].
 
 %%%% VERBOS
 % INTRANSITIVO        : subcat:[]
@@ -207,13 +207,13 @@ advb(tipo_adv:afirmacao ..adv:ja) -->[já].
 
 % VERBO: ESTAR
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[advb] ..poss:nao) --> 
-        [está].
+        [estah].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
-        [está].
+        [estah].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[advb]..poss:nao) --> 
-        [estão].
+        [estao].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
-        [estão].
+        [estao].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[advb] ..poss:nao) --> 
         [estou].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 
@@ -227,7 +227,7 @@ v(omite:_ ..acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [e
 % VERBO: SER
 v(omite:_   ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: indic ..subcat:[sn]) --> [ser].
-v(omite:nao ..acao:ser .. num:plur ..pessoa: terc ..subcat:[sn]) --> [sao].
+v(omite:nao ..acao:ser .. num:plur ..pessoa: terc ..subcat:[sn]) --> ['sao'].
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sn]) --> [sou].
 % exige adjetivo
 v(omite:nao ..acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
@@ -235,7 +235,7 @@ v(omite:nao ..acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
 v(omite:nao ..acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
 
 v(omite:nao ..acao:pertencer .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
-v(omite:nao ..acao:pertencer .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> [sao].
+v(omite:nao ..acao:pertencer .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> ['sao'].
 
 % VERBO: CONHECER
 v(omite:nao ..acao:conhecer ..num:sing  ..pessoa: prim ..subcat:[sn]) --> [conheco].
@@ -407,7 +407,7 @@ v(omite:nao ..acao:ver ..num:sing ..pessoa: terc ..subcat:[sn]) --> [ve].
 v(omite:nao ..acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 
 % "VERBO": "SER DONO DE"
-v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> [eh],[dono].
+v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> ['eh'],[dono].
 v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
 
 % VERBO: entender
