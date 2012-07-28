@@ -66,7 +66,8 @@ atualiza_pessoa(Pessoa, NovoValor):-
     nonvar(Pessoa),
     \+ estar(player, NovoValor),
     contexto_atual(Ctx),
-    retractall(contexto(Ctx, Pessoa, _)),
+	Pessoa=(tipa_pro:reto ..pessoa:terc ..gen:G),
+    retractall(contexto(Ctx, (tipo_pro:reto ..pessoa:terc ..gen:G), _)),
     asserta(contexto(Ctx, Pessoa, NovoValor)).
 
 atualiza_pessoa(_ , _).
