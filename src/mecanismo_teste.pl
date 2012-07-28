@@ -3,11 +3,14 @@ roda_testes:-
     assert(jogador('foo')),
 	assert(sexo_jogador(masc)),
 	write('Test execution started'),nl,
-	roda_teste(1).
+	findall(Q, (current_predicate(Q/0),sub_string(Q,0,5,_,teste)),UnsortedTests),sort(UnsortedTests,SortedTests),
+	roda_testes(SortedTests).
 
-roda_teste(N):-
-	concat_atom([teste,N],NomeTeste),
-	\+ clause(NomeTeste,_).
+roda_testes([]).
+
+roda_testes([Teste|Outros]):-
+	executa(Teste),
+	roda_testes(Outros).
 
 roda_teste(N):-
 	concat_atom([teste,N],NomeTeste),
@@ -18,16 +21,20 @@ roda_teste(N):-
 	roda_teste(NNext).
 
 executa(T):-
-	T,
-	clause(T,C),
-	write('PASSED: '),
-	write(C),nl.
-
-executa(T):-
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
 	ignore(NC),
+	(Esperado=RespostaReal,
+		printpassed(C);
+		printfailed(C,Esperado,RespostaReal)
+	).
+
+printpassed(C):-
+	write('PASSED: '),
+	write(C),nl.
+
+printfailed(C,Esperado,RespostaReal):-
 	write('***FAILED : '),  write(C),nl,
 	write('   Esperado: '), write(Esperado),nl,
 	write('   Gerado  : '), write(RespostaReal),nl.

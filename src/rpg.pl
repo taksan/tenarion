@@ -25,9 +25,11 @@ jogar:-
         nl,
         write('Qual o seu sexo (F/M/I)? '),
         readText([Sex|_]),
-        if(Sex = 'm', 
-			(T='aventureiro', assert(sexo_jogador(masc))),
-			(T='aventureira', assert(sexo_jogador(fem)))
+		(
+	        (Sex = 'm', 
+				T='aventureiro', assert(sexo_jogador(masc)))
+			;
+				(T='aventureira', assert(sexo_jogador(fem)))
 		),
         write('Digite seu nome, nobre '),
         write(T), write(': '),
@@ -130,7 +132,7 @@ processar((ato_fala:interro_tema_desconhecido
 			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
-            ..tema:(acao:AcaoAlvo ..tema_real:TS ..pessoa:PX))
+            ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:AcaoAlvo ..tema_real:TS ..pessoa:indic))
         ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),

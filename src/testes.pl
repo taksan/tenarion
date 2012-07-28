@@ -2,23 +2,23 @@
 :-[mecanismo_teste].
 
 % Siga a sequencia e nomenclatura, o mecanismo de testes depende delas para funcionar.
-teste1:-
+teste01:-
     dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, uma vara de pescar e algumas tabuas estao aqui.').
-teste2:- 
+teste02:- 
     dado_pergunta_espero_resposta('quem estah aqui?', 'voce e o zulu estao aqui.').
-teste3:- 
+teste03:- 
     dado_pergunta_espero_resposta('onde eu estou?', 'voce estah no ancoradouro.').
-teste4:-
+teste04:-
     dado_pergunta_espero_resposta('onde eu posso ir?', 'voce pode ir para a carpintaria.').
-teste5:-
+teste05:-
     dado_pergunta_espero_resposta('o que eu posso pegar?', 'voce pode pegar algumas minhocas, uma vara de pescar e algumas tabuas.').
-teste6:-
+teste06:-
     dado_pergunta_espero_resposta('onde estah a corda?', 'ela estah no ancoradouro e no barco.').
-teste7:-
+teste07:-
     dado_pergunta_espero_resposta('eu posso pegar a corda?', 'nao').
-teste8:-
+teste08:-
     dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pegar ela.').
-teste9:-
+teste09:-
     dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
 teste10:-
     dado_pergunta_espero_resposta('as minhocas estao aqui?', 'sim').
@@ -53,15 +53,15 @@ teste24:-
 teste25:-
 	dado_pergunta_espero_resposta('onde estah a faca?', 'eu nao sei o que eh uma faca.').
 teste26:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pegar elas porque voce jah tem as minhocas.').
-teste27:-
-	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
-teste28:-
 	dado_pergunta_espero_resposta('eu pego a vara de pescar.', 'ok').
-teste29:-
+teste27:-
 	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
-teste30:-
+teste29:-
 	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'algumas minhocas estao nela.').
+teste30:-
+	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
+teste31:-
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pegar elas porque voce jah tem as minhocas.').
 
 :-roda_testes.
 :-halt.

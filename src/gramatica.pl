@@ -149,7 +149,7 @@ sn(coord:nao .. id:Id ..desconhecido:sim) -->
 % verbo transitivo direto (ex: verbos que não exigem preposição antes do objeto, pegar '' a faca)
 % verbo bitransitivo direto e indireto (ex.:preferir)
 
-%%
+%% VERBO TRANSITIVO DIRETO CUJO COMPLEMENTO É OUTRO VERBO
 sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
 		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
 	{ ignore((var(IsPositivo),is_positivo(T, IsPositivo))) },
