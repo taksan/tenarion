@@ -1,6 +1,7 @@
 roda_testes:-
     cleanup_player,
     assert(jogador('foo')),
+	assert(sexo_jogador(masc)),
 	write('Test execution started'),nl,
 	roda_teste(1).
 
@@ -34,22 +35,19 @@ executa(T):-
 dado_pergunta_espero_resposta(Pergunta,Resposta):-
 	processa_pergunta_gera_resposta(Pergunta,Resposta).
 
-processa_pergunta_gera_resposta(PerguntaString1,RespostaString):-
-	adapt_punctuation(PerguntaString1,PerguntaString),
-	atomic_list_concat(PerguntaC,' ',PerguntaString),!,
-	contraido(PerguntaC,Pergunta),
-    seta_contexto(jogador),!,
-    s(Sem, Pergunta, []),!,
-    substitui_pronomes_na_sentenca(Sem),!,
-    seta_contexto(computador),!,
-    once(atualiza_contexto(Sem)),!,
-    processar(Sem,Res),!,
-	institui_pronomes_na_sentenca(Res),!,
-    s(Res, Resposta, []),!,
-    seta_contexto(jogador),!,
-    once(atualiza_contexto(Res)),!,
-	contraido(RespostaC, Resposta),
-	toString(RespostaC,RespostaString),!.
+processa_pergunta_gera_resposta(PerguntaString,RespostaString):-
+	converte_pergunta_para_lista(PerguntaString,Pergunta),!,
+	processar_pergunta(Pergunta,Resposta,_),!,
+	converte_resposta_para_string(Resposta,RespostaString).
+
+converte_pergunta_para_lista(PerguntaString,PerguntaArray):-
+	adapt_punctuation(PerguntaString,PerguntaString1),
+	atomic_list_concat(PerguntaC,' ',PerguntaString1),!,
+	contraido(PerguntaC,PerguntaArray).
+
+converte_resposta_para_string(RespostaLista,RespostaString):-
+	contraido(RespostaC, RespostaLista),
+	toString(RespostaC,RespostaString).
 
 adapt_punctuation(SIn,SOut):-
 	string_length(SIn,Len), 

@@ -35,17 +35,17 @@ teste15:-
 teste16:-
     dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah no ancoradouro.').
 teste17:-
-    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o barco.').
+    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o zulu.').
 teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
-	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah em ele.').
+	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah nele.').
 teste20:-
 	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele nao tem nada.').
 teste21:-
 	dado_pergunta_espero_resposta('eu falo com o zulu.', 'ok').
 teste22:-
-	dado_pergunta_espero_resposta('oi zulu', 'oi').
+	dado_pergunta_espero_resposta('oi zulu.', 'oi.').
 teste23:-
 	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu.').
 teste24:-

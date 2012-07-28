@@ -51,7 +51,10 @@ institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agent
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
 	\+ has_features(TemaReal), \+ has_features(AgenteReal),
 	institui_pronome(AgenteReal, AgenteReferenciado),
-	institui_pronome(TemaReal, TemaReferenciado).
+	(
+		( once(institui_pronome(TemaReal, TemaReferenciado)),\+ AgenteReferenciado = TemaReferenciado )
+		; TemaReal = TemaReferenciado
+	).
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 

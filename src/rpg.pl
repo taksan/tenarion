@@ -25,29 +25,15 @@ jogar:-
         nl,
         write('Qual o seu sexo (F/M/I)? '),
         readText([Sex|_]),
-        assert(sexoJogador(Sex)),
-        ((Sex = 'm', T='aventureiro'); (T='aventureira')),
+        if(Sex = 'm', 
+			(T='aventureiro', assert(sexo_jogador(masc))),
+			(T='aventureira', assert(sexo_jogador(fem)))
+		),
         write('Digite seu nome, nobre '),
         write(T), write(': '),
         readText([Nome|_]),
         assert(jogador(Nome)),!,
         dialogo.
-
-testar:-
-        once(cleanup_player),
-        write('Bem Vindo ao mundo de Fagageh!'),
-        nl,
-        write('Qual o seu sexo (F/M/I)? '),
-        Sex='m',
-        assert(sexoJogador(Sex)),
-        ((Sex = 'm', T='aventureiro'); (T='aventureira')),
-        write('Digite seu nome, nobre '),
-        write(T), write(': '),
-        Nome='Fulk',
-        assert(jogador(Nome)),!,
-        dialogo.
-
-
 
 seta_contexto(Ctx):-
     retractall(contexto_atual(_)),
@@ -55,25 +41,29 @@ seta_contexto(Ctx):-
 
 dialogo:-
     once(readLine(P)),!,
-    seta_contexto(jogador),
-    s(Sem,P,[]),
-    substitui_pronomes_na_sentenca(Sem),
-    seta_contexto(computador),
-    once(atualiza_contexto(Sem)),
+	processar_pergunta(P,R,Sem),!,
 
-    processar(Sem,Resposta),!,
-
-	institui_pronomes_na_sentenca(Resposta),
-    s(Resposta,R,[]),!,
-    seta_contexto(jogador),
-    once(atualiza_contexto(Resposta)),
-
-    writeLine(R),
+    writeLine(R),!,
     continuar(Sem).
 
 dialogo:-
     writeLine(['hã', hein, '?']),
     dialogo.
+
+processar_pergunta(P,R,Sem):-
+    seta_contexto(jogador),
+    s(Sem,P,[]),
+    substitui_pronomes_na_sentenca(Sem),!,
+    once(atualiza_contexto(Sem)),
+    seta_contexto(computador),
+    once(atualiza_contexto(Sem)),
+
+    processar(Sem,Resposta),!,
+	
+	institui_pronomes_na_sentenca(Resposta),!,
+    s(Resposta,R,[]),
+    seta_contexto(jogador),
+    once(atualiza_contexto(Resposta)).
 
 continuar(ato_fala:terminar):-
         falando_com(voce, X),
@@ -151,7 +141,7 @@ processar((ato_fala:interro_tema_desconhecido
     filtrar(TipoNp, L1,TS).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
-          (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS ..pessoa:terc)):-
+          (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS)):-
     \+ compound(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
     PredAcao =.. [Relacao, Agent, TemaSolucao],

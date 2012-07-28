@@ -6,10 +6,6 @@ contexto_atual(jogador).
 
 %% mantem mapeamento para ultimas referencias por genero
 % aqui eh igual para o computador e para o jogador
-
-    
-contexto(jogador, (tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce) , X):-
-    falando_com(voce, X).
     
 % qdo o jogador usa pronome "eu"
 contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), voce).% 
@@ -87,6 +83,14 @@ valida_locutor(Ag):-
 denota((tipo_pro:pron_ninguem(quem)), ninguem).
 denota((tipo_pro:pron_ninguem(oque)), nada).
 denota((tipo_pro:relativo ..pron:onde), onde).
+
+denota((tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce), Quem):-
+	contexto_atual(jogador),
+	falando_com(voce,Quem).
+
+denota((tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu), Quem):-
+	contexto_atual(computador),
+	falando_com(voce,Quem).
     
 % vai determinar se o Ag vai usar o pronome "eu" para se designar.
 denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
@@ -108,7 +112,7 @@ denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
     contexto_atual(Ctx),
     contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem).
 
-    
+   
 denota((tipo_pro:relativo ..pron:Pron), P):-
     nonvar(Pron),
     P=Pron.

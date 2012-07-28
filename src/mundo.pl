@@ -226,23 +226,25 @@ local(lago).
 local(barco).
 local(caixa_eletronico).
 
-/* identidade */
-ser(voce, narrador):-
-        \+ falando_com(voce, _).
+combina(minhocas,vara_pescar).
 
-ser(voce, X):-
-        falando_com(voce, X).
-ser(L,L).        
+/* identidade */
+ser(voce, Nome):-
+	jogador(Nome).
+
+ser(L,L):-
+	nonvar(L),
+	nao(L=voce).
 
 /* diferenca entre pessoas e objetos */
 
 /* entidade(voce, _):- !, fail. */
 
 entidade(A, quem):-
-        racional(A).
+	racional(A).
 
 entidade(A, oque):-
-        \+ racional(A).
+    \+ racional(A).
 
 /* racionalidade */
 
@@ -413,13 +415,15 @@ pregar_em_com(prego, X, Y, martelo):-
     assertz(estar(prego, X)),
     assertz(estar(prego, Y)).
 
+
 /* colocar objeto X em objeto Y */
 poder_colocar(voce, (tema1:OQue ..tema2:Onde)):-
     ter(voce, OQue),
-	(	estar(voce,Onde);
-		(estar(voce,Aqui),estar(Onde,Aqui));
-		ter(voce,Onde)
+	(	(local(Onde),estar(voce,Onde));
+		(local(Onde),estar(voce,Aqui),estar(Onde,Aqui));
+		(ter(voce,Onde),combina(OQue,Onde))
 	).
+
 
 colocar(voce, (tema1:OQue ..tema2:Onde)):-
     poder_colocar(voce, (tema1:OQue ..tema2:Onde)),
@@ -521,15 +525,18 @@ conversar(voce, X):-
 
 conversar_com(Pessoa):-
         poder_conversar_com(Pessoa),
+		retractall(falando_com(voce,_)),
         assertz(falando_com(voce, Pessoa)).
 
 finaliza_conversa(Pessoa):-
         falando_com(_, Pessoa),
-        retract(falando_com(_, Pessoa)).
+        retract(falando_com(_, Pessoa)),
+		assertz(falando_com(voce,narrador)).
 
 finaliza_conversa(Pessoa):-
         falando_com(Pessoa, _),
-        retract(falando_com(Pessoa, _)).
+        retract(falando_com(Pessoa, _)),
+		assertz(falando_com(voce,narrador)).
 
 /* acoes provenientes do lexico */
 
