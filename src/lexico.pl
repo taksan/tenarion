@@ -161,7 +161,7 @@ pro(tipo_pro:reto .. num:sing .. pessoa:terc ..gen:masc ..pron:ele) --> [ele].
 pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:fem ..pron:elas) --> [elas].
 pro(tipo_pro:reto .. num:plur .. pessoa:terc ..gen:masc ..pron:eles) --> [eles].
 pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce) --> [voce].
-pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:voce_resp) --> [voce].
+pro(tipo_pro:voce .. num:sing .. pessoa:terc ..pron:player) --> [voce].
 pro(tipo_pro:reto .. num:plur .. pessoa:prim ..pron:nos) --> [nos].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[] ..pron:mim) --> [mim].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv] ..pron:me) --> [me].

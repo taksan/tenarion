@@ -12,9 +12,9 @@ nao(Predicado):-
     \+ Predicado.
 
 inventario(Obj):-
-        examinar(voce, Obj).
+        examinar(player, Obj).
 
-falando_com(voce, narrador).
+falando_com(player, narrador).
 
 /**** objetos especiais */
 conj_velas([1,2,3,4,5,6,7,8,9,10,11,12,13]).
@@ -28,10 +28,10 @@ ter(Quem, Oque):-
     ( var(Oque); \+ racional(Oque) ),
     estar(Oque, Quem).
 
-ter(voce, ferramentas):-
-    ter(voce,pregos),
-    ter(voce,tabuas),
-    ter(voce,martelo).
+ter(player, ferramentas):-
+    ter(player,pregos),
+    ter(player,tabuas),
+    ter(player,martelo).
     
 pertencer(Oque,A_Quem):-
     ter(A_Quem, Oque).
@@ -63,13 +63,13 @@ estar(ilha, jogo).
 
 
 /* LOCAL ONDE VOCE SE ENCONTRA */
-estar(voce, ancoradouro).
+estar(player, ancoradouro).
 
 /* LOCAL: Inventario */
 
-estar(identidade, voce).
-estar(cartao_credito, voce).
-estar(sua(mao), voce).
+estar(identidade, player).
+estar(cartao_credito, player).
+estar(sua(mao), player).
 
 /* LOCAL: ANCORADOURO */
 
@@ -137,7 +137,7 @@ estar(peixe, agua_do_lago).
 estar(vitoria_regia, agua_do_lago).
 
 %estar(Objeto,aqui):-
-%    estar(voce, Aqui),!,
+%    estar(player, Aqui),!,
 %    estar(Objeto,Aqui).
 
 /* Verificacao sobre um conjunto de objetos */
@@ -229,16 +229,16 @@ local(caixa_eletronico).
 combina(minhocas,vara_pescar).
 
 /* identidade */
-ser(voce, Nome):-
+ser(player, Nome):-
 	jogador(Nome).
 
 ser(L,L):-
 	nonvar(L),
-	nao(L=voce).
+	nao(L=player).
 
 /* diferenca entre pessoas e objetos */
 
-/* entidade(voce, _):- !, fail. */
+/* entidade(player, _):- !, fail. */
 
 entidade(A, quem):-
 	racional(A).
@@ -248,7 +248,7 @@ entidade(A, oque):-
 
 /* racionalidade */
 
-racional(voce).
+racional(player).
 racional(zulu).
 racional(mateo).
 racional(peixe_voador).
@@ -271,10 +271,10 @@ dono(mateo, estande).
 dono(mateo, carpintaria).
 dono(mateo, santo_do_pau_oco).
 dono(mateo, carteira).
-% voce
-dono(voce, X):-
+% player
+dono(player, X):-
     nonvar(X),
-    estar(X, voce).
+    estar(X, player).
 
 /* quem conhece quem*/
 conhecer(zulu, mateo).
@@ -315,27 +315,27 @@ comprimento(remo, 60).
 /* ACOES: define acoes que podem ser realizadas SOBRE os objetos */
 
 /* acoes de deslocamento */
-poder_ir(voce, barco):-
-    dono(voce, barco),
-    estar(voce, CenaAtual),
+poder_ir(player, barco):-
+    dono(player, barco),
+    estar(player, CenaAtual),
     perto(CenaAtual, barco).
 
-poder_ir(voce, lago):-
-    estar(voce, barco),
+poder_ir(player, lago):-
+    estar(player, barco),
     nao(quebrado(barco)),
-    ter(voce, remo).
+    ter(player, remo).
 
-poder_ir(voce, X):-
-        estar(voce, Aqui),
+poder_ir(player, X):-
+        estar(player, Aqui),
         perto(Aqui, X),
-        nao(estar(voce, X)),
+        nao(estar(player, X)),
         local(X),
         \+ member(X,[barco,lago]).
 
-ir(voce, X):-
-        poder_ir(voce, X),!,
-        retract(estar(voce, _)),
-        assert(estar(voce, X)).
+ir(player, X):-
+        poder_ir(player, X),!,
+        retract(estar(player, _)),
+        assert(estar(player, X)).
 
 /* cortar */
 cortar_com((tabua, X), serrote):-
@@ -353,46 +353,46 @@ cortar_com((tabua, X), serrote):-
         assertz(ultima_tabua(NovaUltima)),
         assertz(comprimento((tabua, NovaUltima), 10)),
         % posicionamento da tabua no mundo
-        estar_em(voce, CenaAtual),
+        estar_em(player, CenaAtual),
         assertz(estar((tabua, NovaUltima), CenaAtual)).
 
 objeto_A_corta_B(faca,corda).
 objeto_A_corta_B(serrote,tabua).
 objeto_A_corta_B(serrote,barco).
 
-poder_cortar(voce, ObjACortar, ObjParaCortar):-
+poder_cortar(player, ObjACortar, ObjParaCortar):-
     estar(ObjACortar, aqui),
-    ter(voce, ObjParaCortar),
+    ter(player, ObjParaCortar),
     objeto_A_corta_B(ObjParaCortar,ObjParaCortar).
 
-poder_cortar(voce, Oque, ComOQue):-
+poder_cortar(player, Oque, ComOQue):-
     var(Oque), Oque=oque,
     var(ComOQue), ComOQue=oque.
 
-cortar(voce, Oque, ComOQue):-
+cortar(player, Oque, ComOQue):-
     var(Oque), Oque=oque,
     var(ComOQue), ComOQue=oque.
 
-cortar(voce, corda, tesoura):-
-        poder_cortar(voce, corda, tesoura),
+cortar(player, corda, tesoura):-
+        poder_cortar(player, corda, tesoura),
         retract(estar(corda, _)).
 
-cortar(voce, mao, serrote):-
-        assertz(injuriado(voce)).
+cortar(player, mao, serrote):-
+        assertz(injuriado(player)).
 
-amarrar(voce, Oque, [NoQue,ENoQue]):-
-    poder_amarrar(voce, Oque, [NoQue,ENoQue]),
+amarrar(player, Oque, [NoQue,ENoQue]):-
+    poder_amarrar(player, Oque, [NoQue,ENoQue]),
     assertz(estar(Oque, NoQue)),
     assertz(estar(Oque, ENoQue)).
 
 /* execucao da acao de consertar: somente para buraco/barco */
-poder_consertar(voce, barco):-
-	estar(voce, Aqui),
+poder_consertar(player, barco):-
+	estar(player, Aqui),
 	estar(barco, Aqui),
-    dono(voce, barco),
-    ter(voce,ferramentas).
+    dono(player, barco),
+    ter(player,ferramentas).
 
-consertar(voce, barco):-
+consertar(player, barco):-
         poder_consertar(barco),
         retract(defeito(barco, [buraco])),
         retract(estar(buraco, barco)).
@@ -400,16 +400,16 @@ consertar(voce, barco):-
 
 /* pregar: aplicavel a qualquer objeto */
 pregar_em_com(prego, X, martelo):-
-        ter(voce, martelo), !, 
-        ter(voce, prego),!,
-		estar(voce,Aqui),
+        ter(player, martelo), !, 
+        ter(player, prego),!,
+		estar(player,Aqui),
         estar(X,Aqui),!,
         assertz(estar_em(pregos, X)).
 
 pregar_em_com(prego, X, Y, martelo):-
-    ter(voce, martelo),
-    ter(voce, pregos),
-	estar(voce,Aqui),
+    ter(player, martelo),
+    ter(player, pregos),
+	estar(player,Aqui),
     estar(X, Aqui),
     estar(Y, Aqui),
     assertz(estar(prego, X)),
@@ -417,28 +417,28 @@ pregar_em_com(prego, X, Y, martelo):-
 
 
 /* colocar objeto X em objeto Y */
-poder_colocar(voce, (tema1:OQue ..tema2:Onde)):-
-    ter(voce, OQue),
-	(	(local(Onde),estar(voce,Onde));
-		(local(Onde),estar(voce,Aqui),estar(Onde,Aqui));
-		(ter(voce,Onde),combina(OQue,Onde))
+poder_colocar(player, (tema1:OQue ..tema2:Onde)):-
+    ter(player, OQue),
+	(	(local(Onde),estar(player,Onde));
+		(local(Onde),estar(player,Aqui),estar(Onde,Aqui));
+		(ter(player,Onde),combina(OQue,Onde))
 	).
 
 
-colocar(voce, (tema1:OQue ..tema2:Onde)):-
-    poder_colocar(voce, (tema1:OQue ..tema2:Onde)),
+colocar(player, (tema1:OQue ..tema2:Onde)):-
+    poder_colocar(player, (tema1:OQue ..tema2:Onde)),
     colocar(OQue, Onde).
 
 colocar(X, Y):-
-    retract(estar(X, voce)),
+    retract(estar(X, player)),
     assertz(estar(X, Y)).
 
 /* larga o objeto e o coloca na cena atual */
-soltar(voce, X):-
+soltar(player, X):-
         largar(X).
 
 largar(X):-
-        estar(voce, CenaAtual), !,
+        estar(player, CenaAtual), !,
         colocar(X, CenaAtual).
 
 /* pegar */
@@ -457,52 +457,52 @@ poder_pegar(Quem,Oque):-
     estar(Quem,Aqui),
 	estar(Oque,Aqui).
 
-pegar(voce, X):-
-	poder_pegar(voce, X),
+pegar(player, X):-
+	poder_pegar(player, X),
     pegar(X).
 
 pegar(X):-
-     poder_pegar(voce, X),!,
+     poder_pegar(player, X),!,
      retract(estar(X, _)),
-     assertz(estar(X, voce)).
+     assertz(estar(X, player)).
 
 /* vedar -- para vedar buracos */
 vedar(buraco, X):-
         (X = vela ; X = chiclete),
-        ter(voce,X),!,
+        ter(player,X),!,
         unido(barco, (tabua, _)),!,
         consertar(barco),
-        retract(estar(X, voce)).
+        retract(estar(X, player)).
 
 vedar(barco, X):-
         (X = vela ; X = chiclete),
-        estar_em(X, voce),!,
+        estar_em(X, player),!,
         pregado(barco, (tabua, _)),!,
         consertar(barco),
-        retract(estar(X, voce)).
+        retract(estar(X, player)).
 
 /* fazer remo */
-poder_fazer(voce, remo):-
-    ter(voce, (tabua,_)),
-    ter(voce, serrote).
+poder_fazer(player, remo):-
+    ter(player, (tabua,_)),
+    ter(player, serrote).
 
-fazer(voce, remo):-
-    poder_fazer(voce,remo),
-    retract(estar((tabua, _), voce)),
+fazer(player, remo):-
+    poder_fazer(player,remo),
+    retract(estar((tabua, _), player)),
 	comprimento((tabua, X), Comp),
 	Comp > 50,
-	retract(estar((tabua, X), voce)),
-	assert(estar(remo, voce)).
+	retract(estar((tabua, X), player)),
+	assert(estar(remo, player)).
 
 /* Examinar */
 
 examinar(Oque, [obj(Objetos), def(Defeitos)]):-
         \+ invisivel(Oque),
-        estar(voce, CenaAtual),
+        estar(player, CenaAtual),
         (estar_em(Oque, CenaAtual); Oque = CenaAtual),
         (defeito(Oque, Defeitos); Defeitos=[]),
         findall(X, (estar(X, Oque), 
-                    \+ member(X, [voce, sua(mao)]),
+                    \+ member(X, [player, sua(mao)]),
                     \+ member(X, Defeitos)),
                 Objetos),
         findall(X, (invisivel(X), 
@@ -513,60 +513,60 @@ examinar(Oque, [obj(Objetos), def(Defeitos)]):-
                     retract(invisivel(X))), _).
 
 /* conversar -- inicia dialogo com Pessoa */
-poder_conversar(voce, X):-
+poder_conversar(player, X):-
     poder_conversar_com(X).
 
 poder_conversar_com(Pessoa):-
         racional(Pessoa), !, 
-        \+ falando_com(voce, Pessoa).
+        \+ falando_com(player, Pessoa).
 
-conversar(voce, X):-
+conversar(player, X):-
         conversar_com(X).
 
 conversar_com(Pessoa):-
         poder_conversar_com(Pessoa),
-		retractall(falando_com(voce,_)),
-        assertz(falando_com(voce, Pessoa)).
+		retractall(falando_com(player,_)),
+        assertz(falando_com(player, Pessoa)).
 
 finaliza_conversa(Pessoa):-
         falando_com(_, Pessoa),
         retract(falando_com(_, Pessoa)),
-		assertz(falando_com(voce,narrador)).
+		assertz(falando_com(player,narrador)).
 
 finaliza_conversa(Pessoa):-
         falando_com(Pessoa, _),
         retract(falando_com(Pessoa, _)),
-		assertz(falando_com(voce,narrador)).
+		assertz(falando_com(player,narrador)).
 
 /* acoes provenientes do lexico */
 
 /* --- acoes de conversa com personagens --- */
 
 /* comprar objeto da pessoa */
-poder_comprar(voce,Objeto):-
+poder_comprar(player,Objeto):-
         dono(Objeto, Pessoa),
-        falando_com(voce, Pessoa), 
+        falando_com(player, Pessoa), 
         aceitar_vender(Pessoa, Objeto).
     
-comprar(voce, Objeto):-
-        poder_comprar(voce,Objeto),
+comprar(player, Objeto):-
+        poder_comprar(player,Objeto),
         retractall(dono(_,Objeto)),
-        assertz(dono(voce,Objeto)),
-        assertz(estar(Objeto,voce)).
+        assertz(dono(player,Objeto)),
+        assertz(estar(Objeto,player)).
 
-poder_digitar(voce, senha, caixa_eletronico).
+poder_digitar(player, senha, caixa_eletronico).
 
-digitar(voce, Oque, NoQue):-
-    poder_digitar(voce, Oque, NoQue),
+digitar(player, Oque, NoQue):-
+    poder_digitar(player, Oque, NoQue),
     assertz(digitado(Oque, NoQue)).
 
-poder_pescar(voce, Onde):-
+poder_pescar(player, Onde):-
 	Onde = lago,
-	estar(voce,Aqui),
+	estar(player,Aqui),
 	perto(Aqui,lago),
-	ter(voce, vara_pescar),
+	ter(player, vara_pescar),
 	estar(minhocas, vara_pescar).
 
-pescar(voce,Onde):-
-	poder_pescar(voce,Onde),
-	assertz(estar(peixe,voce)).
+pescar(player,Onde):-
+	poder_pescar(player,Onde),
+	assertz(estar(peixe,player)).

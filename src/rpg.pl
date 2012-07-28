@@ -66,8 +66,8 @@ processar_pergunta(P,R,Sem):-
     once(atualiza_contexto(Resposta)).
 
 continuar(ato_fala:terminar):-
-        falando_com(voce, X),
-        retract(falando_com(voce, X)),
+        falando_com(player, X),
+        retract(falando_com(player, X)),
         dialogo.
 
 continuar(ato_fala:terminar).
@@ -168,7 +168,7 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
 
 processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           (ato_fala:informar
-           ..agente_real:voce
+           ..agente_real:player
            ..acao:poder 
            ..positivo:nao 
            ..pessoa:terc
@@ -192,7 +192,7 @@ processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)).
 
 processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder .. mensagem:oi)).
 processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .. mensagem:oi)):-
-    falando_com(voce, T).
+    falando_com(player, T).
 
 % se o processar falhar
 processar(_, []):-
@@ -203,14 +203,7 @@ processar(_, []):-
 %    racional(QuemTemOuEsta).
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
-traduz_agente_para_evitar_ambiguidade([],[]).
-traduz_agente_para_evitar_ambiguidade(voce, voce).
-traduz_agente_para_evitar_ambiguidade(A,A):-
-    \+ is_list(A).
-traduz_agente_para_evitar_ambiguidade([voce|Resto], [voce|Resto]).
-traduz_agente_para_evitar_ambiguidade([Alguem|Resto], [Alguem|RestoRes]):-
-    \+ Alguem = voce,
-    traduz_agente_para_evitar_ambiguidade(Resto, RestoRes).
+traduz_agente_para_evitar_ambiguidade(A,A).
 
 % normalizacao    
 filtrar(TipoNp,[], np([],TipoNp)).

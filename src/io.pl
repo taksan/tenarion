@@ -128,7 +128,7 @@ convertWord([Char|Rest1],[Char|Rest2]):-
 
 writeLine([]).
 writeLine([First|Rest]):-
-    (falando_com(voce, Nome); Nome = narrador),            
+    (falando_com(player, Nome); Nome = narrador),            
     write(Nome),
     write(' > '),
 	capitalize(First,FirstCap),

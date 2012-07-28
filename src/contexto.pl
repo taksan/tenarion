@@ -8,23 +8,22 @@ contexto_atual(jogador).
 % aqui eh igual para o computador e para o jogador
     
 % qdo o jogador usa pronome "eu"
-contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), voce).% 
+contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), player).% 
 
 contexto(jogador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
-    estar(voce, Lugar).
+    estar(player, Lugar).
 
 % contexto do computador
-contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),voce).
-contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),jogador).
+contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),player).
 
 contexto(computador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
-    estar(voce, Lugar).
+    estar(player, Lugar).
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
 atualiza_advb_aqui:-
     (
         contexto_atual(Ctx),
-        estar(voce, Lugar),
+        estar(player, Lugar),
         \+contexto(Ctx, (tipo_adv:lugar ..adv:aqui), Lugar),
         asserta(contexto(Ctx, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar))
     ).
@@ -60,12 +59,12 @@ atualiza_contexto_denotado_por([TemaOuAgente|Resto]):-
 atualiza_contexto_denotado_por(_).
 
 atualiza_pessoa((tipo_pro:voce),_).
-atualiza_pessoa(_,voce).
+atualiza_pessoa(_,player).
 
 atualiza_pessoa(Pessoa, NovoValor):-
     nonvar(NovoValor),
     nonvar(Pessoa),
-    \+ estar(voce, NovoValor),
+    \+ estar(player, NovoValor),
     contexto_atual(Ctx),
     retractall(contexto(Ctx, Pessoa, _)),
     asserta(contexto(Ctx, Pessoa, NovoValor)).
@@ -76,21 +75,20 @@ atualiza_pessoa(_ , _).
 % DENOTA EH SEMPRE USADO PARA DETERMINAR O USO DE PRONOME
 %% determinacao do agente baseado no contexto
 valida_locutor(Ag):-
-    falando_com(voce, Interlocutor),
-    member(Ag, [voce,Interlocutor]).
+    falando_com(player, Interlocutor),
+    member(Ag, [player,Interlocutor]).
 
-%denota((tipo_pro:voce), jogador).
 denota((tipo_pro:pron_ninguem(quem)), ninguem).
 denota((tipo_pro:pron_ninguem(oque)), nada).
 denota((tipo_pro:relativo ..pron:onde), onde).
 
 denota((tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce), Quem):-
 	contexto_atual(jogador),
-	falando_com(voce,Quem).
+	falando_com(player,Quem).
 
 denota((tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu), Quem):-
 	contexto_atual(computador),
-	falando_com(voce,Quem).
+	falando_com(player,Quem).
     
 % vai determinar se o Ag vai usar o pronome "eu" para se designar.
 denota((tipo_pro:reto ..num:sing ..pessoa:prim ..gen:G), Ag):-
@@ -142,6 +140,6 @@ denota_lugar(nenhum, []).
 %adiciona_termo_a_definir(Termo, Definicao).
 adiciona_termo_a_definir(_, _).
 
-determina_agente((pessoa:indic ..num:sing), voce).
+determina_agente((pessoa:indic ..num:sing), player).
 determina_agente(A,A).
 
