@@ -194,7 +194,7 @@ pro(tipo_pro:relativo ..pron:onde) --> [onde].
 
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
-advb(tipo_adv:lugar ..adv:la) --> [lá].
+advb(tipo_adv:lugar ..adv:la) --> [la].
 advb(tipo_adv:afirmacao ..adv:nao) --> [nao].
 advb(tipo_adv:afirmacao ..adv:sim) --> [].
 advb(tipo_adv:afirmacao ..adv:ja) -->[ja].
