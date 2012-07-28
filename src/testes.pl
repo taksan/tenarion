@@ -17,13 +17,13 @@ teste06:-
 teste07:-
     dado_pergunta_espero_resposta('eu posso pegar a corda?', 'nao').
 teste08:-
-    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pegar ela.').
+    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque a corda nao eh pegavel.').
 teste09:-
     dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
 teste10:-
     dado_pergunta_espero_resposta('as minhocas estao aqui?', 'sim').
 teste11:-
-    dado_pergunta_espero_resposta('o que sao elas?', 'elas sao algumas minhocas.').
+    dado_pergunta_espero_resposta('o que sao elas?', 'elas sao as minhocas.').
 teste12:-
     dado_pergunta_espero_resposta('eu pego elas.', 'ok').
 teste13:-
@@ -57,11 +57,11 @@ teste26:-
 teste27:-
 	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
 teste29:-
-	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'algumas minhocas estao nela.').
+	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'as minhocas estao nela.').
 teste30:-
 	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
 teste31:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pegar elas porque voce jah tem as minhocas.').
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque voce jah tem as minhocas.').
 
 :-roda_testes.
 :-halt.

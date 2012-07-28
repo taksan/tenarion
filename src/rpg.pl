@@ -125,7 +125,7 @@ processar((ato_fala:interro_tema_desconhecido
            ..agente_real:Agent
            ..tema: (
                 tema_real:incog(TipoNp)..%oque,quem,onde
-                subtema: (num:_ ..pessoa:PX ..subcat:_ ..acao:AcaoAlvo)
+                subtema: (num:_ ..pessoa:_ ..subcat:_ ..acao:AcaoAlvo)
 				)
         ),
         (ato_fala:informar 

@@ -217,6 +217,10 @@ pegavel(vaso_ming).
 pegavel(santo_do_pau_oco).
 pegavel(chiclete).
 pegavel(dinheiro).
+pegavel(corda):-
+	nao(amarrada(corda)).
+
+amarrada(corda).
 
 /* indica que e um local e que o personagem pode "ir para" ele */
 local(ancoradouro).

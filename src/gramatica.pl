@@ -1,7 +1,8 @@
 /*********************** Gramatica *********************/
 %:-[gulp].
 :-[apoio_gramatical].
-:- dynamic(np_desconhecido/2).
+:- dynamic(np_desconhecido/2),dynamic(forca_pontuacao/1).
+
 
 /*
  * premissas:
@@ -24,6 +25,20 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 	pontuacao_opcional('.').
 
 /*** Gramatica Real ****/
+s(Tracos)-->
+	{
+		Tracos=(porque:Porque ..porque_processado:nao),
+		nonvar(Porque),
+		Porque=(porque_processado:PorqueProcessado ..ato_fala:informar),
+		var(PorqueProcessado),
+		once(marcar_porque_processado(Porque)),
+		asserta(forca_pontuacao(','))
+	},
+	s(Tracos),
+	[porque],
+	{ retract(forca_pontuacao(_)) },
+	s(Porque).
+
 /* perguntas */
 
 % ex.: o que EU tenho (EU eh agente)
@@ -57,6 +72,8 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 
 /* informar / mandar */
 % sentenca para agente singular
+
+
 s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:_) -->
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes), 
@@ -94,9 +111,10 @@ sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
 sn(coord:nao ..positivo:nao ..id:np([],TipoQuem) ..desconhecido:nao)-->
 	pro(tipo_pro:pron_ninguem(TipoQuem)).
 
-sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao) -->
-        { (var(I); \+ is_list(I)) },
-    	ident(gen:G .. num:N ..tipo:T),
+sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+    { (var(I); \+ is_list(I)) },
+	{ (nonvar(TipoDet),T\=np; (var(TipoDet), TipoDet=np)) },
+   	ident(gen:G .. num:N ..tipo:TipoDet),
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
@@ -111,28 +129,28 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesc
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ var(P) },
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..prefere_det:nc),
 	[e],
-	sn(id:A2 .. coord:nao).
+	sn(id:A2 .. coord:nao ..prefere_det:nc).
 
 % gera frases com conjuntos de substantivos, levando em consideracao a preposicao correta
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
 	{ nonvar(P) },
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..prefere_det:nc),
 	[e],
-	sp(id:A2 .. prep:P).
+	sp(id:A2 .. prep:P ..prefere_det:nc).
 
 % reconhece/gera listas de substantivos
 sn(coord:sim ..id:[A1|Resto] .. num:plur ..prep:P) -->
-	sn(id:A1 .. coord:nao),
+	sn(id:A1 .. coord:nao ..prefere_det:nc),
 	[,],
-	sn(coord:sim .. id:Resto ..prep:P).
+	sn(coord:sim .. id:Resto ..prep:P ..prefere_det:nc).
 
 % usado tao somente para imprimir "eu" sempre que o narrador for o agente da resposta
 % so deve ser usado para produzir texto
-sn(coord:nao ..id:Ag ..pessoa:prim ..desconhecido:nao ..produzindo:ProduzindoTexto) -->
-	{ nonvar(Ag), nonvar(ProduzindoTexto) },
-	[eu].
+%sn(coord:nao ..id:Ag ..pessoa:prim ..desconhecido:nao ..produzindo:ProduzindoTexto) -->
+%	{ nonvar(Ag), nonvar(ProduzindoTexto) },
+%	[eu].
 
 %sn(coord:nao ..id:Ag ..pessoa:P ..num:N ..gen:N) -->
 %	sadvb(id:Ag),
@@ -187,17 +205,19 @@ sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desc
 % VERBO TRANSITIVO DIRETO
 % verbo que exige substantivo depois (ex.: pegar, "pegar o ...")
 % AGENTE: externo (num:N ..pessoa:Pess)
-sv(tema_eh_agente_ou_complemento:complemento ..omite:O ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:complemento ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..positivo:IsPositivo ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
-	{ is_positivo(Complemento, IsPositivo) },
+	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
 	sn(id:Complemento ..desconhecido:IsDesconhecido).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn representata o complemento 
 
-sv(tema_eh_agente_ou_complemento:complemento ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess) -->
+sv(tema_eh_agente_ou_complemento:complemento ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..positivo:IsPositivo) -->
 %	{ \+ compound(T); is_list(T) },
+	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
+	negacao(positivo:IsPositivo),
 	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[advb]),
 	sadvb(id:Complemento).
 
@@ -244,13 +264,20 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).
 
+sv(tema_eh_agente_ou_complemento:_ ..num:N ..pessoa:P ..acao:A .. tema:Adjetivo ..positivo:IsPositivo ..desconhecido:IsDesconhecido) -->
+	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
+	negacao(positivo:IsPositivo),
+	v(omite:O ..acao:A ..subcat:[sa] ..num:N ..pessoa:P),
+	sa(adj:Adjetivo).
+
+
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
 sp(id:I .. prep:_ ..desconhecido:_)-->
 	sadvb(id:I).
 	
-sp(id:I .. prep:P ..desconhecido:IsDesconhecido) -->
+sp(id:I .. prep:P ..desconhecido:IsDesconhecido ..prefere_det:PrefDet) -->
     prep(prep:P),
-    sn(id:I ..desconhecido:IsDesconhecido ..prep:P).
+    sn(id:I ..desconhecido:IsDesconhecido ..prep:P ..prefere_det:PrefDet).
 
 sadvb(id:I) -->
     advb(tipo_adv:lugar ..adv:I).
@@ -286,4 +313,13 @@ mod(_) --> sp(_).
 
 mod(_) --> [].
 
-pontuacao_opcional(P) --> [P];[].
+pontuacao_opcional(_) --> 
+	{ forca_pontuacao(P) },
+	[P].
+
+pontuacao_opcional(P) --> 
+	[P];
+	[].
+
+
+marcar_porque_processado(porque_processado:sim).

@@ -47,3 +47,23 @@ equivale(dela, [de, ela]).
 equivale(deles, [de, eles]).
 equivale(delas, [de, elas]).
 
+% contrai ou descontrai verbo indic + pronome
+equivale(VerboMaisPronomeObliquo, [Verbo, Pronome]):-
+	nonvar(Verbo), nonvar(Pronome),
+	v((pessoa:indic),[Verbo],[]),
+	pro((tipo_pro:reto),[Pronome],[]),
+	string_length(Verbo,Len), 
+	Len1 is Len-1, 
+	sub_string(Verbo, 0, Len1, _, VerboSemR),
+	string_length(Pronome,LenPron),
+	LenPrin_1 is LenPron-1,
+	sub_string(Pronome,1,LenPrin_1,_,PronomeObliquo),
+	concat_atom([VerboSemR,'-',PronomeObliquo], VerboMaisPronomeObliquo).
+	
+
+equivale(VerboMaisPronomeObliquo, [Verbo, PronomeCompleto]):-
+	nonvar(VerboMaisPronomeObliquo),
+	atomic_list_concat([VerboSemR,Pronome],'-', VerboMaisPronomeObliquo),
+	concat_atom([VerboSemR,r], Verbo),
+	concat_atom([e,Pronome],PronomeCompleto).
+

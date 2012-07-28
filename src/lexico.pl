@@ -15,6 +15,7 @@ a(adj:defeito ..gen:masc ..num:sing) --> [estragado].
 a(adj:defeito ..gen:fem ..num:sing) --> [estragada].
 a(adj:acesa ..gen:fem ..num:sing) --> [acesa].
 a(adj:acesa ..gen:fem ..num:plur) --> [acesas].
+a(adj:pegavel ..num:sing)-->[pegavel].
 
 a(adj:_ ..gen:_ ..num:_) --> [].
 
