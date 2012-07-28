@@ -112,7 +112,7 @@ processar(
         ..acao:saber
         ..num:sing
         ..tema:(acao:ser ..pessoa:terc ..num:Num ..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
-        ..agente:narrador
+        ..agente:eu
         ..pessoa:prim
         )):-
     adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).

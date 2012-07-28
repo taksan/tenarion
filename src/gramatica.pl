@@ -32,13 +32,11 @@ s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
-
 % ex: quem esta aqui? ("quem" eh o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:_) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
-	%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
@@ -46,16 +44,16 @@ s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(P
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Tema ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 
+s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:IsDesconhecido) -->
+	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
+	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:IsDesconhecido),
+    pontuacao_opcional(_).
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 	sn(id:A ..num:N ..pessoa:Pes),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T ..num:N ..pessoa:Pes),
     ['?'].
-%	{ 
-%		determina_desconhecido(T, IsDesconhecido, EI);
-%	  	determina_desconhecido(A, IsDesconhecido, EI) 
-%	}.
 
 /* informar / mandar */
 % sentenca para agente singular
@@ -64,20 +62,17 @@ s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pesso
 	sn(id:A .. num: N ..pessoa:Pes), 
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
    	pontuacao_opcional('.').
-	%,{ determina_desconhecido(A, IsDesconhecido, EI) }.
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
 s(ato_fala:informar .. agente:[A1|ATail] .. acao:X .. tema:T ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|ATail] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
     pontuacao_opcional('.').
-	%{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 % sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
 s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconhecido:_) -->
 	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
 	pontuacao_opcional('.').
-%,{ determina_desconhecido(T, IsDesconhecido, EI) }.
 
 /* atos de fala diversos */
 
@@ -111,8 +106,7 @@ sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesc
 	det(gen:G .. num:N ..tipo:T ),
 	mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido),
-	mod(gen:G .. num:N),
-	{ cria_np_desconhecido(IsDesconhecido, I, T, G, N) }.
+	mod(gen:G .. num:N).
 
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
@@ -146,9 +140,9 @@ sn(coord:nao ..id:Ag ..pessoa:prim ..desconhecido:nao ..produzindo:ProduzindoTex
 
 % essa regra eh para produzir texto sobre substantivos desconhecidos
 sn(coord:nao .. id:Id ..desconhecido:sim) -->
-	{ nonvar(Id), Id=desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N)  },
+	{ nonvar(Id), Id=desconhecido(tipo:Tipo ..gen:G ..num:N)  },
     ident(gen:G .. num:N ..tipo:nc),
-	np(id:Texto .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
+	np(id:Id .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
 
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:

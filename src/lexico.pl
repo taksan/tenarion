@@ -152,7 +152,7 @@ np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	[ Jogador ].
 
 % casa com nomes desconhecidos, ou seja, objetos ou pessoas desconhecidas.
-np(id:T ..desconhecido:sim) --> [T].
+np(id:desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N) ..tipo:Tipo ..gen:G ..num:N ..desconhecido:sim) --> [Texto].
 
 %%%% PRONOMES
 pro(tipo_pro:reto .. num:sing .. pessoa:prim ..pron:eu) --> [eu].
