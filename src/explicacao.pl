@@ -10,7 +10,7 @@ head([Primeira|_],Primeira).
 
 gera_porque_nao([],[]).
 
-gera_porque_nao((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:sim ..agente:Agente ..tema_possivel:Tema)|Resto]):-
+gera_porque_nao((nao(Pred),RestoPredicados),[(predicado:Acao ..positivo:ja ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
 	gera_porque_nao(RestoPredicados,Resto).
 
@@ -18,7 +18,7 @@ gera_porque_nao((Pred,RestoPredicados),[(predicado:Acao ..positivo:nao ..agente:
 	Pred =..[Acao,Agente,Tema],
 	gera_porque_nao(RestoPredicados,Resto).
 
-gera_porque_nao([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:sim ..agente:Agente ..tema_possivel:Tema)|Resto]):-
+gera_porque_nao([nao(Pred)|RestoPredicados], [(predicado:Acao ..positivo:ja ..agente:Agente ..tema_possivel:Tema)|Resto]):-
 	Pred =..[Acao,Agente,Tema],
 	gera_porque_nao(RestoPredicados,Resto).
 

@@ -194,9 +194,10 @@ pro(tipo_pro:relativo ..pron:onde) --> [onde].
 
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
-advb(tipo_adv:lugar ..adv:la) --> [la].
-advb(tipo_adv:afirmacao ..adv:nao) --> [nao].
+advb(tipo_adv:lugar ..adv:la) --> [lá].
+advb(tipo_adv:afirmacao ..adv:nao) --> [não].
 advb(tipo_adv:afirmacao ..adv:sim) --> [].
+advb(tipo_adv:afirmacao ..adv:ja) -->[já].
 
 %%%% VERBOS
 % INTRANSITIVO        : subcat:[]
@@ -206,13 +207,13 @@ advb(tipo_adv:afirmacao ..adv:sim) --> [].
 
 % VERBO: ESTAR
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[advb] ..poss:nao) --> 
-        [estah].
+        [está].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> 
-        [estah].
+        [está].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[advb]..poss:nao) --> 
-        [estao].
+        [estão].
 v(omite:nao ..acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> 
-        [estao].
+        [estão].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[advb] ..poss:nao) --> 
         [estou].
 v(omite:nao ..acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> 

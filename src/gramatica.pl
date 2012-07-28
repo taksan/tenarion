@@ -13,7 +13,7 @@
 /*** Mensagens simples ****/
 s([]) --> [].
 s(ato_fala:responder .. mensagem: positivo)--> [sim].
-s(ato_fala:responder .. mensagem: negativo)--> [nao].
+s(ato_fala:responder .. mensagem: negativo)--> advb(tipo_adv:afirmacao ..adv:nao).
 s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
 s(ato_fala:responder .. mensagem: ok) --> [ok].
 s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
@@ -41,13 +41,13 @@ s(Tracos)-->
 
 /* perguntas */
 
-% ex.: o que EU tenho (EU eh agente)
+% ex.: o que EU tenho (EU é agente)
 s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:_) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
-% ex: quem esta aqui? ("quem" eh o agente do verbo estar)
+% ex: quem esta aqui? ("quem" é o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:_) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
@@ -93,7 +93,7 @@ s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconheci
 
 /* atos de fala diversos */
 
-% funciona para resposta do tipo tipo "eu nao sei o que eh faca"
+% funciona para resposta do tipo tipo "eu nao sei o que é faca"
 s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:Pessoa) -->
 	sn(coord:nao ..id:A ..pessoa:Pessoa ..tipo:_ ..produzindo:sim),
 	sv(positivo:nao ..tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Tema ..pessoa: Pessoa ..desconhecido:sim),
