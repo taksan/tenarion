@@ -36,7 +36,7 @@ s(Tracos)-->
 	},
 	s(Tracos),
 	[porque],
-	{ retract(forca_pontuacao(_)) },
+	{ 	retract(forca_pontuacao(_)) },
 	s(Porque).
 
 /* perguntas */
@@ -173,7 +173,7 @@ sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..a
 	{ ignore((var(IsPositivo),is_positivo(T, IsPositivo))) },
 	negacao(positivo:IsPositivo),
 	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
-	sv(tema_eh_agente_ou_complemento:TAC ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
+	sv(tema_eh_agente_ou_complemento:TAC ..positivo:sim ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
 
 
 % VERBO INTRANSITIVO
@@ -209,7 +209,7 @@ sv(tema_eh_agente_ou_complemento:complemento ..acao:A .. tema:Complemento ..num:
 %	{ \+ compound(T); is_list(T) },
 	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
 	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
 	sn(id:Complemento ..desconhecido:IsDesconhecido).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn representata o complemento 
@@ -264,10 +264,10 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..a
 sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).
 
-sv(tema_eh_agente_ou_complemento:_ ..num:N ..pessoa:P ..acao:A .. tema:Adjetivo ..positivo:IsPositivo ..desconhecido:IsDesconhecido) -->
-	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
+sv(tema_eh_agente_ou_complemento:_ ..num:N ..pessoa:P ..acao:A .. tema:Adjetivo ..positivo:IsPositivo ..desconhecido:_) -->
+	{ ignore((var(IsPositivo), is_positivo(Adjetivo, IsPositivo))) },
 	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:A ..subcat:[sa] ..num:N ..pessoa:P),
+	v(acao:A ..subcat:[sa] ..num:N ..pessoa:P),
 	sa(adj:Adjetivo).
 
 
