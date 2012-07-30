@@ -50,6 +50,7 @@ np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [vaso],
 np(id:vela .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vitoria-regia].
+np(id:sambura ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [sambura].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

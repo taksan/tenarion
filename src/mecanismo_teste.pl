@@ -4,36 +4,36 @@ roda_testes:-
 	assert(sexo_jogador(masc)),
 	write('Test execution started'),nl,
 	findall(Q, (current_predicate(Q/0),sub_string(Q,0,5,_,teste)),UnsortedTests),sort(UnsortedTests,SortedTests),
-	roda_testes(SortedTests).
+	roda_testes(SortedTests,TotalPassados,Total),
+	TotalFalhados is Total-TotalPassados,
+	write('PASSARAM: '),write(TotalPassados),nl,
+	write('FALHARAM: '),write(TotalFalhados),nl,
+	write('TOTAL:    '),write(Total),nl.
 
-roda_testes([]).
+roda_testes([],0,0).
 
-roda_testes([Teste|Outros]):-
-	executa(Teste),
-	roda_testes(Outros).
+roda_testes([Teste|Outros],TotalPassados,Total):-
+	executa(Teste,Passou),
+	roda_testes(Outros,Passados,SubTotal),
+	TotalPassados is Passados+Passou,
+	Total is SubTotal+1.
 
-roda_teste(N):-
-	concat_atom([teste,N],NomeTeste),
-	clause(NomeTeste,_),
-	T=..[NomeTeste],
-	executa(T),
-	NNext is N+1,
-	roda_teste(NNext).
-
-executa(T):-
+executa(T,Passou):-
 %	ignore((T=teste27,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
 	ignore(NC),
 	(Esperado=RespostaReal,
-		printpassed(C);
-		printfailed(C,Esperado,RespostaReal)
+		(printpassed(C),Passou=1);
+		printfailed(C,Esperado,RespostaReal),Passou=0
 	).
 
 printpassed(C):-
+	is_verbose,
 	write('PASSED: '),
 	write(C),nl.
+printpassed(_).
 
 printfailed(C,Esperado,RespostaReal):-
 	write('***FAILED : '),  write(C),nl,

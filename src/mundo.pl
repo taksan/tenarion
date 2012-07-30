@@ -140,6 +140,9 @@ estar(peixe_voador, lago).
 estar(peixe, agua_do_lago).
 estar(vitoria_regia, agua_do_lago).
 
+/* PERSONAGENS */
+estar(sambura, zulu).
+
 /* Verificacao sobre um conjunto de objetos */
 estar(QueCoisas, Lug):-
         nonvar(QueCoisas),
@@ -230,8 +233,6 @@ local(lago).
 local(barco).
 local(caixa_eletronico).
 
-combina(minhocas,vara_pescar).
-
 /* identidade */
 ser(player, Nome):-
     jogador(Nome).
@@ -262,6 +263,8 @@ racional(peixe_voador).
 % zulu
 dono(zulu, barco).
 dono(zulu, (tabua,_)).
+dono(zulu, chapeu).
+dono(zulu, sambura).
 
 % mateo
 dono(mateo, martelo).
@@ -439,6 +442,11 @@ poder_especifico(colocar(_,estande)):-
 	!,
 	estar(player,Aqui),
 	estar(estande,Aqui).
+
+poder_especifico(colocar(peixe,sambura)):-
+	!,
+	ter(player, sambura).
+
 
 poder_especifico(colocar(_,Onde)):-
 	local(Onde),!,

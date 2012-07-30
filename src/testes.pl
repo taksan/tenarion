@@ -1,5 +1,6 @@
 :-[rpg].
 :-[mecanismo_teste].
+is_verbose:-fail.
 
 % Siga a sequencia e nomenclatura, o mecanismo de testes depende delas para funcionar.
 teste01:-
@@ -14,13 +15,17 @@ teste05:-
     dado_pergunta_espero_resposta('o que eu posso pegar?', 'voce pode pegar algumas minhocas e uma vara de pescar.').
 teste06:-
     dado_pergunta_espero_resposta('onde estah a corda?', 'ela estah no ancoradouro e no barco.').
-teste07:-
+teste07a:-
     dado_pergunta_espero_resposta('eu posso pegar a corda?', 'nao').
+teste07b:-
+    dado_pergunta_espero_resposta('eu posso pegar as minhocas?', 'sim').
 teste08:-
     dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque a corda estah amarrada.').
 teste09:-
     dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
-teste10:-
+teste10_a:-
+	dado_pergunta_espero_resposta('o martelo estah aqui?', 'nao').
+teste10_b:-
     dado_pergunta_espero_resposta('as minhocas estao aqui?', 'sim').
 teste11:-
     dado_pergunta_espero_resposta('o que sao elas?', 'elas sao as minhocas.').
@@ -40,8 +45,14 @@ teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
 	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah nele.').
-teste20:-
-	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele nao tem nada.').
+teste20_a:-
+	dado_pergunta_espero_resposta('o que o peixe voador tem?', 'ele nao tem nada.').
+teste20_b:-
+	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele tem o sambura.').
+teste20_c:-
+	dado_pergunta_espero_resposta('o que voce tem?', 'eu nao tenho nada.').
+teste20_d:-
+	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o narrador.').
 teste21:-
 	dado_pergunta_espero_resposta('eu falo com o zulu.', 'ok').
 teste22:-
@@ -86,6 +97,13 @@ teste41:-
 	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque o barco nao eh pegavel.').
 teste42:-
 	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque nao eh o dono delas.').
+%teste43:-
+%	dado_pergunta_espero_resposta('o que eu vejo?', 'voce ve o zulu, o barco, as minhocas.').
+teste44:-
+	dado_pergunta_espero_resposta('o que voce tem?', 'eu tenho o sambura.').
+teste45:-
+	dado_pergunta_espero_resposta('quem estah no barco?', 'ninguem estah nele.').
+
 
 :-roda_testes.
 :-halt.

@@ -9,14 +9,13 @@ contexto_atual(jogador).
     
 % qdo o jogador usa pronome "eu"
 contexto(jogador, (tipo_pro:reto ..pessoa:prim ..num:sing), player).% 
-
-contexto(jogador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
-    estar(player, Lugar).
-
+contexto(jogador ,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),Quem):-
+	falando_com(player,Quem).
+	
 % contexto do computador
 contexto(computador,(tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce),player).
 
-contexto(computador, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
+contexto(_, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Lugar):-
     estar(player, Lugar).
 
 %% atualiza o contexto de acordo com a pergunta e com a resposta
@@ -72,16 +71,11 @@ atualiza_pessoa(Pessoa, NovoValor):-
 
 atualiza_pessoa(_ , _).
 
-
 % DENOTA EH SEMPRE USADO PARA DETERMINAR O USO DE PRONOME
 %% determinacao do agente baseado no contexto
 valida_locutor(Ag):-
     falando_com(player, Interlocutor),
     member(Ag, [player,Interlocutor]).
-
-denota((tipo_pro:pron_ninguem(quem)), ninguem).
-denota((tipo_pro:pron_ninguem(oque)), nada).
-denota((tipo_pro:relativo ..pron:onde), onde).
 
 denota((tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce), Quem):-
 	contexto_atual(jogador),
@@ -110,15 +104,14 @@ denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
     var(Quem),
     contexto_atual(Ctx),
     contexto(Ctx,(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem).
-
    
-denota((tipo_pro:relativo ..pron:Pron), P):-
-    nonvar(Pron),
-    P=Pron.
+%denota((tipo_pro:relativo ..pron:Pron), P):-
+%    nonvar(Pron),
+%    P=Pron.
 
 % para aceitar o pronome prp.dito
-denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
-    pro((tipo_pro:T ..gen:G ..num:N ..pessoa:P ..pron:Pron),[Quem],[]).
+%denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Pron), Quem):-
+%    pro((tipo_pro:T ..gen:G ..num:N ..pessoa:P ..pron:Pron),[Quem],[]).
 
 quem_denota((tipo_pro:reto ..num:N ..gen:G ..pessoa:terc), X):-
     \+ compound(X), 

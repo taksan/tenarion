@@ -48,4 +48,4 @@ institui_pronome(TemaReal, TemaReal).
 
 has_features(G):-
 	nonvar(G),
-	G=tema:_.
+	(G=tema:_;G=agente:_;G=tema1:_).

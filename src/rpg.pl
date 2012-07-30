@@ -81,30 +81,25 @@ continuar(_):-
 processar([],[]).
 
 processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
-          (ato_fala:responder .. mensagem:positivo)):-
+          (ato_fala:responder .. mensagem:Resposta)):-
         \+ compound(T),
         PredAcao =.. [Relacao, A, T],
-        PredAcao.
+		(
+        	(PredAcao,Resposta=positivo);
+			Resposta=negativo
+		).
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T ..desconhecido:nao),
-          (ato_fala:responder .. mensagem:negativo)):-
-        \+ compound(T),
-        PredAcao =.. [Relacao, A, T],
-        \+ PredAcao.
-
+% processamento de verbos sobre verbos
 processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema_real:T ..desconhecido:nao)),
-          (ato_fala:responder .. mensagem:positivo)):-
+          (ato_fala:responder .. mensagem:Resposta)):-
     PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
 	PredAcao =..[Relacao, PredAcaoAuxiliar],
-    PredAcao.
+	(
+        	(PredAcao,Resposta=positivo);
+			Resposta=negativo
+	).
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema_real:T) ..desconhecido:nao),
-          (ato_fala:responder .. mensagem:negativo)):-
-    PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
-	PredAcao =..[Relacao, PredAcaoAuxiliar],
-    \+ PredAcao.
-
-% perguntas qu
+% perguntas na qual o tema é uma palavra desconhecida
 processar(
     (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
     (ato_fala:recusar 
