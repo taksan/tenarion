@@ -21,7 +21,7 @@ roda_teste(N):-
 	roda_teste(NNext).
 
 executa(T):-
-%	ignore((T=teste28,gspy(processar))),
+%	ignore((T=teste27,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
@@ -30,14 +30,6 @@ executa(T):-
 		printpassed(C);
 		printfailed(C,Esperado,RespostaReal)
 	).
-
-seleciona_clausula([C],C).
-seleciona_clausula([C|_],C):-
-	C=..[dado_pergunta_espero_resposta,_,_].
-
-seleciona_clausula([_|Resto],CR):-
-	seleciona_clausula(Resto,CR).
-seleciona_clausula(C,C).
 
 printpassed(C):-
 	write('PASSED: '),

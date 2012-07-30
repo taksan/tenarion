@@ -3,9 +3,9 @@
 :-[lexico].
 :-[gramatica].
 :-[io].
-:-[auxiliar].
 :-[resolucao_pronomes].
 :-[contexto].
+:-[poder].
 :-[explicacao].
 
 /*

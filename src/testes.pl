@@ -55,7 +55,7 @@ teste25:-
 teste26:-
 	dado_pergunta_espero_resposta('eu pego a vara de pescar.', 'ok').
 teste27:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque voce ja tem as minhocas.').
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque as minhocas ja estao contigo.').
 teste28:-
 	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
 teste29:-

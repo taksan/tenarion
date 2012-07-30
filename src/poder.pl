@@ -1,5 +1,7 @@
 % Predicados auxiliares
 
+:-dynamic(ignore_non_asserts/0).
+
 %%%% verifica se é possivel executar o predicado, sem causar efeitos colaterais
 poder(Predicado):-
 	once((clause(Predicado, Clausulas), extrai_poder(Clausulas, PredicadoPoder))),
@@ -13,13 +15,11 @@ extrai_poder((Clausula,Outras),OutrasR):-
 	\+ filtra_clausula(Clausula,_),
 	extrai_poder(Outras,OutrasR).
 
-
 extrai_poder((Clausula),FatoNovo):-
 	filtra_clausula(Clausula,FatoNovo).
 
 extrai_poder((Clausula),true):-
 	\+filtra_clausula(Clausula,_).
-
 
 filtra_clausula(Clausula, FatoNovo):-
 	Clausula=..[Assert,PredInterno],
@@ -34,9 +34,18 @@ filtra_clausula(Clausula, true):-
 filtra_clausula(Clausula,Clausula).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-motivos_para_nao_poder(Predicado,PorqueNao):-
+motivos_para_nao_poder(Predicado,Motivos):-
 	clause(Predicado, Clausulas),
-	verificar_se_pode(Clausulas,PorqueNao).
+	verificar_se_pode_asserts(Clausulas,PorqueJaEhVerdade),
+	(
+			PorqueJaEhVerdade\=[], Motivos=PorqueJaEhVerdade;
+			verificar_se_pode(Clausulas,PorqueNao),Motivos=PorqueNao
+	).
+
+verificar_se_pode_asserts(Clausulas,PorqueNao):-
+	asserta(ignore_non_asserts),
+	ignore(verificar_se_pode(Clausulas,PorqueNao)),
+	retract(ignore_non_asserts).
 
 verificar_se_pode((Clausula,Outras),PorqueNao):-
 	Clausula=poder_especifico(_),
@@ -61,6 +70,11 @@ verificar_se_pode((UltimaClausula),PorqueNao):-
 	transforma_asserts_ja(UltimaClausula,PorqueNao).
 
 testa_clausula(Clausula):-
+	ignore_non_asserts,
+	Clausula=..[NomePred|_],
+	notrace(\+starts_with(NomePred,assert)),!.
+
+testa_clausula(Clausula):-
 	Clausula=..[Assert,FatoNovo],
 	notrace(starts_with(Assert,assert)),!,
 	\+ FatoNovo.
@@ -81,4 +95,3 @@ transforma_asserts_ja(Pred, ja(Nucleo)):-
 	notrace(starts_with(Assert,assert)),!.
 
 transforma_asserts_ja(Pred, Pred).
-
