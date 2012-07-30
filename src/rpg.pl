@@ -42,14 +42,13 @@ seta_contexto(Ctx):-
     assertz(contexto_atual(Ctx)).
 
 dialogo:-
-    once(readLine(P)),!,
+    once(readLine(P)),
 	processar_pergunta(P,R,Sem),!,
-
-    writeLine(R),!,
+    writeLine(R),
     continuar(Sem).
 
 dialogo:-
-    writeLine(['hã', hein, '?']),
+    writeLine(['desculpe, mas não entendi']),
     dialogo.
 
 processar_pergunta(P,R,Sem):-
@@ -87,26 +86,25 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
         PredAcao =.. [Relacao, A, T],
         PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T ..desconhecido:nao),
           (ato_fala:responder .. mensagem:negativo)):-
         \+ compound(T),
         PredAcao =.. [Relacao, A, T],
         \+ PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema_real:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema_real:T ..desconhecido:nao)),
           (ato_fala:responder .. mensagem:positivo)):-
-    concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
-    PredAcao =.. [RelacaoAuxiliar, A, T],
+    PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
+	PredAcao =..[Relacao, PredAcaoAuxiliar],
     PredAcao.
 
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema_real:T)),
+processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao:AcaoAuxiliar ..tema_real:T) ..desconhecido:nao),
           (ato_fala:responder .. mensagem:negativo)):-
-    concat_atom([Relacao, '_', AcaoAuxiliar], RelacaoAuxiliar),
-    PredAcao =.. [RelacaoAuxiliar, A, T],
+    PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
+	PredAcao =..[Relacao, PredAcaoAuxiliar],
     \+ PredAcao.
 
 % perguntas qu
-
 processar(
     (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
     (ato_fala:recusar 
@@ -132,15 +130,15 @@ processar((ato_fala:interro_tema_desconhecido
 			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
-            ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:AcaoAlvo ..tema_real:TS ..pessoa:indic))
+            ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:AcaoAlvo ..tema_real:TemaSolucao ..pessoa:indic))
         ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),
-    concat_atom([Relacao, '_', AcaoAlvo], RelacaoAuxiliar),
-    PredAcao =.. [RelacaoAuxiliar, Agent, T],
+	PredAcaoAuxiliar =..[AcaoAlvo, Agent, T],
+    PredAcao =.. [Relacao, PredAcaoAuxiliar],
     findall(T, (PredAcao), L),
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-    filtrar(TipoNp, L1,TS).
+    filtrar(TipoNp, L1,TemaSolucao).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
           (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS)):-
@@ -179,10 +177,9 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
           )):-
     determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
-    \+ notrace(PredAcao),
-	concat_atom([poder_,Relacao], PoderRelacao),
-	PredPoder=..[PoderRelacao, Ag, T],
-	gera_explicacao_falhas(PredPoder, Porque).
+    \+ PredAcao,
+	motivos_para_nao_poder(PredAcao, PorqueNao),
+	gera_explicacao(PorqueNao, Porque).
 
 %%% acao cujo resultado eh descritivo
 processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),

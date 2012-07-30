@@ -21,6 +21,7 @@ roda_teste(N):-
 	roda_teste(NNext).
 
 executa(T):-
+%	ignore((T=teste28,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,

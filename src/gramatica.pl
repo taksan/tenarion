@@ -42,13 +42,13 @@ s(Tracos)-->
 /* perguntas */
 
 % ex.: o que EU tenho (EU é agente)
-s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:_) -->
+s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
 % ex: quem esta aqui? ("quem" é o agente do verbo estar)
-s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:_) -->
+s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
@@ -66,8 +66,8 @@ s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X 
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
-	sn(id:A ..num:N ..pessoa:Pes),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T ..num:N ..pessoa:Pes),
+	sn(id:A ..num:N ..pessoa:Pes ..gen:G),
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:T ..num:N ..pessoa:Pes ..gen:G),
     ['?'].
 
 /* informar / mandar */
@@ -76,27 +76,27 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:T ..desconhecido:nao) -->
 
 s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:T ..pessoa:Pes ..desconhecido:_) -->
         {\+ is_list(A)}, 
-	sn(id:A .. num: N ..pessoa:Pes), 
-	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:nao ..acao:X .. tema:T .. num: N ..pessoa:Pes),
+	sn(id:A .. num: N ..pessoa:Pes ..gen:G), 
+	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X .. tema:T .. num: N ..pessoa:Pes ..gen:G),
    	pontuacao_opcional('.').
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
 s(ato_fala:informar .. agente:[A1|ATail] .. acao:X .. tema:T ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|ATail] ..pessoa:P),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:plur ..pessoa:P),
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:T .. num:plur ..pessoa:P),
     pontuacao_opcional('.').
 
 % sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
 s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:T ..desconhecido:_) -->
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:X .. tema:T .. num:N .. pessoa:P),
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:T .. num:N .. pessoa:P),
 	pontuacao_opcional('.').
 
 /* atos de fala diversos */
 
 % funciona para resposta do tipo tipo "eu nao sei o que é faca"
 s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:Pessoa) -->
-	sn(coord:nao ..id:A ..pessoa:Pessoa ..tipo:_ ..produzindo:sim),
-	sv(positivo:nao ..tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Tema ..pessoa: Pessoa ..desconhecido:sim),
+	sn(coord:nao ..id:A ..pessoa:Pessoa ..tipo:_ ..produzindo:sim ..gen:G),
+	sv(positivo:nao ..tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Tema ..pessoa: Pessoa ..gen:G ..desconhecido:sim),
         pontuacao_opcional('.').
 
 % SINTAGMA NOMINAL
@@ -113,14 +113,14 @@ sn(coord:nao ..positivo:nao ..id:np([],TipoQuem) ..desconhecido:nao)-->
 
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
     { (var(I); \+ is_list(I)) },
-	{ (nonvar(TipoDet),T\=np; (var(TipoDet), TipoDet=np)) },
-   	ident(gen:G .. num:N ..tipo:TipoDet),
+	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
+   	ident(gen:G .. num:N ..tipo:TipoIdent),
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
 % nao aceita produzir texto
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesconhecido) -->
-        { var(I), var(T), var(IsDesconhecido) },
+    { var(I), var(T), var(IsDesconhecido) },
 	det(gen:G .. num:N ..tipo:T ),
 	mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido),
@@ -168,19 +168,19 @@ sn(coord:nao .. id:Id ..desconhecido:sim) -->
 % verbo bitransitivo direto e indireto (ex.:preferir)
 
 %% VERBO TRANSITIVO DIRETO CUJO COMPLEMENTO É OUTRO VERBO
-sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..omite:O ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
+sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..acao:A ..num:_ ..pessoa:P ..desconhecido:IsDesconhecido 
 		..tema:(tema_eh_agente_ou_complemento:TAC ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..subcat:SUBCAT) ) -->
 	{ ignore((var(IsPositivo),is_positivo(T, IsPositivo))) },
-	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:A ..subcat:[sv] ..pessoa:P),
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..subcat:[sv] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:TAC ..positivo:sim ..acao:AX ..tema:T .. num:NX ..pessoa:PX ..desconhecido:IsDesconhecido ..subcat:SUBCAT).
 
 
 % VERBO INTRANSITIVO
 % verbos intransitivos: verbo ou forma do verbo que nao exige nenhum complemento (ex.: pescar em, "eu pesco.")
-sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:nao) -->
+sv(acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:nao) -->
 	{ var(T) },
-	v(omite:O ..acao:A ..subcat:[] .. num:N ..pessoa:P).
+	v(acao:A ..subcat:[] .. num:N ..pessoa:P).
 
 %% IMPORTANTE:
 %%% o verbo transitivo direto TEM que ser testado antes do indireto, pois no caso de verbos
@@ -190,15 +190,15 @@ sv(omite:O ..acao:A .. tema:T ..num:N ..pessoa:P ..desconhecido:nao) -->
 % VERBO TRANSITIVO DIRETO onde o OBJETO foi determinado antes
 % exemplo onde a faca está? (nesse caso o complemento é ONDE)
 % Nesses casos, o tema do sintagma verbal será o AGENTE  
-sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
 	sn(id:Agente ..pessoa:P ..num:N ..desconhecido:IsDesconhecido),
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P).
+	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P).
 
 % igual ao caso anterior, apenas invertendo verbo com agente
-sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
-	v(omite:O ..acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
 	sn(id:Agente ..pessoa:P ..num:N ..desconhecido:IsDesconhecido).
 
 
@@ -208,67 +208,69 @@ sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desc
 sv(tema_eh_agente_ou_complemento:complemento ..acao:A .. tema:Complemento ..num:N ..pessoa:P ..positivo:IsPositivo ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
 	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
-	negacao(positivo:IsPositivo),
+	adv_afirmacao(positivo:IsPositivo),
 	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
 	sn(id:Complemento ..desconhecido:IsDesconhecido).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn representata o complemento 
 
-sv(tema_eh_agente_ou_complemento:complemento ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..positivo:IsPositivo) -->
+sv(tema_eh_agente_ou_complemento:complemento ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..positivo:IsPositivo) -->
 %	{ \+ compound(T); is_list(T) },
 	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
-	negacao(positivo:IsPositivo),
-	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[advb]),
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[advb]),
 	sadvb(id:Complemento).
 
 % VERBO TRANSITIVO INDIRETO
 % verbo que exige preposicao e substantivo - tb chamdo de objeto indireto (ex.: estar em, "o barco esta _no_ ...")
 % AGENTE: externo (num:N ..pessoa:Pess)
-sv(tema_eh_agente_ou_complemento:complemento ..omite:O ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:A ..tema:Complemento .. num:N ..pessoa:Pess ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
-	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
+	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
 	sp(id:Complemento ..prep:P ..desconhecido:IsDesconhecido).
 
 % VERBO TRANSITIVO INDIRETO onde o OBJETO foi determinado antes 
 % nesse caso, o substantivo determina o AGENTE
 % ex: *onde* estah a identidade? (*onde* eh o complemento, *a identidade* é o agente)
-sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
-	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]),
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]),
 	sn(id:Agente ..num:N ..pessoa:Pess ..desconhecido:IsDesconhecido).
 	
 % igual ao caso acima, mas o verbo fica no final.
-sv(tema_eh_agente_ou_complemento:agente ..omite:O ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
+sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
 	sn(id:Agente ..num:N ..pessoa:Pess ..desconhecido:IsDesconhecido),
-	v(omite: O ..acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]).
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:_)]).
 	
 
 % VERBO BITRANSITIVO 
 % seria o caso bitransitivo, exigindo um objeto direto e um indireto
-sv(omite:O ..acao:A .. tema:(tema1:T1 ..prep:Prep ..tema2:T2) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
+sv(acao:A .. tema:(tema1:T1 ..prep:Prep ..tema2:T2) ..num:N ..pessoa:P ..desconhecido:IsDesconhecido) -->
 %	{ \+ compound(T); is_list(T) },
-	v(omite:O ..acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
+	v(acao:A ..subcat:[sn, sp(prep:Prep)] ..num:N ..pessoa:P),
 	sn(id:T1 ..desconhecido:IsDesconhecido),
    	sp(id:T2 ..prep:Prep ..desconhecido:IsDesconhecido).
 
 % ex.: sv onde o tema eh uma acao .. nesse caso, vai ser usado para "eu NAO SEI O QUE <verbo>"
-sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..omite:O ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido
+sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:A ..num:N ..pessoa:P ..desconhecido:IsDesconhecido
 		..tema:(acao:AX ..pessoa:PX ..num:NX ..tema:T)) -->
-	negacao(positivo:IsPositivo),
-	v(omite:O ..acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..subcat:[pro(pron:Pronome),sn] ..num:N ..pessoa:P),
 	pro(tipo_pro:relativo ..pron:Pronome),
-	sv(tema_eh_agente_ou_complemento:complemento ..omite:nao ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:AX ..pessoa:PX ..num:NX ..tema:T ..desconhecido:IsDesconhecido).
 
 
 sv(tema_eh_agente_ou_complemento:a_definir ..acao:A ..num:N ..pessoa:Pess ..subcat:SUBCAT) -->
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[SUBCAT]).
 
-sv(tema_eh_agente_ou_complemento:_ ..num:N ..pessoa:P ..acao:A .. tema:Adjetivo ..positivo:IsPositivo ..desconhecido:_) -->
+sv(tema_eh_agente_ou_complemento:complemento ..gen:G ..num:N ..pessoa:P ..acao:A .. tema:Adjetivo ..positivo:IsPositivo ..desconhecido:_) -->
 	{ ignore((var(IsPositivo), is_positivo(Adjetivo, IsPositivo))) },
-	negacao(positivo:IsPositivo),
+	adv_afirmacao(positivo:IsPositivo),
 	v(acao:A ..subcat:[sa] ..num:N ..pessoa:P),
-	sa(adj:Adjetivo).
+	sa(adj:Adjetivo ..tipo:A ..num:N ..gen:G).
 
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
@@ -282,11 +284,11 @@ sp(id:I .. prep:P ..desconhecido:IsDesconhecido ..prefere_det:PrefDet) -->
 sadvb(id:I) -->
     advb(tipo_adv:lugar ..adv:I).
 
-negacao(positivo: IsPositivo) -->
+adv_afirmacao(positivo: IsPositivo) -->
 	{ nonvar(IsPositivo) },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-negacao(positivo: IsPositivo) -->
+adv_afirmacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 

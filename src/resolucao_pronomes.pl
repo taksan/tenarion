@@ -32,29 +32,13 @@ substitui_pronome(TalvezPronome, Traduzido):-
 
 substitui_pronome(NaoPronome, NaoPronome).
 
-institui_pronomes_na_sentenca(tema_real:TemaComposto ..tema:TemaComposto ..agente_real:AgenteComposto ..agente:AgenteComposto):-
-	has_features(TemaComposto), has_features(AgenteComposto),
-	institui_pronomes_na_sentenca(AgenteComposto),
-	institui_pronomes_na_sentenca(TemaComposto).
-
-institui_pronomes_na_sentenca(tema_real:TemaComposto ..tema:TemaComposto ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
-	has_features(TemaComposto), \+has_features(AgenteReal),
-	institui_pronome(AgenteReal,AgenteReferenciado),
-	institui_pronomes_na_sentenca(TemaComposto).
-
-institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteComposto ..agente:AgenteComposto):-
-	\+ has_features(TemaReal), has_features(AgenteComposto),
-	institui_pronomes_na_sentenca(AgenteComposto),
-	institui_pronome(TemaReal,TemaReferenciado).
-
-
-institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado):-
-	\+ has_features(TemaReal), \+ has_features(AgenteReal),
+institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado ..porque:Porque):-
 	institui_pronome(AgenteReal, AgenteReferenciado),
 	(
 		( once(institui_pronome(TemaReal, TemaReferenciado)),\+ AgenteReferenciado = TemaReferenciado )
 		; TemaReal = TemaReferenciado
-	).
+	),
+	ignore((nonvar(Porque),institui_pronomes_na_sentenca(Porque))).
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
@@ -65,6 +49,10 @@ institui_pronome(TemaReal, TemaReferenciado):-
 	\+ has_features(TemaReal),
 	denota((tipo_pro:T ..gen:G .. num:N .. pessoa:P), TemaReal),
 	pro((tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:TemaReferenciado),_,[]).
+
+institui_pronome(TemaComposto, TemaComposto):-
+	has_features(TemaComposto),
+	institui_pronomes_na_sentenca(TemaComposto).
 
 institui_pronome(TemaReal, TemaReal).
 

@@ -17,7 +17,7 @@ teste06:-
 teste07:-
     dado_pergunta_espero_resposta('eu posso pegar a corda?', 'nao').
 teste08:-
-    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque a corda nao eh pegavel.').
+    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque a corda estah amarrada.').
 teste09:-
     dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
 teste10:-
