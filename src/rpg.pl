@@ -155,13 +155,12 @@ processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real
     filtrar(Tipo,L1,W),
     traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
 
-processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
+processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           (ato_fala:responder .. mensagem:ok)):-
-    determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
     PredAcao.
 
-processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
+processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           (ato_fala:informar
            ..agente_real:player
            ..acao:poder 
@@ -170,7 +169,6 @@ processar((ato_fala:informar .. agente_real:A .. acao:Relacao .. tema_real:T),
            ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
 		   ..porque:Porque
           )):-
-    determina_agente(A, Ag),
     PredAcao =.. [Relacao, Ag, T],
     \+ PredAcao,
 	motivos_para_nao_poder(PredAcao, PorqueNao),
@@ -205,4 +203,5 @@ filtrar(_,X,Y):-
     filtrar(X,Y).
 filtrar([X],X):-!.
 filtrar(X,X):-!.
+
 
