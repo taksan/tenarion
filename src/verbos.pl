@@ -109,6 +109,12 @@ v(acao:colocar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [coloco
 v(acao:colocar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [coloca].
 v(acao:colocar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [colocar].
 
+% VERBO: tirar
+v(acao:tirar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:de)]) --> [tiro].
+v(acao:tirar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:de)]) --> [tira].
+v(acao:tirar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:de)]) --> [tirar].
+
+
 % VERBO: COMPRAR
 v(acao:comprar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [compro].
 v(acao:comprar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [compra].

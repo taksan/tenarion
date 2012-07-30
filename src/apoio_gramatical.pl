@@ -52,18 +52,24 @@ equivale(VerboMaisPronomeObliquo, [Verbo, Pronome]):-
 	nonvar(Verbo), nonvar(Pronome),
 	v((pessoa:indic),[Verbo],[]),
 	pro((tipo_pro:reto),[Pronome],[]),
-	string_length(Verbo,Len), 
-	Len1 is Len-1, 
-	sub_string(Verbo, 0, Len1, _, VerboSemR),
-	string_length(Pronome,LenPron),
-	LenPrin_1 is LenPron-1,
-	sub_string(Pronome,1,LenPrin_1,_,PronomeObliquo),
-	concat_atom([VerboSemR,'-',PronomeObliquo], VerboMaisPronomeObliquo).
 	
+	equivale_verbo_ligado_obliquo(Verbo,VerboFlexionado),
+	equilave_pronome_obliquo(Pronome,PronomeObliquo),
 
+	concat_atom([VerboFlexionado,'-',PronomeObliquo], VerboMaisPronomeObliquo).
+	
 equivale(VerboMaisPronomeObliquo, [Verbo, PronomeCompleto]):-
 	nonvar(VerboMaisPronomeObliquo),
-	atomic_list_concat([VerboSemR,Pronome],'-', VerboMaisPronomeObliquo),
-	concat_atom([VerboSemR,r], Verbo),
+	atomic_list_concat([VerboFlexionado,Pronome],'-', VerboMaisPronomeObliquo),
+	concat_atom([VerboFlexionado,r], Verbo),
 	concat_atom([e,Pronome],PronomeCompleto).
 
+equivale_verbo_ligado_obliquo(Verbo,VerboFlexionado):-
+	string_length(Verbo,Len), 
+	Len1 is Len-1, 
+	sub_string(Verbo, 0, Len1, _, VerboFlexionado).
+
+equilave_pronome_obliquo(ela,la).
+equilave_pronome_obliquo(elas,las).
+equilave_pronome_obliquo(ele,lo).
+equilave_pronome_obliquo(eles,los).

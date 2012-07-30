@@ -219,7 +219,8 @@ pegavel(chiclete).
 pegavel(dinheiro).
 pegavel(corda).
 
-amarrado(corda).
+amarrado(corda,barco).
+amarrado(corda,ancoradouro).
 
 /* indica que e um local e que o personagem pode "ir para" ele */
 local(ancoradouro).
@@ -260,7 +261,7 @@ racional(peixe_voador).
 /* pertinencia */
 % zulu
 dono(zulu, barco).
-dono(zulu, vara_de_pescar).
+dono(zulu, (tabua,_)).
 
 % mateo
 dono(mateo, martelo).
@@ -443,12 +444,17 @@ poder_especifico(colocar(_,Onde)):-
 	local(Onde),!,
 	estar(player,Onde).
 
-/* colocar objeto X em objeto Y */
 colocar(player, (tema1:OQue ..tema2:Onde)):-
     ter(player, OQue),
 	poder_especifico(colocar(OQue,Onde)),
     retract(estar(OQue, player)),
     assertz(estar(OQue, Onde)).
+
+tirar(player, (tema1:OQue ..tema2:DoQue)):-
+    ter(player, DoQue),
+	estar(OQue, DoQue),
+    retract(estar(OQue, DoQue)),
+    assertz(estar(OQue, player)).
 
 /* larga o objeto e o coloca na cena atual */
 soltar(player, OQue):-
@@ -459,7 +465,7 @@ soltar(player, OQue):-
 /* pegar */
 poder_especifico(pegar(player,corda)):-
 	!,
-	nao(amarrado(corda)).
+	nao(amarrado(corda,_)).
 
 pegar(Quem, OQue):-
     pegavel(OQue),
@@ -468,7 +474,7 @@ pegar(Quem, OQue):-
     estar(OQue,Aqui),
     (dono(Quem, OQue);nao(dono(_,OQue))),
 	poder_especifico(pegar(Quem,OQue)),
-    retract(estar(OQue, _)),
+    retractall(estar(OQue, _)),
     assertz(estar(OQue, Quem)).
 
 /* vedar -- para vedar buracos */

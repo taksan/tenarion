@@ -11,7 +11,7 @@ teste03:-
 teste04:-
     dado_pergunta_espero_resposta('onde eu posso ir?', 'voce pode ir para a carpintaria.').
 teste05:-
-    dado_pergunta_espero_resposta('o que eu posso pegar?', 'voce pode pegar algumas minhocas, uma vara de pescar e algumas tabuas.').
+    dado_pergunta_espero_resposta('o que eu posso pegar?', 'voce pode pegar algumas minhocas e uma vara de pescar.').
 teste06:-
     dado_pergunta_espero_resposta('onde estah a corda?', 'ela estah no ancoradouro e no barco.').
 teste07:-
@@ -64,6 +64,28 @@ teste30:-
 	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
 teste31:-
 	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque as minhocas nao estao aqui.').
+teste32:-
+	dado_pergunta_espero_resposta('eu desamarro a corda.', 'ok').
+teste33:-
+	dado_pergunta_espero_resposta('onde a corda estah?', 'ela estah no ancoradouro e no barco.').
+teste34:-
+	dado_pergunta_espero_resposta('eu pego a corda.', 'ok').
+teste35:-
+	dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, uma corda, a identidade, uma vara de pescar e a sua mao.').
+teste36:-
+	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'ok').
+teste37:-
+	dado_pergunta_espero_resposta('onde as minhocas estao?', 'elas estao contigo.').
+teste38:-
+	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tirar as minhocas da vara de pescar, porque as minhocas ja estao contigo.').
+teste39:-
+	dado_pergunta_espero_resposta('eu largo as minhocas.', 'ok').
+teste40:-
+	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tirar as minhocas da vara de pescar, porque as minhocas nao estao na vara de pescar.').
+teste41:-
+	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque o barco nao eh pegavel.').
+teste42:-
+	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque nao eh o dono delas.').
 
 :-roda_testes.
 :-halt.
