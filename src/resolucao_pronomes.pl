@@ -32,6 +32,13 @@ institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agent
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
+institui_pronome(TemaBiTransitivo, (tema1:Tema1Referenciado ..tema2:Tema2Referenciado)):-
+	nonvar(TemaBiTransitivo),
+	has_features(TemaBiTransitivo),
+	TemaBiTransitivo=(tema1:Tema1 ..tema2:Tema2),
+	institui_pronome(Tema1,Tema1Referenciado),
+	institui_pronome(Tema2,Tema2Referenciado).
+
 institui_pronome(TemaReal, TemaReferenciado):-
 	denota_lugar(TemaReferenciado, TemaReal).
 

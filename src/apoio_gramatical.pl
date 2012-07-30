@@ -8,11 +8,11 @@ is_positivo(T, nao):-
 
 is_positivo(T, nao):-
 	nonvar(T),
-	T=(tema:np([],_)).
+	T=(tema_real:np([],_)).
 
 is_positivo(TX, IsPositivo):-
 	nonvar(TX),
-	TX=(tema:T),
+	TX=(tema_real:T),
 	is_positivo(T, IsPositivo).
 
 is_positivo(T, sim):-

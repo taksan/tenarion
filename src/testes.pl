@@ -20,7 +20,7 @@ teste07a:-
 teste07b:-
     dado_pergunta_espero_resposta('eu posso pegar as minhocas?', 'sim').
 teste08:-
-    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque a corda estah amarrada.').
+    dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque ela estah amarrada.').
 teste09:-
     dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
 teste10_a:-
@@ -66,7 +66,7 @@ teste25:-
 teste26:-
 	dado_pergunta_espero_resposta('eu pego a vara de pescar.', 'ok').
 teste27:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque as minhocas ja estao contigo.').
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque elas ja estao contigo.').
 teste28:-
 	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
 teste29:-
@@ -74,7 +74,7 @@ teste29:-
 teste30:-
 	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
 teste31:-
-	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque as minhocas nao estao aqui.').
+	dado_pergunta_espero_resposta('eu pego as minhocas.', 'voce nao pode pega-las, porque elas nao estao aqui.').
 teste32:-
 	dado_pergunta_espero_resposta('eu desamarro a corda.', 'ok').
 teste33:-
@@ -88,13 +88,13 @@ teste36:-
 teste37:-
 	dado_pergunta_espero_resposta('onde as minhocas estao?', 'elas estao contigo.').
 teste38:-
-	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tirar as minhocas da vara de pescar, porque as minhocas ja estao contigo.').
+	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tira-las da vara de pescar, porque elas ja estao contigo.').
 teste39:-
 	dado_pergunta_espero_resposta('eu largo as minhocas.', 'ok').
 teste40:-
-	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tirar as minhocas da vara de pescar, porque as minhocas nao estao na vara de pescar.').
+	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tira-las da vara de pescar, porque elas nao estao na vara de pescar.').
 teste41:-
-	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque o barco nao eh pegavel.').
+	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque ele nao eh pegavel.').
 teste42:-
 	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque voce nao eh dono delas.').
 %teste43:-
