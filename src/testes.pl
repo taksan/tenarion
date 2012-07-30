@@ -4,7 +4,7 @@ is_verbose:-fail.
 
 % Siga a sequencia e nomenclatura, o mecanismo de testes depende delas para funcionar.
 teste01:-
-    dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, uma vara de pescar e algumas tabuas estao aqui.').
+    dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, algumas tabuas e uma vara de pescar estao aqui.').
 teste02:- 
     dado_pergunta_espero_resposta('quem estah aqui?', 'voce e o zulu estao aqui.').
 teste03:- 
@@ -96,7 +96,7 @@ teste40:-
 teste41:-
 	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque o barco nao eh pegavel.').
 teste42:-
-	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque nao eh o dono delas.').
+	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque voce nao eh dono delas.').
 %teste43:-
 %	dado_pergunta_espero_resposta('o que eu vejo?', 'voce ve o zulu, o barco, as minhocas.').
 teste44:-

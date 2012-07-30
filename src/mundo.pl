@@ -79,7 +79,7 @@ estar(sua(mao), player).
 
 /* LOCAL: ANCORADOURO */
 
-estar((tabua, 1), ancoradouro).
+estar(tabuas, ancoradouro).
 estar(vara_pescar, ancoradouro).
 estar(minhocas, ancoradouro).
 estar(barco, ancoradouro).
@@ -209,7 +209,7 @@ pegavel(martelo).
 pegavel(identidade).
 pegavel(carta_credito).
 pegavel(sua(mao)).
-pegavel((tabua, _)).
+pegavel(tabuas).
 pegavel(vara_pescar).
 pegavel(minhocas).
 pegavel(pregos).
@@ -262,7 +262,7 @@ racional(peixe_voador).
 /* pertinencia */
 % zulu
 dono(zulu, barco).
-dono(zulu, (tabua,_)).
+dono(zulu, tabuas).
 dono(zulu, chapeu).
 dono(zulu, sambura).
 
@@ -315,7 +315,7 @@ unido(X, Y):-
 
 /* determina tamanho dos elementos do jogo */
 
-comprimento((tabua, 1), 100).
+comprimento(tabuas, 100).
 comprimento(buraco, 8).
 comprimento(remo, 60).
 
@@ -348,14 +348,14 @@ ir(player, X):-
     asserta(estar(player, X)).
 
 /* cortar */
-cortar_com((tabua, X), serrote):-
+cortar_com(tabuas, serrote):-
         % coleta de informacoes do mundo
-        comprimento((tabua, X), Comp),
+        comprimento(tabuas, Comp),
         Comp > 10,
         % atualizacao do tamanho da tabua
-        retract(comprimento((tabua, X), Comp)),
+        retract(comprimento(tabuas, Comp)),
         NovoComp is Comp-10,
-        assertz(comprimento((tabua, X), NovoComp)),
+        assertz(comprimento(tabuas, NovoComp)),
         % criacao da nova tabua
         ultima_tabua(Ultima),
         retract(ultima_tabua(Ultima)),
@@ -489,25 +489,24 @@ pegar(Quem, OQue):-
 vedar(buraco, X):-
      (X = vela ; X = chiclete),
      ter(player,X),!,
-     unido(barco, (tabua, _)),!,
+     unido(barco, tabuas),!,
      consertar(barco),
      retract(estar(X, player)).
 
 vedar(barco, X):-
      (X = vela ; X = chiclete),
      estar_em(X, player),!,
-     pregado(barco, (tabua, _)),!,
+     pregado(barco, tabuas),!,
      consertar(barco),
      retract(estar(X, player)).
 
 /* fazer remo */
 fazer(player, remo):-
-    ter(player, (tabua,_)),
+    ter(player, tabuas),
     ter(player, serrote),
-    comprimento((tabua, X), Comp),
+    comprimento(tabuas, Comp),
     Comp > 50,
-    retract(estar((tabua, _), player)),
-    retract(estar((tabua, X), player)),
+    retract(estar(tabuas, player)),
     asserta(estar(remo, player)).
 
 /* Examinar */

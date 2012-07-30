@@ -42,7 +42,7 @@ np(id:poster .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [poster].
 np(id:pregos .. tipo:nc ..num:plur ..gen:masc ..desconhecido:nao) --> [pregos].
 np(id:serrote .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [serrote].
 np(id:tabua ..tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [tabua].
-np(id:(tabua,_) ..tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [tabuas].
+np(id:tabuas ..tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [tabuas].
 np(id:tela .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [tela].
 np(id:tesoura .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [tesoura].
 np(id:vara_pescar .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vara], [de], [pescar].
