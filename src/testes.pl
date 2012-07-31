@@ -96,7 +96,7 @@ teste40:-
 teste41:-
 	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque ele nao eh pegavel.').
 teste42:-
-	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque voce nao eh dono delas.').
+	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque voce nao eh o dono delas.').
 teste43:-
 	dado_pergunta_espero_resposta('o que eu vejo?', 'voce nao ve nada.').
 teste44:-
@@ -112,7 +112,7 @@ teste48:-
 teste49:-
 	dado_pergunta_espero_resposta('eu vou para a carpintaria.', 'ok').
 teste50:-
-	dado_pergunta_espero_resposta('eu entro no ancoradouro.', 'voce nao pode entrar nele, porque ele nao eh local fechado.').
+	dado_pergunta_espero_resposta('eu entro no ancoradouro.', 'voce nao pode entrar nele, porque ele nao eh um local fechado.').
 teste51:-
 	dado_pergunta_espero_resposta('onde eu estou?', 'voce estah na carpintaria.').
 teste52:-

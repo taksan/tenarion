@@ -91,7 +91,8 @@ denota((tipo_pro:reto ..gen:G .. num:N .. pessoa:terc ..pron:Pron), Quem):-
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
     contexto_atual(Ctx),
-    contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), L).
+    contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), _),
+	estar(player,L).
 
 %%TODO: serah usado no futuro como contexto para o usuario ensinar palavras novas
 %adiciona_termo_a_definir(Termo, Definicao).

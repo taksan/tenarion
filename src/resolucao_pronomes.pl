@@ -32,6 +32,11 @@ institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agent
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
+institui_pronome(comp_nominal(Tema,ComplementoNom), comp_nominal(TemaReferenciado,ComplReferenciado)):-
+	nonvar(Tema),nonvar(ComplementoNom),
+	institui_pronome(Tema,TemaReferenciado),
+	institui_pronome(ComplementoNom,ComplReferenciado).
+
 institui_pronome(TemaBiTransitivo, (tema1:Tema1Referenciado ..tema2:Tema2Referenciado)):-
 	nonvar(TemaBiTransitivo),
 	has_features(TemaBiTransitivo),

@@ -186,10 +186,6 @@ v(acao:ver ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vejo].
 v(acao:ver ..num:sing ..pessoa: terc ..subcat:[sn]) --> [ve].
 v(acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 
-% "VERBO": "SER DONO DE"
-v(acao:dono ..num:sing ..pessoa:terc ..subcat:[sp(prep:de)]) --> ['eh'],[dono].
-v(acao:dono ..num:sing ..pessoa:prim ..subcat:[sp(prep:de)]) --> [sou],[dono].
-
 % VERBO: entender
 v(acao:saber ..num:sing ..pessoa:indic..subcat:[pro(pron:oque),sn]) --> [saber].
 v(acao:saber ..num:sing ..pessoa:prim ..subcat:[pro(pron:oque),sn]) --> [sei].
