@@ -130,7 +130,5 @@ teste57:-
 teste58:-
 	dado_pergunta_espero_resposta('onde estah o sambura do zulu?', 'o sambura do zulu estah com ele.').
 
-
-
 :-roda_testes.
 :-halt.
