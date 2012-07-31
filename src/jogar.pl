@@ -1,2 +1,3 @@
 :-[rpg].
 :-jogar.
+:-halt.

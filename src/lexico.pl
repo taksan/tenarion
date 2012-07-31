@@ -29,6 +29,8 @@ a(adj:amarrado   ..gen:masc ..tipo:estar ..num:sing)-->[amarrado].
 a(adj:amarrado   ..gen:fem  ..tipo:estar ..num:sing)-->[amarrada].
 a(adj:pregado    ..gen:masc ..tipo:estar ..num:sing)-->[pregado].
 a(adj:pregado    ..gen:fem ..tipo:estar ..num:sing)-->[pregada].
+a(adj:quebrado   ..gen:masc ..tipo:estar ..num:sing)-->[quebrado].
+a(adj:quebrado   ..gen:fem ..tipo:estar ..num:sing)-->[quebrada].
 
 
 %%%% QUANT

@@ -1,6 +1,6 @@
 :-[rpg].
 :-[mecanismo_teste].
-is_verbose:-fail.
+is_verbose:-true.
 
 % Siga a sequencia e nomenclatura, o mecanismo de testes depende delas para funcionar.
 teste01:-
@@ -97,13 +97,16 @@ teste41:-
 	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque ele nao eh pegavel.').
 teste42:-
 	dado_pergunta_espero_resposta('eu pego as tabuas.', 'voce nao pode pega-las, porque voce nao eh dono delas.').
-%teste43:-
-%	dado_pergunta_espero_resposta('o que eu vejo?', 'voce ve o zulu, o barco, as minhocas.').
+teste43:-
+	dado_pergunta_espero_resposta('o que eu vejo?', 'voce nao ve nada.').
 teste44:-
 	dado_pergunta_espero_resposta('o que voce tem?', 'eu tenho o sambura.').
 teste45:-
 	dado_pergunta_espero_resposta('quem estah no barco?', 'ninguem estah nele.').
-
+teste46:-
+	dado_pergunta_espero_resposta('eu vou para o barco.', 'voce nao pode ir para ele, porque ele estah quebrado.').
+teste47:-
+	dado_pergunta_espero_resposta('eu entro no barco.', 'voce nao pode entrar nele, porque ele estah quebrado.').
 
 :-roda_testes.
 :-halt.

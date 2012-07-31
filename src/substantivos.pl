@@ -3,6 +3,7 @@
 % personagens (pessoas)
 np(id:zulu ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [zulu].
 np(id:mateo ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [mateo].
+np(id:narrador ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [narrador].
 
 np(id:sua(mao) ..gen:fem ..num:sing ..desconhecido:nao) --> [sua],[mao].
 

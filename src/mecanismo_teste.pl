@@ -19,10 +19,12 @@ roda_testes([Teste|Outros],TotalPassados,Total):-
 	Total is SubTotal+1.
 
 executa(T,Passou):-
+%	ignore((T=teste43,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
 	ignore(NC),
+	(nonvar(RespostaReal);RespostaReal='-empty-'),
 	(Esperado=RespostaReal,
 		(printpassed(C),Passou=1);
 		printfailed(C,Esperado,RespostaReal),Passou=0

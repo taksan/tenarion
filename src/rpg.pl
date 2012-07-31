@@ -52,26 +52,40 @@ dialogo:-
     dialogo.
 
 processar_pergunta(P,R,Sem):-
+	(s(Sem,P,[]), processa_sentenca(Sem,R));
+	(R=['desculpe, mas nao entendi.']).
+
+
+processa_sentenca(Sem,R):-
     seta_contexto(jogador),
-    s(Sem,P,[]),
     substitui_pronomes_na_sentenca(Sem),!,
-    once(atualiza_contexto(Sem)),
-    seta_contexto(computador),
-    once(atualiza_contexto(Sem)),
-
+	processa_contexto(Sem),
     processar(Sem,Resposta),!,
-	
+	(
+		gera_resposta(Resposta,R);
+		R=['nao sei te responder.']
+	).
+
+gera_resposta(Resposta,R):-
 	institui_pronomes_na_sentenca(Resposta),!,
-    s(Resposta,R,[]),
-    seta_contexto(jogador),
-    once(atualiza_contexto(Resposta)).
+    s(Resposta,R,[]), 
+	seta_contexto(jogador), 
+	once(atualiza_contexto(Resposta)).
 
-continuar(ato_fala:terminar):-
-        falando_com(player, X),
-        retract(falando_com(player, X)),
-        dialogo.
+processa_contexto(Sem):-
+    once(atualiza_contexto(Sem)),
 
-continuar(ato_fala:terminar).
+    seta_contexto(computador),
+    once(atualiza_contexto(Sem)).
+
+%
+continuar(Sem):-
+	nonvar(Sem),
+	Sem=ato_fala:terminar,
+    falando_com(player, X),
+    retract(falando_com(player, X)),
+	(	X=narrador,nl; 
+		dialogo).
 
 continuar(_):-
     dialogo.
@@ -140,9 +154,13 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
     \+ compound(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
     PredAcao =.. [Relacao, Agent, TemaSolucao],
-    findall(TemaSolucao, (PredAcao), L),
-    ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-    filtrar(TipoNp, L1,TS).
+	PredToCheck=.. [Relacao, Agent, _],
+	(
+		clause(PredToCheck,_),
+		findall(TemaSolucao, (PredAcao), L),
+		( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
+		filtrar(TipoNp, L1,TS)
+	);TS=[].
 
 % o que ou quem        
 
@@ -187,8 +205,7 @@ processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .
     falando_com(player, T).
 
 % se o processar falhar
-processar(_, []):-
-        write('Ha algo errado na sua pergunta.'), !.
+processar(_, []).
 
 % converte o verbo ter para estar se o alvo eh racional; isso corrige o problema de personagens serem possuidos por coisas
 %ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
