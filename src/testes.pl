@@ -48,7 +48,7 @@ teste19:-
 teste20_a:-
 	dado_pergunta_espero_resposta('o que o peixe voador tem?', 'ele nao tem nada.').
 teste20_b:-
-	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele tem o sambura.').
+	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele tem um sambura.').
 teste20_c:-
 	dado_pergunta_espero_resposta('o que voce tem?', 'eu nao tenho nada.').
 teste20_d:-
@@ -100,7 +100,7 @@ teste42:-
 teste43:-
 	dado_pergunta_espero_resposta('o que eu vejo?', 'voce nao ve nada.').
 teste44:-
-	dado_pergunta_espero_resposta('o que voce tem?', 'eu tenho o sambura.').
+	dado_pergunta_espero_resposta('o que voce tem?', 'eu tenho um sambura.').
 teste45:-
 	dado_pergunta_espero_resposta('quem estah no barco?', 'ninguem estah nele.').
 teste46:-

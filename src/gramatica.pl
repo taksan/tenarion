@@ -219,7 +219,7 @@ sv(tema_eh_agente_ou_complemento:complemento ..acao:A .. tema:Complemento ..num:
 	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
 	adv_afirmacao(positivo:IsPositivo),
 	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
-	sn(id:Complemento ..desconhecido:IsDesconhecido).
+	sn(id:Complemento ..desconhecido:IsDesconhecido ..prefere_det:nc).
 	% nao forca o substantivo que tem depois a concordar com o anterior, pois o anterior eh o verbo do agente
 	% e o sn representata o complemento 
 
