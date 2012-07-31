@@ -46,6 +46,7 @@ equivale(dele, [de, ele]).
 equivale(dela, [de, ela]).
 equivale(deles, [de, eles]).
 equivale(delas, [de, elas]).
+equivale(daqui, [de, aqui]).
 
 % contrai ou descontrai verbo indic + pronome
 equivale(VerboMaisPronomeObliquo, [Verbo, Pronome]):-

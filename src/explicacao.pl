@@ -27,6 +27,10 @@ normaliza_tracos_explicacao(Normalizado):-
 	eh_verbo(Acao).
 
 normaliza_tracos_explicacao(Normalizado):-
+	Normalizado=(predicado:Predicado ..acao:locucao(Acao,Predicado) ..tema_possivel:Tema ..tema_real:Tema),
+	verbo_da_locucao(Predicado,Acao).
+
+normaliza_tracos_explicacao(Normalizado):-
 	Normalizado=(predicado:Predicado ..acao:Acao ..tema_possivel:Tema ..tema_real:Predicado ..complemento_nominal:Tema),
 	tipo_adjetivo(Predicado,Acao).
 
@@ -36,5 +40,8 @@ normaliza_tracos_explicacao(Normalizado):-
 eh_verbo(Verbo):-
 	v(acao:Verbo, _, []).
 
-tipo_adjetivo(Adjetivo,Tipo):-
-	a(adj:Adjetivo ..tipo:Tipo,[_],[]).
+verbo_da_locucao(Locucao,Verbo):-
+	loc(id:Locucao ..verbo:Verbo,[_],[]).
+
+tipo_adjetivo(Adjetivo,Verbo):-
+	a(adj:Adjetivo ..tipo:Verbo,[_],[]).

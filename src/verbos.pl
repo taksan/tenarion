@@ -1,3 +1,6 @@
+:-discontiguous(subcat/2).
+:-discontiguous(v/3).
+
 %%%% VERBOS
 % INTRANSITIVO        : subcat:[]
 % TRANSITIVO DIRETO   : subcat:[sn]
@@ -5,37 +8,30 @@
 % BITRANSITIVO        : subcat[sn, sp(prep:P)] P = preposição exigida para o 2o objeto
 
 % VERBO: ESTAR
-v(acao:estar ..num:sing ..pessoa: terc ..subcat:[advb] ..poss:nao) --> [estah].
-v(acao:estar ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)] ..poss:nao) --> [estah].
-v(acao:estar ..num:plur ..pessoa: terc ..subcat:[advb]..poss:nao) --> [estao].
-v(acao:estar ..num:plur ..pessoa: terc ..subcat:[sp(prep:em)]..poss:nao) --> [estao].
-v(acao:estar ..num:sing ..pessoa: prim ..subcat:[advb] ..poss:nao) --> [estou].
-v(acao:estar ..num:sing ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> [estou].
-v(acao:estar ..num:plur ..pessoa: prim ..subcat:[sp(prep:em)] ..poss:nao) --> [estamos].
-v(acao:estar ..num:plur ..pessoa: prim ..subcat:[advb] ..poss:nao) --> [estamos].
-v(acao:estar ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [estar].
-
-v(acao:estar ..num:sing ..pessoa: indic ..subcat:[sa]) --> [estar].
-v(acao:estar ..num:sing ..pessoa: terc ..subcat:[sa]) --> [estah].
-v(acao:estar ..num:plur ..pessoa: terc ..subcat:[sa]) --> [estao].
+subcat(estar,SUBCAT):-
+	member(SUBCAT,[advb,sp(prep:em),sa,loc(verbo:estar)]).
+v(acao:estar ..num:sing ..pessoa: terc ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estah].
+v(acao:estar ..num:plur ..pessoa: terc ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estao].
+v(acao:estar ..num:sing ..pessoa: prim ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estou].
+v(acao:estar ..num:plur ..pessoa: prim ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estamos].
+v(acao:estar ..num:sing ..pessoa: indic ..subcat:[SUBCAT]) --> {subcat(estar,SUBCAT)}, [estar].
 
 % VERBO: SER
-v(acao:ser .. num:sing ..pessoa: terc ..subcat:[sn]) --> ['eh'].
-v(acao:ser .. num:sing ..pessoa: indic ..subcat:[sn]) --> [ser].
-v(acao:ser .. num:plur ..pessoa: terc ..subcat:[sn]) --> ['sao'].
-v(acao:ser .. num:sing ..pessoa: prim ..subcat:[sn]) --> [sou].
-% exige adjetivo
-v(acao:ser .. num:sing ..pessoa: prim ..subcat:[sa]) --> [sou].
-v(acao:ser .. num:sing ..pessoa: terc ..subcat:[sa]) --> ['eh'].
-v(acao:ser .. num:plur ..pessoa: prim ..subcat:[sa]) --> [sao].
+subcat(ser,SUBCAT):-
+	member(SUBCAT,[sn,sa]).
+v(acao:ser .. num:sing ..pessoa: indic ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [ser].
+v(acao:ser .. num:sing ..pessoa: terc  ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [eh].
+v(acao:ser .. num:plur ..pessoa: terc  ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [sao].
+v(acao:ser .. num:sing ..pessoa: prim  ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [sou].
 
+% VERBO: PERTENCER
 v(acao:pertencer .. num:sing ..pessoa: terc ..subcat:[sp(prep:de)]) --> ['eh'].
 v(acao:pertencer .. num:plur ..pessoa: prim ..subcat:[sp(prep:de)]) --> ['sao'].
 
 % VERBO: CONHECER
+v(acao:conhecer ..num:sing  ..pessoa: indic ..subcat:[sn]) --> [conhecer].
 v(acao:conhecer ..num:sing  ..pessoa: prim ..subcat:[sn]) --> [conheco].
 v(acao:conhecer ..num:sing  ..pessoa: terc ..subcat:[sn]) --> [conhece].
-v(acao:conhecer ..num:sing  ..pessoa: indic ..subcat:[sn]) --> [conhecer].
 
 % VERBO: CONSERTAR
 v(acao:consertar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [consertar].
@@ -43,14 +39,20 @@ v(acao:consertar ..num:sing ..pessoa: prim  ..subcat:[sn]) --> [conserto].
 v(acao:consertar ..num:sing ..pessoa: terc  ..subcat:[sn]) --> [conserta].
 
 % VERBO: PEGAR
+v(acao:pegar .. num:sing .. pessoa:indic ..subcat:[sn]) --> [pegar].
 v(acao:pegar .. num:sing .. pessoa:prim ..subcat:[sn]) --> [pego].
 v(acao:pegar .. num:sing .. pessoa:terc ..subcat:[sn]) --> [pega].
-v(acao:pegar .. num:sing .. pessoa:indic ..subcat:[sn]) --> [pegar].
 
 % VERBO: IR
+v(acao:ir ..num:sing ..pessoa: indic ..subcat:[sp(prep:para)]) --> [ir].
 v(acao:ir .. num:sing .. pessoa: prim ..subcat:[sp(prep:para)]) --> [vou].
 v(acao:ir .. num:sing .. pessoa: terc ..subcat:[sp(prep:para)]) --> [vai].
-v(acao:ir ..num:sing ..pessoa: indic ..subcat:[sp(prep:para)]) --> [ir].
+
+% VERBO: ENTRAR
+v(acao:entrar .. num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [entrar].
+v(acao:entrar .. num:sing .. pessoa: prim ..subcat:[sp(prep:em)]) --> [entro].
+v(acao:entrar .. num:sing .. pessoa: terc ..subcat:[sp(prep:em)]) --> [entra].
+
 
 % VERBO: VEDAR
 v(acao:vedar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vedo].

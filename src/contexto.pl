@@ -85,7 +85,8 @@ denota((tipo_pro:voce ..num:sing ..pessoa:terc ..pron:voce), player):-
 % a resolucao para terc pessoa ele/ela/eles/elas depende do contexto dinamico
 denota((tipo_pro:reto ..gen:G .. num:N .. pessoa:terc ..pron:Pron), Quem):-
     contexto_atual(Ctx),
-    contexto(Ctx,(tipo_pro:reto ..gen:G .. num:N .. pessoa:terc ..pron:Pron), Quem).
+    contexto(Ctx,(tipo_pro:reto ..gen:G .. num:N .. pessoa:terc ..pron:Pron), Quem),
+	\+estar(player,Quem).
    
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-

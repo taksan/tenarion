@@ -5,10 +5,9 @@
 
 
 /*
- * premissas:
- * 	o verbo deve concordar com o agente, e nao com o tema!
- *  
- */
+* premissas:
+* 	o verbo deve concordar com o agente, e nao com o tema!
+*/
 
 /*** Mensagens simples ****/
 s([]) --> [].
@@ -102,6 +101,7 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Tema ..desconhecido:sim ..pessoa:P
 % SINTAGMA NOMINAL
 % casa com pronomes: eu, ele, voce
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
+	{ \+compound(Ag)},
 	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
 
 sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
@@ -112,7 +112,7 @@ sn(coord:nao ..positivo:nao ..id:np([],TipoQuem) ..desconhecido:nao)-->
 	pro(tipo_pro:pron_ninguem(TipoQuem)).
 
 sn(coord:nao ..id:I ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
-    { (var(I); \+ is_list(I)) },
+    { (var(I); \+ is_list(I)), \+compound(I) },
 	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
    	ident(gen:G .. num:N ..tipo:TipoIdent),
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
@@ -145,6 +145,15 @@ sn(coord:sim ..id:[A1|Resto] .. num:plur ..prep:P) -->
 	sn(id:A1 .. coord:nao ..prefere_det:nc),
 	[,],
 	sn(coord:sim .. id:Resto ..prep:P ..prefere_det:nc).
+
+sn(coord:nao ..id:SnComposto ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+	{ SnComposto = comp_nominal(I,CompNominal) },
+    { (var(I); \+ is_list(I)), \+compound(I) },
+	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
+   	ident(gen:G .. num:N ..tipo:TipoIdent),
+	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao),
+	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
+
 
 % usado tao somente para imprimir "eu" sempre que o narrador for o agente da resposta
 % so deve ser usado para produzir texto
@@ -231,6 +240,14 @@ sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:A ..te
 	v(acao:A ..num:N ..pessoa:Pess ..subcat:[sp(prep:P)]),
 	sp(id:Complemento ..prep:P ..desconhecido:IsDesconhecido).
 
+sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:locucao(A,LocP) ..tema:Complemento .. num:N ..pessoa:Pess ..desconhecido:IsDesconhecido) -->
+%	{ \+ compound(T); is_list(T) },
+	{ ignore((var(IsPositivo), is_positivo(Complemento, IsPositivo))) },
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..num:N ..pessoa:Pess ..subcat:[loc(tipo:prep..verbo:A)]),
+	loc(tipo:prep.. id:LocP ..prep:P),
+	sp(id:Complemento ..prep:P ..desconhecido:IsDesconhecido).
+
 % VERBO TRANSITIVO INDIRETO onde o OBJETO foi determinado antes 
 % nesse caso, o substantivo determina o AGENTE
 % ex: *onde* estah a identidade? (*onde* eh o complemento, *a identidade* é o agente)
@@ -274,6 +291,10 @@ sv(tema_eh_agente_ou_complemento:complemento ..gen:G ..num:N ..pessoa:P ..acao:A
 
 
 % cobre o caso em que o objeto indireto eh substituido por um adverbio
+sp(id:I .. prep:P ..desconhecido:_)-->
+    prep(prep:P),
+	sadvb(id:I ..aceita_prep:P).
+
 sp(id:I .. prep:_ ..desconhecido:_)-->
 	sadvb(id:I).
 	

@@ -22,6 +22,7 @@ a(adj:racional ..tipo:ser ..num:plur)-->[racionais].
 
 a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
 a(adj:amarravel ..tipo:ser ..num:sing)-->[amarravel].
+a(adj:possivel  ..tipo:ser ..num:sing)-->[possivel].
 
 a(adj:consertado ..gen:masc ..tipo:estar  ..num:sing)-->[consertado].
 a(adj:consertada ..gen:fem  ..tipo:estar  ..num:sing)-->[consertada].
@@ -31,6 +32,7 @@ a(adj:pregado    ..gen:masc ..tipo:estar ..num:sing)-->[pregado].
 a(adj:pregado    ..gen:fem ..tipo:estar ..num:sing)-->[pregada].
 a(adj:quebrado   ..gen:masc ..tipo:estar ..num:sing)-->[quebrado].
 a(adj:quebrado   ..gen:fem ..tipo:estar ..num:sing)-->[quebrada].
+%a(adj:perto      ..gen:_   ..tipo:estar ..num:sing)-->[perto].
 
 
 %%%% QUANT
@@ -147,8 +149,12 @@ pro(tipo_pro:relativo ..pron:qual ..num:plur ) --> [quais].
 pro(tipo_pro:relativo ..pron:onde) --> [onde].
 
 %%%% ADVERBIOS
-advb(tipo_adv:lugar ..adv:aqui) --> [aqui].
+advb(tipo_adv:lugar ..aceita_prep:de ..adv:aqui) --> [aqui].
 advb(tipo_adv:lugar ..adv:la) --> [la].
 advb(tipo_adv:afirmacao ..adv:nao) --> [nao].
 advb(tipo_adv:afirmacao ..adv:sim) --> [].
 advb(tipo_adv:afirmacao ..adv:ja) -->[ja].
+
+%%% LOCUCAO PREPOSITIVA
+loc(tipo:prep.. id:perto ..prep:de ..verbo:estar)-->[perto].
+

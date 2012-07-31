@@ -82,7 +82,7 @@ teste33:-
 teste34:-
 	dado_pergunta_espero_resposta('eu pego a corda.', 'ok').
 teste35:-
-	dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, uma corda, a identidade, uma vara de pescar e a sua mao.').
+	dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, uma corda, a identidade, a sua mao e uma vara de pescar.').
 teste36:-
 	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'ok').
 teste37:-
@@ -107,6 +107,30 @@ teste46:-
 	dado_pergunta_espero_resposta('eu vou para o barco.', 'voce nao pode ir para ele, porque ele estah quebrado.').
 teste47:-
 	dado_pergunta_espero_resposta('eu entro no barco.', 'voce nao pode entrar nele, porque ele estah quebrado.').
+teste48:-
+	dado_pergunta_espero_resposta('eu vou para o caixa eletronico.', 'voce nao pode ir para ele, porque ele nao estah perto daqui.').
+teste49:-
+	dado_pergunta_espero_resposta('eu vou para a carpintaria.', 'ok').
+teste50:-
+	dado_pergunta_espero_resposta('eu entro no ancoradouro.', 'voce nao pode entrar nele, porque ele nao eh local fechado.').
+teste51:-
+	dado_pergunta_espero_resposta('onde eu estou?', 'voce estah na carpintaria.').
+teste52:-
+	dado_pergunta_espero_resposta('onde estao os pregos do barco?', 'os pregos do barco estao no barco.').
+teste53:-
+	dado_pergunta_espero_resposta('onde estah o dono do barco?', 'o dono do barco estah no ancoradouro.').
+teste54:-
+	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o dono do barco sou eu.').
+teste55:-
+	dado_pergunta_espero_resposta('tchau.', 'tchau').
+teste56:-
+	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o dono do barco eh o zulu.').
+teste57:-
+	dado_pergunta_espero_resposta('onde estao as tabuas do zulu?', 'as tabuas do zulu estao no ancoradouro.').
+teste58:-
+	dado_pergunta_espero_resposta('onde estah o sambura do zulu?', 'o sambura do zulu estah com ele.').
+
+
 
 :-roda_testes.
 :-halt.

@@ -82,10 +82,8 @@ processa_contexto(Sem):-
 continuar(Sem):-
 	nonvar(Sem),
 	Sem=ato_fala:terminar,
-    falando_com(player, X),
-    retract(falando_com(player, X)),
-	(	X=narrador,nl; 
-		dialogo).
+    \+ falando_com(player, _),
+	nl.
 
 continuar(_):-
     dialogo.
@@ -96,7 +94,7 @@ processar([],[]).
 
 processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
           (ato_fala:responder .. mensagem:Resposta)):-
-        \+ compound(T),
+        eh_tema_simples(T),
         PredAcao =.. [Relacao, A, T],
 		(
         	(PredAcao,Resposta=positivo);
@@ -151,46 +149,62 @@ processar((ato_fala:interro_tema_desconhecido
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
           (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS)):-
-    \+ compound(Agent),
+    eh_tema_simples(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
-    PredAcao =.. [Relacao, Agent, TemaSolucao],
-	PredToCheck=.. [Relacao, Agent, _],
-	(
-		clause(PredToCheck,_),
-		findall(TemaSolucao, (PredAcao), L),
-		( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-		filtrar(TipoNp, L1,TS)
-	);TS=[].
+	determina_agente(Agent,AgenteDeterminado),
+    PredAcao =.. [Relacao, AgenteDeterminado, TemaSolucao],
+	PredToCheck=.. [Relacao, AgenteDeterminado, _],
+	(	
+		(
+			clause(PredToCheck,_),
+			findall(TemaSolucao, (PredAcao), L),
+			( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
+			filtrar(TipoNp, L1,TS)
+		);
+		filtrar(TipoNp, [],TS)
+	).
 
 % o que ou quem        
 
 processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:T),
    (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:T ..pessoa:terc ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
-    PredAcao =.. [RelacaoAjustada, A, T],
+	determina_agente(T,TemaDeterminado),
+    PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
     ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
     filtrar(Tipo,L1,W),
     traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
 
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
-          (ato_fala:responder .. mensagem:ok)):-
+          Resposta):-
     PredAcao =.. [Relacao, Ag, T],
-    PredAcao.
-
-processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
-          (ato_fala:informar
-           ..agente_real:player
-           ..acao:poder 
-           ..positivo:nao 
-           ..pessoa:terc
-           ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
-		   ..porque:Porque
-          )):-
-    PredAcao =.. [Relacao, Ag, T],
-    \+ PredAcao,
-	motivos_para_nao_poder(PredAcao, PorqueNao),
-	gera_explicacao(PorqueNao, Porque).
+	PredToCheck=.. [Relacao, Ag, _],
+	clause(PredToCheck,_), 
+	(
+		(
+			PredAcao, Resposta=(ato_fala:responder .. mensagem:ok)
+		);
+		(
+			motivos_para_nao_poder(PredAcao, PorqueNao),
+			gera_explicacao(PorqueNao, Porque),
+			Resposta=(ato_fala:informar
+				   ..agente_real:player
+				   ..acao:poder 
+				   ..positivo:nao 
+				   ..pessoa:terc
+				   ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
+				   ..porque:Porque
+				  )
+		)
+	);
+	Resposta=(ato_fala:informar
+		   ..agente_real:player
+		   ..acao:poder 
+		   ..positivo:nao 
+		   ..pessoa:terc
+		   ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
+		  ).
 
 %%% acao cujo resultado eh descritivo
 processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
@@ -198,7 +212,9 @@ processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
         PredAcao =.. [Relacao, A, T, R],
         PredAcao.
 
-processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)).
+processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)):-
+    falando_com(player, Quem),
+    retract(falando_com(player, Quem)).
 
 processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder .. mensagem:oi)).
 processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .. mensagem:oi)):-
@@ -221,4 +237,17 @@ filtrar(_,X,Y):-
 filtrar([X],X):-!.
 filtrar(X,X):-!.
 
+determina_agente(comp_nominal(A,B),A):-
+	estar(A,B).
 
+determina_agente(comp_nominal(A,B),B):-
+	dono(B,A).
+
+determina_agente(comp_nominal(A,B),Quem):-
+	ser(comp_nominal(A,B),Quem).
+	
+determina_agente(A,A).
+
+eh_tema_simples(Ag):-
+	\+ Ag=incog(_),
+	\+ has_features(Ag).

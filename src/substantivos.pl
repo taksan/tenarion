@@ -5,7 +5,7 @@ np(id:zulu ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [zulu].
 np(id:mateo ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [mateo].
 np(id:narrador ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [narrador].
 
-np(id:sua(mao) ..gen:fem ..num:sing ..desconhecido:nao) --> [sua],[mao].
+np(id:sua_mao ..gen:fem ..num:sing ..desconhecido:nao) --> [sua],[mao].
 
 % objetos com nomes proprios (np), serao designados com o os a as
 np(id:ancoradouro .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [ancoradouro].
@@ -52,6 +52,9 @@ np(id:vela .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vitoria-regia].
 np(id:sambura ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [sambura].
+np(id:dono ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [dono].
+
+np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

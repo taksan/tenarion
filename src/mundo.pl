@@ -75,7 +75,7 @@ estar(player, ancoradouro).
 
 estar(identidade, player).
 estar(cartao_credito, player).
-estar(sua(mao), player).
+estar(sua_mao, player).
 
 /* LOCAL: ANCORADOURO */
 
@@ -208,7 +208,7 @@ pegavel((vela, _)).
 pegavel(martelo).
 pegavel(identidade).
 pegavel(carta_credito).
-pegavel(sua(mao)).
+pegavel(sua_mao).
 pegavel(tabuas).
 pegavel(vara_pescar).
 pegavel(minhocas).
@@ -234,12 +234,18 @@ local(barco).
 local(caixa_eletronico).
 
 /* identidade */
+ser(comp_nominal(NomePred,Alvo),Res):-
+	Pred=..[NomePred,Res,Alvo],
+	clause(Pred,_),
+	Pred.
+
 ser(player, Nome):-
     jogador(Nome).
 
 ser(L,L):-
     nonvar(L),
-    nao(L=player).
+    nao(L=player),
+	\+ compound(L).
 
 /* diferenca entre pessoas e objetos */
 
@@ -339,13 +345,36 @@ poder_especifico(ir(player,Onde)):-
 poder_especifico(ir(player,Onde)):-
 	var(Onde).
 
-ir(player, X):-
+ir(player, Onde):-
     estar(player, Aqui),
-    perto(Aqui, X),
-    local(X),
-    poder_especifico(ir(player,X)),
+    perto(Onde,Aqui),
+    local(Onde),
+    poder_especifico(ir(player,Onde)),
     retract(estar(player, _)),
-    asserta(estar(player, X)).
+    asserta(estar(player, Onde)).
+
+local_fechado(carpintaria).
+
+perto(Onde):-
+    estar(player, Aqui),
+    perto(Aqui, Onde).
+
+
+/* entrar */
+poder_especifico(entrar(player,barco)).
+poder_especifico(entrar(player,Onde)):-
+	!,
+	Onde\=barco,
+	local_fechado(Onde).
+
+entrar(player, Onde):-
+	estar(player, Aqui),
+    perto(Onde,Aqui),
+    local(Onde),
+    poder_especifico(entrar(player,Onde)),
+    poder_especifico(ir(player,Onde)),
+    retract(estar(player, _)),
+    asserta(estar(player, Onde)).
 
 /* cortar */
 cortar_com(tabuas, serrote):-
@@ -384,7 +413,7 @@ assert_especifico(cortar(corda, tesoura)):-
 
 assert_especifico(cortar(mao, serrote)):-
 	assertz(injuriado(player)),
-	retract(estar(sua(mao),player)).
+	retract(estar(sua_mao,player)).
 
 assert_especifico(cortar(barco,serrote)):-
 	retract(consertado(barco)),
@@ -516,7 +545,7 @@ examinar(OQue, [obj(Objetos), def(Defeitos)]):-
         (estar_em(OQue, CenaAtual); OQue = CenaAtual),
         (defeito(OQue, Defeitos); Defeitos=[]),
         findall(X, (estar(X, OQue), 
-                    \+ member(X, [player, sua(mao)]),
+                    \+ member(X, [player, sua_mao]),
                     \+ member(X, Defeitos)),
                 Objetos),
         findall(X, (invisivel(X), 
