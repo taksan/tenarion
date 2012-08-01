@@ -41,16 +41,17 @@ s(Tracos)-->
 /* perguntas */
 
 % ex.: o que EU tenho (EU é agente)
-s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
-	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
-	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
-    pontuacao_opcional(_).
-
 % ex: quem esta aqui? ("quem" é o agente do verbo estar)
 s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:T ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:T ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
+
+s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
+	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
+	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
+    pontuacao_opcional(_).
+
 
 s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Tema) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE

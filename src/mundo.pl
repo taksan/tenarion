@@ -235,12 +235,21 @@ local(caixa_eletronico).
 
 /* identidade */
 ser(comp_nominal(NomePred,Alvo),Res):-
+	nonvar(NomePred),
 	Pred=..[NomePred,Res,Alvo],
 	clause(Pred,_),
 	Pred.
 
+ser(comp_nominal(dono,Alvo),Res):-
+	nonvar(Res),
+	dono(Res,Alvo).
+
 ser(player, Nome):-
     jogador(Nome).
+
+ser(Nome, player):-
+    jogador(Nome).
+
 
 ser(L,L):-
     nonvar(L),
@@ -263,6 +272,9 @@ racional(player).
 racional(zulu).
 racional(mateo).
 racional(peixe_voador).
+racional(narrador).
+racional(Quem):-
+	jogador(Quem).
 
 
 /* pertinencia */

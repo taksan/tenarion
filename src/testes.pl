@@ -28,7 +28,7 @@ teste10_a:-
 teste10_b:-
     dado_pergunta_espero_resposta('as minhocas estao aqui?', 'sim').
 teste11:-
-    dado_pergunta_espero_resposta('o que sao elas?', 'elas sao as minhocas.').
+    dado_pergunta_espero_resposta('o que elas sao?', 'elas sao algumas minhocas.').
 teste12:-
     dado_pergunta_espero_resposta('eu pego elas.', 'ok').
 teste13:-
@@ -40,7 +40,7 @@ teste15:-
 teste16:-
     dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah no ancoradouro.').
 teste17:-
-    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o zulu.').
+    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o dono do barco, o dono de um chapeu, o dono de um sambura e o dono de algumas tabuas.').
 teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
@@ -120,11 +120,11 @@ teste52:-
 teste53:-
 	dado_pergunta_espero_resposta('onde estah o dono do barco?', 'o dono do barco estah no ancoradouro.').
 teste54:-
-	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o dono do barco sou eu.').
+	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'eu sou o dono do barco.').
 teste55:-
 	dado_pergunta_espero_resposta('tchau.', 'tchau').
 teste56:-
-	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o dono do barco eh o zulu.').
+	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o zulu eh o dono do barco.').
 teste57:-
 	dado_pergunta_espero_resposta('onde estao as tabuas do zulu?', 'as tabuas do zulu estao no ancoradouro.').
 teste58:-

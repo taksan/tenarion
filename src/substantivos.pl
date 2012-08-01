@@ -52,6 +52,7 @@ np(id:vela .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vela].
 np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vitoria-regia].
 np(id:sambura ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [sambura].
+np(id:chapeu ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [chapeu].
 np(id:dono ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [dono].
 
 np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].

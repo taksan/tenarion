@@ -166,15 +166,15 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
 
 % o que ou quem        
 
-processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:T),
-   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:T ..pessoa:terc ..entidade:Tipo)):-
-    ajuste_acao_ter_estar_em_caso_racional(T, Relacao, RelacaoAjustada),!,
-	determina_agente(T,TemaDeterminado),
+processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:Tema),
+   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:TemaResolvido ..entidade:Tipo)):-
+    ajuste_acao_ter_estar_em_caso_racional(Tema, Relacao, RelacaoAjustada),!,
+	determina_agente(Tema,TemaDeterminado),
     PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
     ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
-    filtrar(Tipo,L1,W),
-    traduz_agente_para_evitar_ambiguidade(W, AgentesTraduzidos).
+    filtrar(L1,PossivelmenteAgente),
+    determina_agente_e_tema_resultantes(Tipo, PossivelmenteAgente,Tema,AgentesTraduzidos,TemaResolvido).
 
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
@@ -223,12 +223,26 @@ processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .
 % se o processar falhar
 processar(_, []).
 
+determina_agente_e_tema_resultantes(TipoNp, [],Paciente,Paciente,np([],TipoNp)):-
+	racional(Paciente).
+
+determina_agente_e_tema_resultantes(TipoNp, [],Paciente,np([],TipoNp),Paciente):-
+	\+ racional(Paciente).
+
+determina_agente_e_tema_resultantes(TipoNp,TalvezAgente,Paciente,Paciente,TalvezAgente):-
+	racional(Paciente),
+	entidade(TalvezAgente,TipoNp).
+
+determina_agente_e_tema_resultantes(_,TalvezAgente,Paciente,TalvezAgente,Paciente):-
+	racional(TalvezAgente).
+
+determina_agente_e_tema_resultantes(_,Agente,Paciente,Agente,Paciente).
+
 % converte o verbo ter para estar se o alvo eh racional; isso corrige o problema de personagens serem possuidos por coisas
-%ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
-%    racional(QuemTemOuEsta).
+ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
+    racional(QuemTemOuEsta).
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
-traduz_agente_para_evitar_ambiguidade(A,A).
 
 % normalizacao    
 filtrar(TipoNp,[], np([],TipoNp)).
