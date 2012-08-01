@@ -1,4 +1,17 @@
-% tratamento de casos desconhecidos
+preposicao_exigida(exige_preposicao(Acao,Prep),Prep):-
+	nonvar(Acao),
+	nonvar(Prep).
+
+preposicao_exigida(_,_).
+
+id_para_acao(exige_preposicao(Acao,Prep),Acao):-
+	nonvar(Acao),
+	nonvar(Prep).
+
+id_para_acao(Acao,Acao).
+
+id_para_np(Substantivo,Substantivo).
+
 is_positivo(T, _):-
 	var(T).
 
@@ -40,6 +53,7 @@ equivale(dos, [de, os]).
 equivale(comigo, [em, eu]).
 equivale(comigo, [com, eu]).
 equivale(contigo, [em, voce]).
+equivale(contigo, [com, voce]).
 equivale(nele, [em, ele]).
 equivale(nela, [em, ela]).
 equivale(dele, [de, ele]).

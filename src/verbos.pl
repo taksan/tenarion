@@ -9,11 +9,11 @@
 
 % VERBO: ESTAR
 subcat(estar,SUBCAT):-
-	member(SUBCAT,[advb,sp(prep:em),sa,loc(verbo:estar)]).
-v(acao:estar ..num:sing ..pessoa: terc ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estah].
-v(acao:estar ..num:plur ..pessoa: terc ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estao].
-v(acao:estar ..num:sing ..pessoa: prim ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estou].
-v(acao:estar ..num:plur ..pessoa: prim ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estamos].
+	member(SUBCAT,[advb,sp(prep:em),sp(prep:com),sa,loc(verbo:estar)]).
+v(acao:estar ..num:sing ..pessoa: terc  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estah].
+v(acao:estar ..num:plur ..pessoa: terc  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estao].
+v(acao:estar ..num:sing ..pessoa: prim  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estou].
+v(acao:estar ..num:plur ..pessoa: prim  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estamos].
 v(acao:estar ..num:sing ..pessoa: indic ..subcat:[SUBCAT]) --> {subcat(estar,SUBCAT)}, [estar].
 
 % VERBO: SER

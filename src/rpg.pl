@@ -148,7 +148,7 @@ processar((ato_fala:interro_tema_desconhecido
     filtrar(TipoNp, L1,TemaSolucao).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
-          (ato_fala:informar .. agente_real:Agent .. acao:Relacao ..tema_real:TS)):-
+          (ato_fala:informar .. agente_real:Agent .. acao:RelacaoResolvida ..tema_real:PacientesDeterminados)):-
     eh_tema_simples(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
 	determina_agente(Agent,AgenteDeterminado),
@@ -159,22 +159,27 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
 			clause(PredToCheck,_),
 			findall(TemaSolucao, (PredAcao), L),
 			( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-			filtrar(TipoNp, L1,TS)
+			filtrar(TipoNp, L1,PacientesDeterminados),
+			ajuste_acao_de_acordo_com_resposta(PacientesDeterminados, Relacao,RelacaoResolvida)
 		);
-		filtrar(TipoNp, [],TS)
+		(
+			filtrar(TipoNp, [], PacientesDeterminados),
+			RelacaoResolvida=Relacao
+		)
 	).
 
 % o que ou quem        
 
 processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:Tema),
-   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoAjustada .. tema_real:TemaResolvido ..entidade:Tipo)):-
+   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoResolvida .. tema_real:TemaResolvido ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(Tema, Relacao, RelacaoAjustada),!,
 	determina_agente(Tema,TemaDeterminado),
     PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],
     findall(A, (PredAcao, entidade(A, Tipo)), L),
     ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
     filtrar(L1,PossivelmenteAgente),
-    determina_agente_e_tema_resultantes(Tipo, PossivelmenteAgente,Tema,AgentesTraduzidos,TemaResolvido).
+    determina_agente_e_tema_resultantes(Tipo, PossivelmenteAgente,Tema,AgentesTraduzidos,TemaResolvido),
+	ajuste_acao_de_acordo_com_resposta(TemaResolvido, RelacaoAjustada,RelacaoResolvida).
 
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
@@ -242,6 +247,13 @@ determina_agente_e_tema_resultantes(_,Agente,Paciente,Agente,Paciente).
 ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
     racional(QuemTemOuEsta).
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
+
+
+ajuste_acao_de_acordo_com_resposta(Alvo, estar,exige_preposicao(estar,com)):-
+	racional(Alvo).
+
+ajuste_acao_de_acordo_com_resposta(_, R,R).
+
 
 
 % normalizacao    
