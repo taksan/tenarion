@@ -128,7 +128,7 @@ teste56:-
 teste57:-
 	dado_pergunta_espero_resposta('onde estao as tabuas do zulu?', 'as tabuas do zulu estao no ancoradouro.').
 teste58:-
-	dado_pergunta_espero_resposta('onde estah o sambura do zulu?', 'o sambura do zulu estah com ele.').
+	dado_pergunta_espero_resposta('onde estah o sambura do zulu?', 'o sambura do zulu estah com o zulu.').
 
 :-roda_testes.
 :-halt.

@@ -1,4 +1,5 @@
 %:-[gulp].
+:-dynamic estah_na_mesma_sentenca/0.
 
 substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
 	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido),
@@ -23,7 +24,7 @@ substitui_pronome(NaoPronome, NaoPronome).
 
 %%
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado ..porque:Porque):-
-	institui_pronome(AgenteReal, AgenteReferenciado),
+	institui_pronome_agente(AgenteReal, TemaReal, AgenteReferenciado),
 	(
 		( once(institui_pronome(TemaReal, TemaReferenciado)),\+ AgenteReferenciado = TemaReferenciado )
 		; TemaReal = TemaReferenciado
@@ -32,10 +33,23 @@ institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agent
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
+/*
+institui_pronome_agente(AgenteComposto,TemaReal,AgenteComposto):-
+	nonvar(AgenteComposto),
+	AgenteComposto=comp_nominal(_,ComplementoAgente),
+	TemaReal=ComplementoAgente,
+	atualiza_contexto_dado_np_real(ComplementoAgente).
+*/
+
+institui_pronome_agente(Agente,_,AgenteReferenciado):-
+	institui_pronome(Agente,AgenteReferenciado).
+
+
 institui_pronome(comp_nominal(Tema,ComplementoNom), comp_nominal(TemaReferenciado,ComplReferenciado)):-
 	nonvar(Tema),nonvar(ComplementoNom),
 	institui_pronome(Tema,TemaReferenciado),
 	institui_pronome(ComplementoNom,ComplReferenciado).
+
 
 institui_pronome(TemaBiTransitivo, (tema1:Tema1Referenciado ..tema2:Tema2Referenciado)):-
 	nonvar(TemaBiTransitivo),

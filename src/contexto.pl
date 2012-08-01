@@ -19,10 +19,19 @@ atualiza_contexto((agente_real:AgResp ..tema_real:TemaResp)):-
 atualiza_contexto_dado_np_real([]).
 
 % se o jogador perguntou onde estah,remove _aqui_ do contexto
-atualiza_contexto_dado_np_real(incog(onde)):-
+atualiza_contexto_dado_np_real(TemaOuAgente):-
+	nonvar(TemaOuAgente),
+	TemaOuAgente=incog(onde),
     contexto_atual(Ctx),
     contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui),Local),
     retractall(contexto(Ctx,_,Local)).
+
+/*
+atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
+	nonvar(T1),
+	nonvar(T2),
+	atualiza_contexto_dado_np_real(T2).
+*/
 
 atualiza_contexto_dado_np_real(TemaOuAgente):-
     \+ is_list(TemaOuAgente),
