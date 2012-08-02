@@ -7,8 +7,8 @@ substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido 
 
 substitui_pronome(TalvezPronome, Traduzido):-
 	nonvar(TalvezPronome),
-	\+ has_features(TalvezPronome),
-	denota_lugar(TalvezPronome, Traduzido).
+	TalvezPronome=aqui,
+	estar(player, Traduzido).
 
 substitui_pronome(TalvezPronome, Traduzido):-
 	nonvar(TalvezPronome),
@@ -24,31 +24,28 @@ substitui_pronome(NaoPronome, NaoPronome).
 
 %%
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado ..porque:Porque):-
-	institui_pronome_agente(AgenteReal, TemaReal, AgenteReferenciado),
-	(
-		( once(institui_pronome(TemaReal, TemaReferenciado)),\+ AgenteReferenciado = TemaReferenciado )
-		; TemaReal = TemaReferenciado
-	),
+	institui_pronome(AgenteReal, AgenteReferenciado),
+	institui_pronomes_no_complemento_somente_se_nao_usou_pronome_no_agente(TemaReal,TemaReferenciado,AgenteReferenciado),
 	ignore((nonvar(Porque),institui_pronomes_na_sentenca(Porque))).
 
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReal ..agente_real:AgenteReal ..agente:AgenteReal).
 
-/*
-institui_pronome_agente(AgenteComposto,TemaReal,AgenteComposto):-
-	nonvar(AgenteComposto),
-	AgenteComposto=comp_nominal(_,ComplementoAgente),
-	TemaReal=ComplementoAgente,
-	atualiza_contexto_dado_np_real(ComplementoAgente).
-*/
+institui_pronomes_no_complemento_somente_se_nao_usou_pronome_no_agente(TemaReal,TemaReferenciado,AgenteReferenciado):-
+	( 	once(institui_pronome(TemaReal, TemaReferenciado)),
+		\+ AgenteReferenciado = TemaReferenciado 
+	)
+	; TemaReal = TemaReferenciado.
 
 institui_pronome_agente(Agente,_,AgenteReferenciado):-
 	institui_pronome(Agente,AgenteReferenciado).
 
-
 institui_pronome(comp_nominal(Tema,ComplementoNom), comp_nominal(TemaReferenciado,ComplReferenciado)):-
 	nonvar(Tema),nonvar(ComplementoNom),
 	institui_pronome(Tema,TemaReferenciado),
-	institui_pronome(ComplementoNom,ComplReferenciado).
+	(	
+		local(ComplementoNom),ComplReferenciado=ComplementoNom;
+		institui_pronome(ComplementoNom,ComplReferenciado)
+	).
 
 
 institui_pronome(TemaBiTransitivo, (tema1:Tema1Referenciado ..tema2:Tema2Referenciado)):-
@@ -75,3 +72,7 @@ institui_pronome(TemaReal, TemaReal).
 has_features(G):-
 	nonvar(G),
 	(G=tema:_;G=agente:_;G=tema1:_).
+
+suprime_se_era_incog(Original):-
+	nonvar(Original),
+	Original=incog(_).

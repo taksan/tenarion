@@ -7,6 +7,7 @@
    dynamic(jogador/1),dynamic(estado),
    dynamic(consertado/1),dynamic(pregado/2),
    dynamic(amarrado/2),dynamic(digitado/2),
+   dynamic(conhece/2),
    discontiguous(poder_especifico/1).
 
 /**** Predicados auxiliares para informacao ****/
@@ -240,9 +241,13 @@ ser(comp_nominal(NomePred,Alvo),Res):-
 	clause(Pred,_),
 	Pred.
 
-ser(comp_nominal(dono,Alvo),Res):-
+ser(Alvo,Res):-
 	nonvar(Res),
-	dono(Res,Alvo).
+	descreve(Res,Alvo).
+
+ser(Alvo,Res):-
+	nonvar(Alvo),
+	descreve(Res,Alvo).
 
 ser(player, Nome):-
     jogador(Nome).
@@ -254,13 +259,15 @@ ser(Nome, player):-
 ser(L,L):-
     nonvar(L),
     nao(L=player),
-	\+ compound(L).
+	\+ compound(L),
+	ignore((racional(L),\+conhece(player,L),assertz(conhece(player,L)))).
 
 /* diferenca entre pessoas e objetos */
 
 /* entidade(player, _):- !, fail. */
 
 entidade(A, quem):-
+	A\=player,
     racional(A).
 
 entidade(A, oque):-
@@ -276,6 +283,9 @@ racional(narrador).
 racional(Quem):-
 	jogador(Quem).
 
+
+descreve(zulu,pescador).
+descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
 /* pertinencia */
 % zulu
@@ -569,6 +579,8 @@ examinar(OQue, [obj(Objetos), def(Defeitos)]):-
 
 /* conversar -- inicia dialogo com Pessoa */
 conversar(player, Pessoa):-
+	estar(player,Aqui),
+	estar(Pessoa,Aqui),
     racional(Pessoa),
     retract(falando_com(player,_)),
     assertz(falando_com(player, Pessoa)).
@@ -610,3 +622,8 @@ pescar(player,Onde):-
 
 % nao coloque nenhum poder especifico depois desse
 poder_especifico(_).
+
+introduz_pessoa(Quem):-
+	falando_com(player,Quem),
+	\+conhece(player,Quem),
+	assertz(conhece(player,Quem)).

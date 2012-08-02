@@ -54,6 +54,10 @@ np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vit
 np(id:sambura ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [sambura].
 np(id:chapeu ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [chapeu].
 np(id:dono ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [dono].
+np(id:homem ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [homem].
+np(id:mulher ..tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [mulher].
+np(id:pescador ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [pescador].
+np(id:vendedor ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [vendedor].
 
 np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->

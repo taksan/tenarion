@@ -6,7 +6,7 @@ is_verbose:-true.
 teste01:-
     dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, algumas tabuas e uma vara de pescar estao aqui.').
 teste02:- 
-    dado_pergunta_espero_resposta('quem estah aqui?', 'voce e o zulu estao aqui.').
+    dado_pergunta_espero_resposta('quem estah aqui?', 'o pescador estah aqui.').
 teste03:- 
     dado_pergunta_espero_resposta('onde eu estou?', 'voce estah no ancoradouro.').
 teste04:-
@@ -40,7 +40,7 @@ teste15:-
 teste16:-
     dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah no ancoradouro.').
 teste17:-
-    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o dono do barco, o dono de um chapeu, o dono de um sambura e o dono de algumas tabuas.').
+    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o pescador.').
 teste18:-
     dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
 teste19:-
@@ -102,7 +102,7 @@ teste43:-
 teste44:-
 	dado_pergunta_espero_resposta('o que voce tem?', 'eu tenho um sambura.').
 teste45:-
-	dado_pergunta_espero_resposta('quem estah no barco?', 'ninguem estah nele.').
+	dado_pergunta_espero_resposta('quem estah no barco?', 'ninguem estah no barco.').
 teste46:-
 	dado_pergunta_espero_resposta('eu vou para o barco.', 'voce nao pode ir para ele, porque ele estah quebrado.').
 teste47:-
@@ -122,13 +122,30 @@ teste53:-
 teste54:-
 	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'eu sou o dono do barco.').
 teste55:-
-	dado_pergunta_espero_resposta('tchau.', 'tchau').
+	dado_pergunta_espero_resposta('tchau.', 'tchau.').
 teste56:-
 	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o zulu eh o dono do barco.').
 teste57:-
 	dado_pergunta_espero_resposta('onde estao as tabuas do zulu?', 'as tabuas do zulu estao no ancoradouro.').
 teste58:-
 	dado_pergunta_espero_resposta('onde estah o sambura do zulu?', 'o sambura do zulu estah com o zulu.').
+teste59:-
+	dado_pergunta_espero_resposta('quem estah aqui?', 'o vendedor da carpintaria estah aqui.').
+teste60:-
+	dado_pergunta_espero_resposta('eu falo com ele.', 'ok').
+teste61:-
+	dado_pergunta_espero_resposta('oi.','oi.').
+teste62:-
+	dado_pergunta_espero_resposta('quem eh voce.','eu sou o mateo.').
+teste64:-
+	dado_pergunta_espero_resposta('tchau.','tchau.').
+teste65:-
+	dado_pergunta_espero_resposta('quem estah aqui?','o mateo estah aqui.').
+teste66:-
+	dado_pergunta_espero_resposta('quem eh o vendedor?', 'o mateo eh o vendedor.').
+teste67:-
+	dado_pergunta_espero_resposta('eu falo com o vendedor.', 'ok').
+
 
 :-roda_testes.
 :-halt.

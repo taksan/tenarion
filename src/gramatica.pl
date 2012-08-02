@@ -9,21 +9,21 @@
 * 	o verbo deve concordar com o agente, e nao com o tema!
 */
 
-/*** Mensagens simples ****/
-s([]) --> [].
-s(ato_fala:responder .. mensagem: positivo)--> [sim].
-s(ato_fala:responder .. mensagem: negativo)--> advb(tipo_adv:afirmacao ..adv:nao).
-s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
-s(ato_fala:responder .. mensagem: ok) --> [ok].
-s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
-s(ato_fala:terminar .. mensagem: tchau) --> [tchau].
-s(ato_fala:terminar .. mensagem: tchau) --> [tchau],[_].
-s(ato_fala:responder .. mensagem: oi ..tema:T) --> 
-	[oi],
-	sn(id:T),
-	pontuacao_opcional('.').
 
-/*** Gramatica Real ****/
+/*** Sentencas compostas****/
+s(ato_fala:composto ..composicao:[])-->[].
+
+s(ato_fala:composto ..composicao:[S1|Outros])-->
+	{
+		nonvar(S1),
+		S1=(ligacao:L),
+		ignore((nonvar(L),asserta(forca_pontuacao(L))))
+	},
+	s(S1),
+	{ 	ignore((nonvar(L),retract(forca_pontuacao(_)))) },
+	s(ato_fala:composto ..composicao:Outros).
+
+
 s(Tracos)-->
 	{
 		Tracos=(porque:Porque ..porque_processado:nao),
@@ -37,6 +37,23 @@ s(Tracos)-->
 	[porque],
 	{ 	retract(forca_pontuacao(_)) },
 	s(Porque).
+
+
+
+/*** Mensagens simples ****/
+s([]) --> [].
+
+s(ato_fala:responder .. mensagem: positivo)--> [sim].
+s(ato_fala:responder .. mensagem: negativo)--> advb(tipo_adv:afirmacao ..adv:nao).
+s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
+s(ato_fala:responder .. mensagem: ok) --> [ok].
+s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
+s(ato_fala:terminar .. mensagem: tchau) --> [tchau], pontuacao_opcional('.').
+s(ato_fala:responder .. mensagem: oi ..tema:T) --> 
+	[oi],
+	sn(id:T),
+	pontuacao_opcional('.').
+
 
 /* perguntas */
 

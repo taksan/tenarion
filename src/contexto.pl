@@ -22,16 +22,24 @@ atualiza_contexto_dado_np_real([]).
 atualiza_contexto_dado_np_real(TemaOuAgente):-
 	nonvar(TemaOuAgente),
 	TemaOuAgente=incog(onde),
-    contexto_atual(Ctx),
-    contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui),Local),
-    retractall(contexto(Ctx,_,Local)).
+%	estar(player,Local),
+    retractall(contexto(_,_,_)).
 
-/*
+
+atualiza_contexto_dado_np_real(TemaOuAgente):-
+	nonvar(TemaOuAgente),
+	TemaOuAgente=incog(quem),
+%	estar(player,Local),
+    retractall(contexto(computador,(tipo_pro:reto),_)).
+
+
 atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
+	contexto_atual(jogador),
 	nonvar(T1),
 	nonvar(T2),
-	atualiza_contexto_dado_np_real(T2).
-*/
+	ser(comp_nominal(T1,T2),TemaOuAgente),
+	atualiza_contexto_dado_np_real(TemaOuAgente).
+
 
 atualiza_contexto_dado_np_real(TemaOuAgente):-
     \+ is_list(TemaOuAgente),
@@ -56,7 +64,7 @@ atualiza_pessoa(_ , _).
 atualiza_advb_aqui:-
 	contexto_atual(Ctx),
 	estar(player, Aqui),
-	\+contexto(Ctx, (tipo_adv:lugar ..adv:aqui), Aqui),
+	\+contexto(Ctx, (tipo_pro:adv.. tipo_adv:lugar ..adv:aqui), Aqui),
 	asserta(contexto(Ctx, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Aqui)).
 
 %evita que o atualiza_advb_aqui falhe
@@ -99,8 +107,7 @@ denota((tipo_pro:reto ..gen:G .. num:N .. pessoa:terc ..pron:Pron), Quem):-
    
 %% determinacao do lugar baseado no contexto
 denota_lugar(aqui, L):-
-    contexto_atual(Ctx),
-    contexto(Ctx,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), _),
+    contexto(_,(tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), _),
 	estar(player,L).
 
 %%TODO: serah usado no futuro como contexto para o usuario ensinar palavras novas

@@ -134,6 +134,7 @@ processar((ato_fala:interro_tema_desconhecido
 				)
         ),
         (ato_fala:informar 
+			..tema_original:incog(TipoNp)
 			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
@@ -148,7 +149,7 @@ processar((ato_fala:interro_tema_desconhecido
     filtrar(TipoNp, L1,TemaSolucao).
 
 processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
-          (ato_fala:informar .. agente_real:Agent .. acao:RelacaoResolvida ..tema_real:PacientesDeterminados)):-
+          (ato_fala:informar .. tema_original:incog(TipoNp) ..agente_real:Agent .. acao:RelacaoResolvida ..tema_real:PacientesDeterminados)):-
     eh_tema_simples(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
 	determina_agente(Agent,AgenteDeterminado),
@@ -171,7 +172,7 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
 % o que ou quem        
 
 processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:Tema),
-   (ato_fala:informar .. agente_real:AgentesTraduzidos ..acao:RelacaoResolvida .. tema_real:TemaResolvido ..entidade:Tipo)):-
+   (ato_fala:informar ..agente_original:incog(Tipo) ..agente_real:AgentesTraduzidos ..acao:RelacaoResolvida .. tema_real:TemaResolvido ..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(Tema, Relacao, RelacaoAjustada),!,
 	determina_agente(Tema,TemaDeterminado),
     PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],
@@ -183,7 +184,8 @@ processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real
 
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
-    PredAcao =.. [Relacao, Ag, T],
+	determina_agente(T,PacienteDeterminado),
+    PredAcao =.. [Relacao, Ag, PacienteDeterminado],
 	PredToCheck=.. [Relacao, Ag, _],
 	clause(PredToCheck,_), 
 	(
@@ -219,9 +221,17 @@ processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
 
 processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)):-
     falando_com(player, Quem),
-    retract(falando_com(player, Quem)).
+    retract(falando_com(player, Quem)),
+	ignore((Quem\=narrador,assert(falando_com(player,narrador)))).
 
-processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder .. mensagem:oi)).
+%processar(
+%	(ato_fala:responder ..mensagem:oi),
+%	(ato_fala:composto ..composicao:[(ato_fala:responder .. mensagem:oi ..ligacao:','),(ato_fala:informar ..acao:ser ..agente:eu ..tema:Quem)])
+%	):-
+%	introduz_pessoa(Quem).
+
+processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder ..mensagem:oi)).
+
 processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .. mensagem:oi)):-
     falando_com(player, T).
 
@@ -248,7 +258,6 @@ ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
     racional(QuemTemOuEsta).
 ajuste_acao_ter_estar_em_caso_racional(_, A, A).
 
-
 ajuste_acao_de_acordo_com_resposta(Alvo, estar,exige_preposicao(estar,com)):-
 	racional(Alvo).
 
@@ -260,8 +269,41 @@ ajuste_acao_de_acordo_com_resposta(_, R,R).
 filtrar(TipoNp,[], np([],TipoNp)).
 filtrar(_,X,Y):-
     filtrar(X,Y).
-filtrar([X],X):-!.
-filtrar(X,X):-!.
+
+filtrar([],[]).
+
+filtrar([X],Y):-
+	referencia(X,Y).
+
+filtrar(X,Y):-
+	\+is_list(X),
+	referencia(X,Y).
+
+filtrar([X,Z],[Y,W]):-
+	referencia(X,Y),
+	referencia(Z,W).
+
+filtrar([X|Resto],[Y|RestoFilrado]):-
+	referencia(X,Y),
+	filtrar(Resto,RestoFilrado).
+
+referencia([],[]).
+referencia(X,X):-
+	pro(pron:X,_,[]).
+
+referencia(player,player).
+referencia(Q,Q):-
+	jogador(Q).
+
+referencia(X,Y):-
+	racional(X),
+	\+conhece(player,X),
+	(
+		descreve(X,Y);
+		(np(id:X ..gen:masc,[_],[]),Y=homem);
+		Y=mulher
+	).
+referencia(X,X).
 
 determina_agente(comp_nominal(A,B),A):-
 	estar(A,B).
@@ -271,6 +313,12 @@ determina_agente(comp_nominal(A,B),B):-
 
 determina_agente(comp_nominal(A,B),Quem):-
 	ser(comp_nominal(A,B),Quem).
+
+determina_agente(A,B):-
+	\+compound(A),
+	estar(player,Aqui),
+	estar(B,Aqui),
+	ser(comp_nominal(A,_),B).
 	
 determina_agente(A,A).
 
