@@ -108,6 +108,12 @@ processar(
         )):-
     adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
+processar((agente_real:IdPessoa ..agente:IdPessoa ..gen:G ..num:N), Resposta):-
+	resposta_para_pessoa_desconhecida(IdPessoa,G,N,Resposta).
+
+processar((tema_real:IdPessoa ..tema:IdPessoa ..gen:G ..num:N), Resposta):-
+	resposta_para_pessoa_desconhecida(IdPessoa,G,N,Resposta).
+	
 processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
           (ato_fala:responder .. mensagem:Resposta)):-
         eh_tema_simples(T),
@@ -118,7 +124,10 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
 		).
 
 % processamento de verbos sobre verbos
-processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: AcaoAuxiliar ..tema_real:T ..desconhecido:nao)),
+processar((ato_fala:int_sim_nao 
+			..agente_real:A 
+			..acao:Relacao 
+			..tema:(acao: AcaoAuxiliar ..tema_real:T ..desconhecido:nao)),
           (ato_fala:responder .. mensagem:Resposta)):-
     PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
 	PredAcao =..[Relacao, PredAcaoAuxiliar],
@@ -158,7 +167,7 @@ processar((ato_fala:interro_tema_incognito
 processar((ato_fala:interro_tema_incognito 
 			..desconhecido:nao 
 			..agente_real:Agent 
-			.. acao:Relacao 
+			..acao:Relacao 
 			..tema_real:incog(TipoNp)),
           (ato_fala:informar 
 		  	..tema_original:incog(TipoNp) 
@@ -351,3 +360,16 @@ determina_agente(A,A).
 eh_tema_simples(Ag):-
 	\+ Ag=incog(_),
 	\+ has_features(Ag).
+
+resposta_para_pessoa_desconhecida(IdPessoa,G,N,
+	(ato_fala:interro_agente_incognito
+		..agente:incog(quem)
+		..tema:IdPessoa
+		..verbo:ser
+		..pessoa:terc
+		..gen:G
+		..num:N
+	)):-
+	racional(IdPessoa),
+	IdPessoa\=player,
+	\+conhecer(player,IdPessoa).

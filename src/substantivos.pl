@@ -4,6 +4,7 @@
 np(id:zulu ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [zulu].
 np(id:mateo ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [mateo].
 np(id:narrador ..gen:masc ..num:sing ..desconhecido:nao ..tipo:np) --> [narrador].
+np(id:peixe_voador .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [peixe],[voador].
 
 np(id:sua_mao ..gen:fem ..num:sing ..desconhecido:nao) --> [sua],[mao].
 
@@ -36,7 +37,6 @@ np(id:mao .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [mao].
 np(id:martelo .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [martelo].
 np(id:minhocas .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [minhocas].
 np(id:peixe .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [peixe].
-np(id:peixe_voador .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [peixe],[voador].
 np(id:peixes .. tipo:nc ..num:plur ..gen:masc ..desconhecido:nao) --> [peixes].
 np(id:placa_nome_loja .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [placa].
 np(id:poster .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [poster].
@@ -56,7 +56,7 @@ np(id:chapeu ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [chapeu].
 np(id:dono ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [dono].
 np(id:homem ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [homem].
 np(id:mulher ..tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [mulher].
-np(id:pescador ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [pescador].
+np(id:pescador ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [pescador].
 np(id:vendedor ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [vendedor].
 
 np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].

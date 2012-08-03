@@ -59,10 +59,10 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 
 % ex.: o que EU tenho (EU é agente)
 % ex: quem esta aqui? ("quem" é o agente do verbo estar)
-s(ato_fala:interro_agente_incognito ..agente:incog(Id) .. acao:X .. tema:Paciente ..desconhecido:nao) -->
-	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
-	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..pessoa:P ..desconhecido:nao),
-    pontuacao_opcional(_).
+s(ato_fala:interro_agente_incognito ..agente:incog(Id) ..acao:X.. pessoa:P.. gen:G ..num:N ..tema:Paciente ..desconhecido:nao) -->
+	sn(tipo: relativo .. coord:nao ..id:Id), 
+	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..pessoa:P ..num:N ..gen:G ..desconhecido:nao),
+    pontuacao_opcional('?').
 
 s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 

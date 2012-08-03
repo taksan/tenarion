@@ -316,6 +316,7 @@ conhecer(zulu, mateo).
 conhecer(mateo, zulu).
 conhecer(peixe_voador, zulu).
 conhecer(peixe_voador, mateo).
+conhecer(player,narrador).
 
 /* defeito */
 defeito(barco, buraco).
