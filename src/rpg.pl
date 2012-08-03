@@ -113,19 +113,22 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: Aca
 
 % perguntas na qual o tema é uma palavra desconhecida
 processar(
-    (ato_fala:interro_tema_desconhecido ..desconhecido:sim ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+    (ato_fala:interro_tema_incognito 
+	 ..desconhecido:sim 
+	 ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
     (ato_fala:recusar 
         ..desconhecido:sim 
         ..acao:saber
         ..num:sing
-        ..tema:(acao:ser ..pessoa:terc ..num:Num ..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
+        ..tema:(acao:ser ..pessoa:terc ..num:Num 
+			..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
         ..agente:eu
         ..pessoa:prim
         )):-
     adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
 
 % encontra possibilidades de poder fazer alguma coisa
-processar((ato_fala:interro_tema_desconhecido
+processar((ato_fala:interro_tema_incognito
            ..acao:Relacao
            ..agente_real:Agent
            ..tema: (
@@ -148,7 +151,7 @@ processar((ato_fala:interro_tema_desconhecido
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
     filtrar(TipoNp, L1,TemaSolucao).
 
-processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
+processar((ato_fala:interro_tema_incognito ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
           (ato_fala:informar .. tema_original:incog(TipoNp) ..agente_real:Agent .. acao:RelacaoResolvida ..tema_real:PacientesDeterminados)):-
     eh_tema_simples(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
@@ -170,9 +173,16 @@ processar((ato_fala:interro_tema_desconhecido ..desconhecido:nao ..agente_real:A
 	).
 
 % o que ou quem        
-
-processar((ato_fala:interro_agente_desconhecido ..desconhecido:nao ..agente_real:incog(Tipo) ..acao:Relacao ..tema_real:Tema),
-   (ato_fala:informar ..agente_original:incog(Tipo) ..agente_real:AgentesTraduzidos ..acao:RelacaoResolvida .. tema_real:TemaResolvido ..entidade:Tipo)):-
+processar((ato_fala:interro_agente_incognito 
+			..desconhecido:nao 
+			..agente_real:incog(Tipo) 
+			..acao:Relacao ..tema_real:Tema),
+   			(ato_fala:informar 
+				..agente_original:incog(Tipo) 
+				..agente_real:AgentesTraduzidos 
+				..acao:RelacaoResolvida 
+				..tema_real:TemaResolvido 
+				..entidade:Tipo)):-
     ajuste_acao_ter_estar_em_caso_racional(Tema, Relacao, RelacaoAjustada),!,
 	determina_agente(Tema,TemaDeterminado),
     PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],

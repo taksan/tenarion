@@ -59,24 +59,24 @@ s(ato_fala:responder .. mensagem: oi ..tema:T) -->
 
 % ex.: o que EU tenho (EU é agente)
 % ex: quem esta aqui? ("quem" é o agente do verbo estar)
-s(ato_fala:interro_agente_desconhecido ..agente:incog(Id) .. acao:X .. tema:Paciente ..desconhecido:nao) -->
+s(ato_fala:interro_agente_incognito ..agente:incog(Id) .. acao:X .. tema:Paciente ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
-s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
+s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
 
-s(ato_fala:interro_tema_desconhecido .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Paciente) ..desconhecido:IsDesconhecido ) -->
+s(ato_fala:interro_tema_incognito .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Paciente) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
 	sn(id:Ag),%casa com o sujeito
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 
-s(ato_fala:interro_tema_desconhecido ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:IsDesconhecido) -->
+s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:IsDesconhecido) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).

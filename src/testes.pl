@@ -37,8 +37,10 @@ teste14:-
     dado_pergunta_espero_resposta('o barco estah aqui?', 'sim').
 teste15:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o barco.').
-teste16:-
-    dado_pergunta_espero_resposta('onde estah o zulu?', 'ele estah no ancoradouro.').
+teste16a:-
+    dado_pergunta_espero_resposta('onde estah o zulu?', 'quem eh zulu?.').
+teste16b:-
+    dado_pergunta_espero_resposta('onde estah o pescador?', 'ele estah no ancoradouro.').
 teste17:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o pescador.').
 teste18:-
