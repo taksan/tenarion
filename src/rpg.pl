@@ -92,6 +92,22 @@ continuar(_):-
 
 processar([],[]).
 
+% se em qualquer sentenca o usuario fornceu um "agente" que eh um substantivo desconhecido,
+% este caso sera processado nessa regra
+processar(
+    (desconhecido:sim 
+	 ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+    (ato_fala:recusar 
+        ..desconhecido:sim 
+        ..acao:saber
+        ..num:sing
+        ..tema:(acao:ser ..pessoa:terc ..num:Num 
+			..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
+        ..agente:eu
+        ..pessoa:prim
+        )):-
+    adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
+
 processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
           (ato_fala:responder .. mensagem:Resposta)):-
         eh_tema_simples(T),
@@ -111,23 +127,7 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema:(acao: Aca
 			Resposta=negativo
 	).
 
-% perguntas na qual o tema é uma palavra desconhecida
-processar(
-    (ato_fala:interro_tema_incognito 
-	 ..desconhecido:sim 
-	 ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
-    (ato_fala:recusar 
-        ..desconhecido:sim 
-        ..acao:saber
-        ..num:sing
-        ..tema:(acao:ser ..pessoa:terc ..num:Num 
-			..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
-        ..agente:eu
-        ..pessoa:prim
-        )):-
-    adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
-
-% encontra possibilidades de poder fazer alguma coisa
+% processa perguntas do tipo "o que eu posso ... ou onde eu posso ir"
 processar((ato_fala:interro_tema_incognito
            ..acao:Relacao
            ..agente_real:Agent
@@ -141,18 +141,30 @@ processar((ato_fala:interro_tema_incognito
 			..agente_real:Agent 
 			..acao:Relacao 
 			..pessoa:terc
-            ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:AcaoAlvo ..tema_real:TemaSolucao ..pessoa:indic))
+            ..tema:(tema_eh_agente_ou_complemento:complemento 
+					..acao:AcaoAlvo 
+					..tema_real:TemaSolucao 
+					..pessoa:indic))
         ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),
-	PredAcaoAuxiliar =..[AcaoAlvo, Agent, T],
+	determina_agente(Agent,AgenteResolvido),
+	PredAcaoAuxiliar =..[AcaoAlvo, AgenteResolvido, T],
     PredAcao =.. [Relacao, PredAcaoAuxiliar],
     findall(T, (PredAcao), L),
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
     filtrar(TipoNp, L1,TemaSolucao).
 
-processar((ato_fala:interro_tema_incognito ..desconhecido:nao ..agente_real:Agent .. acao:Relacao .. tema_real:incog(TipoNp)),
-          (ato_fala:informar .. tema_original:incog(TipoNp) ..agente_real:Agent .. acao:RelacaoResolvida ..tema_real:PacientesDeterminados)):-
+processar((ato_fala:interro_tema_incognito 
+			..desconhecido:nao 
+			..agente_real:Agent 
+			.. acao:Relacao 
+			..tema_real:incog(TipoNp)),
+          (ato_fala:informar 
+		  	..tema_original:incog(TipoNp) 
+			..agente_real:Agent 
+			.. acao:RelacaoResolvida 
+			..tema_real:PacientesDeterminados)):-
     eh_tema_simples(Agent),
     % TODO: o tipo do tema pode ser usado para restringir as respostas
 	determina_agente(Agent,AgenteDeterminado),
@@ -220,14 +232,12 @@ processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
 		   ..acao:poder 
 		   ..positivo:nao 
 		   ..pessoa:terc
-		   ..tema:(tema_eh_agente_ou_complemento:complemento ..acao:Relacao ..pessoa:indic ..num:sing ..tema_real:T)
+		   ..tema:(tema_eh_agente_ou_complemento:complemento 
+		   			..acao:Relacao 
+					..pessoa:indic 
+					..num:sing 
+					..tema_real:T)
 		  ).
-
-%%% acao cujo resultado eh descritivo
-processar((ato_fala:informar ..agente_real:A .. acao:Relacao .. tema_real:T),
-          (ato_fala:descrever ..mensagem:R)):-
-        PredAcao =.. [Relacao, A, T, R],
-        PredAcao.
 
 processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)):-
     falando_com(player, Quem),
@@ -323,6 +333,12 @@ determina_agente(comp_nominal(A,B),B):-
 
 determina_agente(comp_nominal(A,B),Quem):-
 	ser(comp_nominal(A,B),Quem).
+
+determina_agente(A,B):-
+	\+compound(A),
+	estar(player,Aqui),
+	estar(B,Aqui),
+	ser(A,B).
 
 determina_agente(A,B):-
 	\+compound(A),

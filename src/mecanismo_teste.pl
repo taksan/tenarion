@@ -19,7 +19,7 @@ roda_testes([Teste|Outros],TotalPassados,Total):-
 	Total is SubTotal+1.
 
 executa(T,Passou):-
-%	ignore((T=teste66,gspy(processar))),
+%	ignore((T=teste16b,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
