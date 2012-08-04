@@ -138,11 +138,12 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..d
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
 % nao aceita produzir texto
 sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesconhecido) -->
-    { id_para_np(Substantivo, I), var(I), var(T), var(IsDesconhecido) },
-	det(gen:G .. num:N ..tipo:T ),
+    { var(Substantivo), var(I), var(T), var(IsDesconhecido) },
+	det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant.. poss:Poss)),
 	mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido),
-	mod(gen:G .. num:N).
+	mod(gen:G .. num:N),
+	{ id_para_np(Substantivo,sn(id:I..numero:Numero.. quant:Quant.. poss:Poss))}.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
@@ -173,16 +174,15 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhec
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao),
 	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
 
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+	{ id_para_np(Substantivo, SnComposto) },
+	{ SnComposto = comp_nominal(I,CompNominal) },
+    { (var(I); \+ is_list(I)), \+compound(I) },
+	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
+   	ident(gen:G .. num:N ..tipo:TipoIdent),
+	poss(poss:I..pessoa:terc..gen:G),
+	sn(id:CompNominal .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
-% usado tao somente para imprimir "eu" sempre que o narrador for o agente da resposta
-% so deve ser usado para produzir texto
-%sn(coord:nao ..id:Ag ..pessoa:prim ..desconhecido:nao ..produzindo:ProduzindoTexto) -->
-%	{ nonvar(Ag), nonvar(ProduzindoTexto) },
-%	[eu].
-
-%sn(coord:nao ..id:Ag ..pessoa:P ..num:N ..gen:N) -->
-%	sadvb(id:Ag),
-%	{ ignore(np((id:Ag ..num:N ..pessoa:P ..gen:N),_,[]) }.
 
 % essa regra eh para produzir texto sobre substantivos desconhecidos
 sn(coord:nao .. id:Id ..desconhecido:sim) -->
@@ -327,11 +327,10 @@ adv_afirmacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-det(gen:G .. num:N ..tipo:T) --> 
-       quant(gen:G .. num:N),
+det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant.. poss:Poss)) --> 
+       quant(id:Quant.. gen:G .. num:N),
        ident(gen:G .. num:N ..tipo:T),
-       poss(gen:G .. num:N),
-       num(gen:G .. num:N).
+       num(id:Numero ..gen:G .. num:N).
 
 sa(adj:A ..gen:G .. num:N) --> 
        a(adj:A ..gen:G .. num:N).

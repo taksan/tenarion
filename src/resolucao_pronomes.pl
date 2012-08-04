@@ -39,6 +39,10 @@ institui_pronomes_no_complemento_somente_se_nao_usou_pronome_no_agente(TemaReal,
 institui_pronome_agente(Agente,_,AgenteReferenciado):-
 	institui_pronome(Agente,AgenteReferenciado).
 
+
+institui_pronome(comp_nominal(seu,ComplementoNom), comp_nominal(meu,ComplementoNom)):-
+	nonvar(ComplementoNom).
+
 institui_pronome(comp_nominal(Tema,ComplementoNom), comp_nominal(TemaReferenciado,ComplReferenciado)):-
 	nonvar(Tema),nonvar(ComplementoNom),
 	institui_pronome(Tema,TemaReferenciado),
@@ -52,6 +56,7 @@ institui_pronome(TemaBiTransitivo, (tema1:Tema1Referenciado ..tema2:Tema2Referen
 	nonvar(TemaBiTransitivo),
 	has_features(TemaBiTransitivo),
 	TemaBiTransitivo=(tema1:Tema1 ..tema2:Tema2),
+	nonvar(Tema1),nonvar(Tema2),
 	institui_pronome(Tema1,Tema1Referenciado),
 	institui_pronome(Tema2,Tema2Referenciado).
 

@@ -23,8 +23,9 @@ gera_tracos_explicao(Pred,(predicado:Acao ..positivo:nao ..agente_real:Agente ..
 	Pred =..[Acao,Agente].
 
 normaliza_tracos_explicacao(Normalizado):-
-	Normalizado=(predicado:Acao ..acao:Acao ..tema_possivel:Tema ..tema_real:Tema),
-	eh_verbo(Acao).
+	Normalizado=(predicado:Acao ..agente_real:Agente ..acao:Acao ..tema_possivel:TemaPossivel ..tema_real:Tema),
+	eh_verbo(Acao),
+	converte_tema(Agente,TemaPossivel,Tema).
 
 normaliza_tracos_explicacao(Normalizado):-
 	Normalizado=(predicado:Predicado ..acao:locucao(Acao,Predicado) ..tema_possivel:Tema ..tema_real:Tema),
@@ -50,3 +51,19 @@ verbo_da_locucao(Locucao,Verbo):-
 
 tipo_adjetivo(Adjetivo,Verbo):-
 	a(adj:Adjetivo ..tipo:Verbo,[_],[]).
+
+converte_tema(
+	Agente,
+	Relacao, 
+	(tema_eh_agente_ou_complemento:complemento
+		..acao:Pred
+		..agente_real:Agente
+		..tema_real:Tema
+		..pessoa:indic
+		..num:sing
+	)):-
+	nonvar(Relacao),
+	Relacao=..[Pred,Tema],
+	eh_verbo(Pred).
+
+converte_tema(_,T,T).

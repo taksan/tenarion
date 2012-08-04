@@ -181,6 +181,12 @@ v(acao:poder ..num:sing ..pessoa: prim ..subcat:[sv]) --> [posso].
 v(acao:poder ..num:sing ..pessoa: terc ..subcat:[sv]) --> [pode].
 v(acao:poder ..num:sing ..pessoa: indic ..subcat:[sv]) --> [poder].
 
+% VERBO: QUERER
+v(acao:querer ..num:sing ..pessoa: prim ..subcat:[sv]) --> [quero].
+v(acao:querer ..num:sing ..pessoa: terc ..subcat:[sv]) --> [quer].
+v(acao:querer ..num:sing ..pessoa: indic ..subcat:[sv]) --> [querer].
+
+
 % VERBO: VER
 v(acao:ver ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vejo].
 v(acao:ver ..num:sing ..pessoa: terc ..subcat:[sn]) --> [ve].

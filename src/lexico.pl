@@ -19,6 +19,7 @@ a(adj:acesa    ..tipo:estar ..gen:fem ..num:sing) --> [acesa].
 a(adj:acesa    ..tipo:estar ..gen:fem ..num:plur) --> [acesas].
 a(adj:racional ..tipo:ser ..num:sing)-->[racional].
 a(adj:racional ..tipo:ser ..num:plur)-->[racionais].
+a(adj:caro     ..tipo:ser ..num:sing)-->[caro].
 
 a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
 a(adj:amarravel ..tipo:ser ..num:sing)-->[amarravel].
@@ -36,32 +37,32 @@ a(adj:quebrado   ..gen:fem ..tipo:estar ..num:sing)-->[quebrada].
 
 
 %%%% QUANT
-quant((gen:masc.. num:sing)) --> [todo].
-quant((gen:fem.. num:sing)) --> [toda].
-quant((gen:masc.. num:plur)) --> [todos].
-quant((gen:fem.. num:plur)) --> [todas].
-quant((gen:masc.. num:sing)) --> [algum].
-quant((gen:fem.. num:sing)) --> [alguma].
-quant((gen:masc.. num:plur)) --> [alguns].
-quant((gen:fem.. num:plur)) --> [algumas].
-quant((gen:masc.. num:sing)) --> [nenhum].
-quant((gen:fem.. num:sing)) --> [nenhuma].
+quant(id:todo.. gen:masc.. num:sing)   --> [todo].
+quant(id:todo.. ggen:fem.. num:sing)   --> [toda].
+quant(id:todo.. ggen:masc.. num:plur)  --> [todos].
+quant(id:todo.. ggen:fem.. num:plur)   --> [todas].
+quant(id:algum.. ggen:masc.. num:sing) --> [algum].
+quant(id:algum.. gen:fem.. num:sing)   --> [alguma].
+quant(id:algum.. gen:masc.. num:plur)  --> [alguns].
+quant(id:algum.. gen:fem.. num:plur)   --> [algumas].
+quant(id:nenhum..gen:masc.. num:sing) --> [nenhum].
+quant(id:nenhum..gen:fem.. num:sing) --> [nenhuma].
 quant(_) --> [].
 
 %%%% NUMERO
-num(gen:fem.. num:sing) --> [uma].
-num(gen:fem.. num:plur) --> [duas].
-num(num:plur) -->   [tres].
-num(num:plur) -->   [quatro].
-num(num:plur) -->   [cinco].
-num(num:plur) -->   [seis].
-num(num:plur) -->   [sete].
-num(num:plur) -->   [oito].
-num(num:plur) -->   [nove].
-num(num:plur) -->   [dez].
-num(num:plur) -->   [onze].
-num(num:plur) -->   [doze].
-num(num:plur) -->   [treze].
+num(id:1 ..gen:fem.. num:sing) --> [uma].
+num(id:2 ..gen:fem.. num:plur) --> [duas].
+num(id:3 ..num:plur) -->   [tres].
+num(id:4 ..num:plur) -->   [quatro].
+num(id:5 ..num:plur) -->   [cinco].
+num(id:6 ..num:plur) -->   [seis].
+num(id:7 ..num:plur) -->   [sete].
+num(id:8 ..num:plur) -->   [oito].
+num(id:9 ..num:plur) -->   [nove].
+num(id:10 ..num:plur) -->   [dez].
+num(id:11 ..num:plur) -->   [onze].
+num(id:12 ..num:plur) -->   [doze].
+num(id:13 ..num:plur) -->   [treze].
 num(_) -->   [].
 
 %%%% ADV* (que raio � isso??)
@@ -92,17 +93,17 @@ ident(gen:fem.. num:plur ..tipo:nc) --> [as].
 ident(tipo:np) --> [].
 
 %%%% POSSESSIVOS
-poss((poss:meu.. gen:masc.. num:sing)) -->  [meu].
-poss((poss:meu.. gen:fem.. num:sing)) -->  [minha].
-poss((poss:meu.. gen:masc.. num:plur)) -->  [meus].
-poss((poss:meu.. gen:fem.. num:plur)) -->  [minhas].
-poss((poss:seu.. gen:masc.. num:sing)) -->  [seu].
-poss((poss:seu.. gen:fem.. num:sing)) -->  [sua].
-poss((poss:seu.. gen:masc.. num:plur)) -->  [seus].
-poss((poss:seu.. gen:fem.. num:plur)) -->  [suas].
-poss((poss:nosso.. gen:masc.. num:sing)) -->  [nosso].
-poss((poss:nosso.. gen:fem.. num:sing)) -->  [nossa].
-poss(_) -->  [].
+poss(poss:meu.. gen:masc.. num:sing) -->  [meu].
+poss(poss:meu.. gen:fem.. num:sing) -->  [minha].
+poss(poss:meu.. gen:masc.. num:plur) -->  [meus].
+poss(poss:meu.. gen:fem.. num:plur) -->  [minhas].
+poss(poss:seu.. gen:masc.. num:sing) -->  [seu].
+poss(poss:seu.. gen:fem.. num:sing) -->  [sua].
+poss(poss:seu.. gen:masc.. num:plur) -->  [seus].
+poss(poss:seu.. gen:fem.. num:plur) -->  [suas].
+poss(poss:nosso.. gen:masc.. num:sing) -->  [nosso].
+poss(poss:nosso.. gen:fem.. num:sing) -->  [nossa].
+
 
 %%%% PREPOSICOES
 prep(prep:com) --> [com].
@@ -157,4 +158,5 @@ advb(tipo_adv:afirmacao ..adv:ja) -->[ja].
 
 %%% LOCUCAO PREPOSITIVA
 loc(tipo:prep.. id:perto ..prep:de ..verbo:estar)-->[perto].
+loc(tipo:prep.. id:preco ..prep:de ..verbo:ser)-->[preco].
 

@@ -38,31 +38,37 @@ teste14:-
 teste15:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o barco.').
 teste16a:-
-    dado_pergunta_espero_resposta('onde estah o zulu?', 'quem eh zulu?.').
+    dado_pergunta_espero_resposta('onde estah o zulu?', 'quem eh o zulu?').
 teste16b:-
     dado_pergunta_espero_resposta('onde estah o pescador?', 'ele estah no ancoradouro.').
+teste16c:-
+	dado_pergunta_espero_resposta('o que o pescador tem?', 'ele tem um sambura.').
 teste17:-
-    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh o pescador.').
+    dado_pergunta_espero_resposta('o que eh ele?', 'ele eh um pescador.').
 teste18:-
-    dado_pergunta_espero_resposta('quem eh ele?', 'ele eh o zulu.').
+    dado_pergunta_espero_resposta('quem eh ele?', 'eu nao sei.').
 teste19:-
-	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah nele.').
+	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah no caixa eletronico.').
 teste20_a:-
-	dado_pergunta_espero_resposta('o que o peixe voador tem?', 'ele nao tem nada.').
+	dado_pergunta_espero_resposta('o que o peixe voador tem?', 'quem eh o peixe voador?').
 teste20_b:-
-	dado_pergunta_espero_resposta('o que o zulu tem?', 'ele tem um sambura.').
+	dado_pergunta_espero_resposta('o que o pescador tem?', 'ele tem um sambura.').
 teste20_c:-
 	dado_pergunta_espero_resposta('o que voce tem?', 'eu nao tenho nada.').
 teste20_d:-
 	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o narrador.').
 teste21:-
-	dado_pergunta_espero_resposta('eu falo com o zulu.', 'ok').
+	dado_pergunta_espero_resposta('eu falo com o pescador.', 'ok').
 teste22:-
-	dado_pergunta_espero_resposta('oi zulu.', 'oi.').
+	dado_pergunta_espero_resposta('oi.', 'oi.').
 teste23:-
 	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu.').
+teste23a:-
+	dado_pergunta_espero_resposta('qual eh o seu nome?', 'eu sou o zulu.').
 teste24:-
 	dado_pergunta_espero_resposta('quem sou eu?', 'voce eh o foo.').
+teste24a:-
+	dado_pergunta_espero_resposta('eu compro o sambura.', 'voce nao pode compra-lo, porque eu nao quero vende-lo.').
 teste25:-
 	dado_pergunta_espero_resposta('onde estah a faca?', 'eu nao sei o que eh uma faca.').
 teste26:-

@@ -54,7 +54,8 @@ readLine(WordList):-
 
 readWords([Word|Rest]):-
    get0(Char),
-   readWord(Char,Chars,State),
+   decap(Char,DecapChar),
+   readWord(DecapChar,Chars,State),
    atom_chars(Word,Chars),
    readRest(Rest,State).
 
@@ -83,7 +84,8 @@ readWord(63,[],interro):-!.
 readWord(10,[],return):-!.
 readWord(Code,[Code|Rest],State):-
    get0(Char),
-   readWord(Char,Rest,State).
+   decap(Char,DecapChar),
+   readWord(DecapChar,Rest,State).
 
 checkWords([],[]):- !.
 
@@ -128,7 +130,7 @@ convertWord([Char|Rest1],[Char|Rest2]):-
 
 writeLine([]).
 writeLine([First|Rest]):-
-    (falando_com(player, Nome); Nome = narrador),            
+    nome_de_quem_estah_falando(Nome),
     write(Nome),
     write(' > '),
 	capitalize(First,FirstCap),
@@ -163,6 +165,12 @@ capitalize(W,W2):-
 	atom_chars(W,W1),
 	cap(W1,W1cap),
 	atom_chars(W2,W1cap).
+
+decap(Cap,Decap):-
+	Cap>64, Cap<92,!,
+	Decap is Cap+32.
+
+decap(Decap,Decap).
 
 cap([],[]).
 cap([F|Rest],[F2|Rest]):-

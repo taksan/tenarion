@@ -7,7 +7,7 @@
    dynamic(jogador/1),dynamic(estado),
    dynamic(consertado/1),dynamic(pregado/2),
    dynamic(amarrado/2),dynamic(digitado/2),
-   dynamic(conhece/2),
+   dynamic(conhece/2),dynamic(dono/2),
    discontiguous(poder_especifico/1).
 
 /**** Predicados auxiliares para informacao ****/
@@ -68,15 +68,6 @@ estar(ancoradouro, jogo).
 estar(carpintaria, jogo).
 estar(lago, jogo).
 estar(ilha, jogo).
-
-/* LOCAL ONDE VOCE SE ENCONTRA */
-estar(player, ancoradouro).
-
-/* LOCAL: Inventario */
-
-estar(identidade, player).
-estar(cartao_credito, player).
-estar(sua_mao, player).
 
 /* LOCAL: ANCORADOURO */
 
@@ -149,6 +140,16 @@ estar(QueCoisas, Lug):-
         nonvar(QueCoisas),
         is_list(QueCoisas),
         estar_conj(QueCoisas, Lug).
+
+/* LOCAL ONDE O JOGADOR SE ENCONTRA */
+estar(player, ancoradouro).
+
+/* Inventario */
+estar(identidade, player).
+estar(cartao_credito, player).
+estar(sua_mao, player).
+
+dinheiro(player,0).
 
 %estar(OQue, Onde):-
 %        nonvar(OQue),nonvar(Onde),
@@ -241,6 +242,10 @@ ser(comp_nominal(NomePred,Alvo),Res):-
 	clause(Pred,_),
 	Pred.
 
+%ser(Quem,comp_nominal(seu,nome)):-
+%	falando_com(player,Quem),
+%	ser(Quem,Quem).
+
 ser(Alvo,Res):-
 	nonvar(Res),
 	descreve(Res,Alvo).
@@ -266,6 +271,8 @@ ser(L,L):-
 
 /* entidade(player, _):- !, fail. */
 
+entidade(_,qual).
+
 entidade(A, quem):-
 	A\=player,
     racional(A).
@@ -287,6 +294,11 @@ racional(Quem):-
 descreve(zulu,pescador).
 descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
+preco(martelo,10).
+preco(serrote,15).
+preco(tesoura,2).
+preco(vaso_ming,40).
+
 /* pertinencia */
 % zulu
 dono(zulu, barco).
@@ -306,10 +318,15 @@ dono(mateo, estande).
 dono(mateo, carpintaria).
 dono(mateo, santo_do_pau_oco).
 dono(mateo, carteira).
+
 % player
 dono(player, X):-
     nonvar(X),
     estar(X, player).
+caro(Objeto):-
+	preco(Objeto,Preco),
+	dinheiro(player,Saldo),
+	Preco > Saldo.
 
 /* quem conhece quem*/
 conhecer(zulu, mateo).
@@ -597,14 +614,21 @@ finaliza_conversa(Pessoa):-
     asserta(falando_com(player,narrador)).
 
 /* acoes provenientes do lexico */
+querer(zulu,vender(sambura)):-fail.
 
 /* --- acoes de conversa com personagens --- */
+poder_especifico(comprar(sambura)):-
+	!,
+	querer(zulu,vender(sambura)).
+
+poder_especifico(comprar(_)).
 
 /* comprar objeto da pessoa */
 comprar(player, Objeto):-
-    dono(Objeto, Pessoa),
     falando_com(player, Pessoa), 
-    aceitar_vender(Pessoa, Objeto),
+    dono(Pessoa,Objeto),
+	nao(caro(Objeto)),
+    poder_especifico(comprar(Objeto)),
     retract(dono(_,Objeto)),
     asserta(estar(Objeto,player)).
 
@@ -628,3 +652,12 @@ introduz_pessoa(Quem):-
 	falando_com(player,Quem),
 	\+conhece(player,Quem),
 	assertz(conhece(player,Quem)).
+
+nome_de_quem_estah_falando(Nome):-
+	falando_com(player,Quem),
+	\+conhece(player,Quem),
+	descreve(Quem, Nome).
+
+nome_de_quem_estah_falando(Nome):-
+	falando_com(player,Nome).
+

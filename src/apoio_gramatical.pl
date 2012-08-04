@@ -10,6 +10,14 @@ id_para_acao(exige_preposicao(Acao,Prep),Acao):-
 
 id_para_acao(Acao,Acao).
 
+id_para_np(sn((id:I..quant:Quant ..poss:Poss..numero:Num)), 
+		  	sn(id:I..quant:Quant ..poss:Poss..numero:Num)
+		  ):-
+	(nonvar(Quant); nonvar(Poss); nonvar(Num)).
+
+id_para_np(I, sn(id:I..quant:Quant ..poss:Poss..numero:Num)):-
+	nonvar(I),var(Quant),var(Poss),var(Num).
+
 id_para_np(Substantivo,Substantivo).
 
 is_positivo(T, _):-
