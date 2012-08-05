@@ -7,7 +7,7 @@
    dynamic(jogador/1),dynamic(estado),
    dynamic(consertado/1),dynamic(pregado/2),
    dynamic(amarrado/2),dynamic(digitado/2),
-   dynamic(conhece/2),dynamic(dono/2),
+   dynamic(conhecer/2),dynamic(dono/2),
    discontiguous(poder_especifico/1).
 
 /**** Predicados auxiliares para informacao ****/
@@ -242,10 +242,6 @@ ser(comp_nominal(NomePred,Alvo),Res):-
 	clause(Pred,_),
 	Pred.
 
-%ser(Quem,comp_nominal(seu,nome)):-
-%	falando_com(player,Quem),
-%	ser(Quem,Quem).
-
 ser(Alvo,Res):-
 	nonvar(Res),
 	descreve(Res,Alvo).
@@ -262,10 +258,14 @@ ser(Nome, player):-
 
 
 ser(L,L):-
-    nonvar(L),
+    nonvar(L), \+ compound(L),
     nao(L=player),
-	\+ compound(L),
-	ignore((racional(L),\+conhece(player,L),assertz(conhece(player,L)))).
+	ignore(introduz_pessoa(L)).
+
+ser(Quem,comp_nominal(seu,nome)):-
+	var(Quem),
+	falando_com(player,Quem),
+	ser(Quem,Quem).
 
 /* diferenca entre pessoas e objetos */
 
@@ -279,6 +279,10 @@ entidade(A, quem):-
 
 entidade(A, oque):-
     \+ racional(A).
+
+entidade(A,onde):-
+	local(A);
+    racional(A).
 
 /* racionalidade */
 
@@ -650,12 +654,12 @@ poder_especifico(_).
 
 introduz_pessoa(Quem):-
 	falando_com(player,Quem),
-	\+conhece(player,Quem),
-	assertz(conhece(player,Quem)).
+	\+conhecer(player,Quem),
+	assertz(conhecer(player,Quem)).
 
 nome_de_quem_estah_falando(Nome):-
 	falando_com(player,Quem),
-	\+conhece(player,Quem),
+	\+conhecer(player,Quem),
 	descreve(Quem, Nome).
 
 nome_de_quem_estah_falando(Nome):-

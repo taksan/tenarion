@@ -327,7 +327,7 @@ adv_afirmacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant.. poss:Poss)) --> 
+det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant)) --> 
        quant(id:Quant.. gen:G .. num:N),
        ident(gen:G .. num:N ..tipo:T),
        num(id:Numero ..gen:G .. num:N).

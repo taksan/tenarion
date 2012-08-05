@@ -64,7 +64,7 @@ teste22:-
 teste23:-
 	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu.').
 teste23a:-
-	dado_pergunta_espero_resposta('qual eh o seu nome?', 'eu sou o zulu.').
+	dado_pergunta_espero_resposta('qual eh o seu nome?', 'o meu nome eh zulu.').
 teste24:-
 	dado_pergunta_espero_resposta('quem sou eu?', 'voce eh o foo.').
 teste24a:-
@@ -131,6 +131,8 @@ teste54:-
 	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'eu sou o dono do barco.').
 teste55:-
 	dado_pergunta_espero_resposta('tchau.', 'tchau.').
+teste55a:-
+	dado_pergunta_espero_resposta('o que estah com o zulu?','o sambura estah com ele.').
 teste56:-
 	dado_pergunta_espero_resposta('quem eh o dono do barco?', 'o zulu eh o dono do barco.').
 teste57:-

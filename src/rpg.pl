@@ -123,7 +123,7 @@ processar((ato_fala:int_sim_nao ..agente_real:A ..acao:Relacao ..tema_real:T),
 			Resposta=negativo
 		).
 
-% processamento de verbos sobre verbos
+% processar perguntas do tipo "eu posso pegar X?"
 processar((ato_fala:int_sim_nao 
 			..agente_real:A 
 			..acao:Relacao 
@@ -141,7 +141,7 @@ processar((ato_fala:interro_tema_incognito
            ..acao:Relacao
            ..agente_real:Agent
            ..tema: (
-                tema_real:incog(TipoNp)..%oque,quem,onde
+                tema_real:incog(TipoNp)..
                 subtema: (num:_ ..pessoa:_ ..subcat:_ ..acao:AcaoAlvo)
 				)
         ),
@@ -157,65 +157,45 @@ processar((ato_fala:interro_tema_incognito
         ):-
     nonvar(Relacao),
     nonvar(AcaoAlvo),
-	determina_agente(Agent,AgenteResolvido),
+	determina_entidade_referenciada(Agent,AgenteResolvido),
 	PredAcaoAuxiliar =..[AcaoAlvo, AgenteResolvido, T],
     PredAcao =.. [Relacao, PredAcaoAuxiliar],
     findall(T, (PredAcao), L),
     ( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-    filtrar(TipoNp, L1,TemaSolucao).
+    normaliza_substantivos_resposta(TipoNp, L1,TemaSolucao).
 
 processar((ato_fala:interro_tema_incognito 
 			..desconhecido:nao 
-			..agente_real:Agent 
+			..agente_real:Agente 
 			..acao:Relacao 
 			..tema_real:incog(TipoNp)),
-          (ato_fala:informar 
-		  	..tema_original:incog(TipoNp) 
-			..agente_real:Agent 
-			.. acao:RelacaoResolvida 
-			..tema_real:PacientesDeterminados)):-
-    eh_tema_simples(Agent),
-    % TODO: o tipo do tema pode ser usado para restringir as respostas
-	determina_agente(Agent,AgenteDeterminado),
-    PredAcao =.. [Relacao, AgenteDeterminado, TemaSolucao],
-	PredToCheck=.. [Relacao, AgenteDeterminado, _],
-	(	
-		(
-			clause(PredToCheck,_),
-			findall(TemaSolucao, (PredAcao), L),
-			( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
-			filtrar(TipoNp, L1,PacientesDeterminados),
-			ajuste_acao_de_acordo_com_resposta(PacientesDeterminados, Relacao,RelacaoResolvida)
-		);
-		(
-			filtrar(TipoNp, [], PacientesDeterminados),
-			RelacaoResolvida=Relacao
-		)
-	).
 
+		  Resposta):-
+	
+	resposta_para_tema_incognito(
+		Relacao,
+		Agente,
+		incog(TipoNp),
+		TipoNp,
+		Resposta).
+	
 % o que ou quem        
 processar((ato_fala:interro_agente_incognito 
 			..desconhecido:nao 
-			..agente_real:incog(Tipo) 
-			..acao:Relacao ..tema_real:Tema),
-   			(ato_fala:informar 
-				..agente_original:incog(Tipo) 
-				..agente_real:AgentesTraduzidos 
-				..acao:RelacaoResolvida 
-				..tema_real:TemaResolvido 
-				..entidade:Tipo)):-
-    ajuste_acao_ter_estar_em_caso_racional(Tema, Relacao, RelacaoAjustada),!,
-	determina_agente(Tema,TemaDeterminado),
-    PredAcao =.. [RelacaoAjustada, A, TemaDeterminado],
-    findall(A, (PredAcao, entidade(A, Tipo)), L),
-    ( (\+ L = [], setof(A, member(A,L), L1)) ; L1 = L),
-    filtrar(L1,PossivelmenteAgente),
-    determina_agente_e_tema_resultantes(Tipo, PossivelmenteAgente,Tema,AgentesTraduzidos,TemaResolvido),
-	ajuste_acao_de_acordo_com_resposta(TemaResolvido, RelacaoAjustada,RelacaoResolvida).
-
+			..agente_real:incog(TipoNp) 
+			..acao:Relacao 
+			..tema_real:Tema),
+			Resposta):-
+	resposta_para_tema_incognito(
+		Relacao,
+		incog(TipoNp),
+		Tema,
+		TipoNp,
+		Resposta).
+	
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
-	determina_agente(T,PacienteDeterminado),
+	determina_entidade_referenciada(T,PacienteDeterminado),
     PredAcao =.. [Relacao, Ag, PacienteDeterminado],
 	PredToCheck=.. [Relacao, Ag, _],
 	clause(PredToCheck,_), 
@@ -253,12 +233,6 @@ processar((ato_fala:terminar),(ato_fala:terminar .. mensagem:tchau)):-
     retract(falando_com(player, Quem)),
 	ignore((Quem\=narrador,assert(falando_com(player,narrador)))).
 
-%processar(
-%	(ato_fala:responder ..mensagem:oi),
-%	(ato_fala:composto ..composicao:[(ato_fala:responder .. mensagem:oi ..ligacao:','),(ato_fala:informar ..acao:ser ..agente:eu ..tema:Quem)])
-%	):-
-%	introduz_pessoa(Quem).
-
 processar((ato_fala:responder ..mensagem:oi),(ato_fala:responder ..mensagem:oi)).
 
 processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .. mensagem:oi)):-
@@ -266,100 +240,7 @@ processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .
 
 % se o processar falhar
 processar(_, []).
-
-determina_agente_e_tema_resultantes(TipoNp, [],Paciente,Paciente,np([],TipoNp)):-
-	racional(Paciente).
-
-determina_agente_e_tema_resultantes(TipoNp, [],Paciente,np([],TipoNp),Paciente):-
-	\+ racional(Paciente).
-
-determina_agente_e_tema_resultantes(TipoNp,TalvezAgente,Paciente,Paciente,TalvezAgente):-
-	racional(Paciente),
-	entidade(TalvezAgente,TipoNp).
-
-determina_agente_e_tema_resultantes(_,TalvezAgente,Paciente,TalvezAgente,Paciente):-
-	racional(TalvezAgente).
-
-determina_agente_e_tema_resultantes(_,Agente,Paciente,Agente,Paciente).
-
-% converte o verbo ter para estar se o alvo eh racional; isso corrige o problema de personagens serem possuidos por coisas
-ajuste_acao_ter_estar_em_caso_racional(QuemTemOuEsta, ter, estar):-
-    racional(QuemTemOuEsta).
-ajuste_acao_ter_estar_em_caso_racional(_, A, A).
-
-ajuste_acao_de_acordo_com_resposta(Alvo, estar,exige_preposicao(estar,com)):-
-	racional(Alvo).
-
-ajuste_acao_de_acordo_com_resposta(_, R,R).
-
-
-
-% normalizacao    
-filtrar(TipoNp,[], np([],TipoNp)).
-filtrar(_,X,Y):-
-    filtrar(X,Y).
-
-filtrar([],[]).
-
-filtrar([X],Y):-
-	referencia(X,Y).
-
-filtrar(X,Y):-
-	\+is_list(X),
-	referencia(X,Y).
-
-filtrar([X,Z],[Y,W]):-
-	referencia(X,Y),
-	referencia(Z,W).
-
-filtrar([X|Resto],[Y|RestoFilrado]):-
-	referencia(X,Y),
-	filtrar(Resto,RestoFilrado).
-
-referencia([],[]).
-referencia(X,X):-
-	pro(pron:X,_,[]).
-
-referencia(player,player).
-referencia(Q,Q):-
-	jogador(Q).
-
-referencia(X,Y):-
-	racional(X),
-	\+conhece(player,X),
-	(
-		descreve(X,Y);
-		(np(id:X ..gen:masc,[_],[]),Y=homem);
-		Y=mulher
-	).
-referencia(X,X).
-
-determina_agente(comp_nominal(A,B),A):-
-	estar(A,B).
-
-determina_agente(comp_nominal(A,B),B):-
-	dono(B,A).
-
-determina_agente(comp_nominal(A,B),Quem):-
-	ser(comp_nominal(A,B),Quem).
-
-determina_agente(A,B):-
-	\+compound(A),
-	estar(player,Aqui),
-	estar(B,Aqui),
-	ser(A,B).
-
-determina_agente(A,B):-
-	\+compound(A),
-	estar(player,Aqui),
-	estar(B,Aqui),
-	ser(comp_nominal(A,_),B).
-	
-determina_agente(A,A).
-
-eh_tema_simples(Ag):-
-	\+ Ag=incog(_),
-	\+ has_features(Ag).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 resposta_para_pessoa_desconhecida(IdPessoa,G,N,
 	(ato_fala:interro_agente_incognito
@@ -373,3 +254,136 @@ resposta_para_pessoa_desconhecida(IdPessoa,G,N,
 	racional(IdPessoa),
 	IdPessoa\=player,
 	\+conhecer(player,IdPessoa).
+
+
+
+resposta_para_tema_incognito(
+				Relacao,
+				Agente,
+				Tema,
+				TipoNp,
+
+				(ato_fala:informar 
+				..agente_real:AgenteResolvido
+				..acao:RelacaoResolvida 
+				..tema_real:TemaResolvido)):-
+	determina_entidade_referenciada(Agente,AgenteDeterminado),
+	determina_entidade_referenciada(Tema,TemaDeterminado),
+
+	monta_predicado_para_resolucao(Relacao,AgenteDeterminado,TemaDeterminado,Incognita,PredAcao),
+	(	
+		(
+			existe_predicado_binario(Relacao),
+			findall(Incognita, (PredAcao,entidade(Incognita,TipoNp)), L),
+			( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
+			normaliza_substantivos_resposta(TipoNp, L1,ElementosResultantes),
+			elementos_resposta(Relacao,
+								Agente,
+								Tema,
+								ElementosResultantes,
+								AgenteResolvido,
+								TemaResolvido,
+								RelacaoResolvida)
+		);
+		(
+			AgenteResolvido=Agente,
+			normaliza_substantivos_resposta(TipoNp, [], TemaResolvido),
+			RelacaoResolvida=Relacao
+		)
+	).
+
+
+determina_entidade_referenciada_e_tema_resultantes(_,Agente,Paciente,Agente,Paciente).
+
+monta_predicado_para_resolucao(Relacao,Agente,incog(_),Incognita,Predicado):-
+    Predicado =.. [Relacao, Agente, Incognita].
+
+monta_predicado_para_resolucao(Relacao,incog(_),Tema,Incognita,Predicado):-
+    Predicado =.. [Relacao, Incognita, Tema].
+
+elementos_resposta(Acao,incog(TipoNp),TemaRes,Resposta,Resposta,TemaRes,AcaoRes):-
+	nonvar(TipoNp),
+	ajuste_acao_de_acordo_com_resposta(TemaRes,Acao,AcaoRes).
+
+elementos_resposta(Acao,AgenteRes,incog(TipoNp),Resposta,AgenteRes,Resposta,AcaoRes):-
+	nonvar(TipoNp),
+	ajuste_acao_de_acordo_com_resposta(Resposta,Acao,AcaoRes).
+
+ajuste_acao_de_acordo_com_resposta(Alvo, estar,exige_preposicao(estar,com)):-
+	racional(Alvo).
+
+ajuste_acao_de_acordo_com_resposta(_, R,R).
+
+% normalizacao    
+normaliza_substantivos_resposta(TipoNp,[], np([],TipoNp)).
+normaliza_substantivos_resposta(_,X,Y):-
+    normaliza_substantivos_resposta(X,Y).
+
+normaliza_substantivos_resposta([],[]).
+
+normaliza_substantivos_resposta([X],Y):-
+	referencia(X,Y).
+
+normaliza_substantivos_resposta(X,Y):-
+	\+is_list(X),
+	referencia(X,Y).
+
+normaliza_substantivos_resposta([X,Z],[Y,W]):-
+	referencia(X,Y),
+	referencia(Z,W).
+
+normaliza_substantivos_resposta([X|Resto],[Y|RestoFilrado]):-
+	referencia(X,Y),
+	normaliza_substantivos_resposta(Resto,RestoFilrado).
+
+referencia([],[]).
+referencia(X,X):-
+	pro(pron:X,_,[]).
+
+referencia(player,player).
+referencia(Q,Q):-
+	jogador(Q).
+
+referencia(X,Y):-
+	racional(X),
+	\+conhecer(player,X),
+	(
+		descreve(X,Y);
+		(np(id:X ..gen:masc,[_],[]),Y=homem);
+		Y=mulher
+	).
+referencia(X,X).
+
+determina_entidade_referenciada(A,A):-
+	var(A).
+
+determina_entidade_referenciada(comp_nominal(A,B),A):-
+	estar(A,B).
+
+determina_entidade_referenciada(comp_nominal(A,B),B):-
+	dono(B,A).
+
+determina_entidade_referenciada(comp_nominal(A,B),Quem):-
+	ser(comp_nominal(A,B),Quem).
+
+determina_entidade_referenciada(A,B):-
+	\+compound(A),
+	estar(player,Aqui),
+	estar(B,Aqui),
+	ser(A,B).
+
+determina_entidade_referenciada(A,B):-
+	\+compound(A),
+	estar(player,Aqui),
+	estar(B,Aqui),
+	ser(comp_nominal(A,_),B).
+	
+determina_entidade_referenciada(A,A).
+
+eh_tema_simples(Ag):-
+	\+ Ag=incog(_),
+	\+ has_features(Ag).
+
+existe_predicado_binario(Predicado):-
+	PredToCheck=..[Predicado,_,_],
+	clause(PredToCheck,_).
