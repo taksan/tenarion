@@ -174,9 +174,9 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhec
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao),
 	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
 
-sn(coord:nao ..id:Substantivo  ..tipo:T ..gen:G ..num:N ..desconhecido:nao)-->
-	{ nonvar(Substantivo), Substantivo=pred(Pred) },
-	np(id:Pred.. tipo:T ..gen:G ..num:N ..desconhecido:nao).
+%sn(coord:nao ..id:Substantivo  ..tipo:T ..gen:G ..num:N ..desconhecido:nao)-->
+%	{ nonvar(Substantivo), Substantivo=pred(Pred) },
+%	np(id:Pred.. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 	
 
 sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
@@ -194,6 +194,9 @@ sn(coord:nao .. id:Id ..desconhecido:sim) -->
 	{ nonvar(Id), Id=desconhecido(tipo:Tipo ..gen:G ..num:N)  },
     ident(gen:G .. num:N ..tipo:nc),
 	np(id:Id .. tipo:Tipo ..gen:G ..num:N ..desconhecido:sim).
+
+pred(id:pred(Substantivo) ..tipo:T ..gen:G ..num:N ..desconhecido:nao) -->
+	np(id:Substantivo.. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 % SINTAGMAS VERBAIS
 % tipos de verbos a serem tratados:
@@ -214,6 +217,11 @@ sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..acao:A ..nu
 sv(acao:A .. tema:TemaNaoInstanciado ..num:N ..pessoa:P ..desconhecido:nao) -->
 	{ var(TemaNaoInstanciado) },
 	v(acao:A ..subcat:[] .. num:N ..pessoa:P).
+
+sv(acao:A .. tema:Tema ..num:N ..pessoa:P ..desconhecido:nao) -->
+	v(acao:A ..subcat:[pred] .. num:N ..pessoa:P),
+	pred(id:Tema ..num:N ..pessoa:P).
+
 
 %% IMPORTANTE:
 %%% o verbo transitivo direto TEM que ser testado antes do indireto, pois no caso de verbos

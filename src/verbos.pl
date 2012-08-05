@@ -18,7 +18,7 @@ v(acao:estar ..num:sing ..pessoa: indic ..subcat:[SUBCAT]) --> {subcat(estar,SUB
 
 % VERBO: SER
 subcat(ser,SUBCAT):-
-	member(SUBCAT,[sn,sa]).
+	member(SUBCAT,[sn,sa,pred]).
 v(acao:ser .. num:sing ..pessoa: indic ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [ser].
 v(acao:ser .. num:sing ..pessoa: terc  ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [eh].
 v(acao:ser .. num:plur ..pessoa: terc  ..subcat:[SUBCAT]) --> {subcat(ser,SUBCAT)}, [sao].
