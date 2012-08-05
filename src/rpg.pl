@@ -301,6 +301,11 @@ monta_predicado_para_resolucao(Relacao,Agente,incog(_),Incognita,Predicado):-
 monta_predicado_para_resolucao(Relacao,incog(_),Tema,Incognita,Predicado):-
     Predicado =.. [Relacao, Incognita, Tema].
 
+% se for usar pronome, prefere colocar o pronome como agente
+elementos_resposta(ser,incog(quem),TemaRes,Resposta,TemaRes,Resposta,ser):-
+	institui_pronome(TemaRes,TemaRef),
+	TemaRes\=TemaRef.
+
 elementos_resposta(Acao,incog(TipoNp),TemaRes,Resposta,Resposta,TemaRes,AcaoRes):-
 	nonvar(TipoNp),
 	ajuste_acao_de_acordo_com_resposta(TemaRes,Acao,AcaoRes).
@@ -387,3 +392,6 @@ eh_tema_simples(Ag):-
 existe_predicado_binario(Predicado):-
 	PredToCheck=..[Predicado,_,_],
 	clause(PredToCheck,_).
+
+nadadica:-
+	nl.
