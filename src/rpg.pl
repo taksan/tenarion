@@ -37,10 +37,6 @@ jogar:-
         assert(jogador(Nome)),!,
         dialogo.
 
-seta_contexto(Ctx):-
-    retractall(contexto_atual(_)),
-    assertz(contexto_atual(Ctx)).
-
 dialogo:-
     once(readLine(P)),
 	processar_pergunta(P,R,Sem),!,
@@ -57,9 +53,7 @@ processar_pergunta(P,R,Sem):-
 
 
 processa_sentenca(Sem,R):-
-    seta_contexto(jogador),
-    substitui_pronomes_na_sentenca(Sem),!,
-	processa_contexto(Sem),
+    substitui_pronomes_na_sentenca_start(Sem),!,
     processar(Sem,Resposta),!,
 	(
 		gera_resposta(Resposta,R);
@@ -67,18 +61,9 @@ processa_sentenca(Sem,R):-
 	).
 
 gera_resposta(Resposta,R):-
-	institui_pronomes_na_sentenca(Resposta),!,
-    s(Resposta,R,[]), 
-	seta_contexto(jogador), 
-	once(atualiza_contexto(Resposta)).
+	institui_pronomes_na_sentenca_start(Resposta),!,
+    s(Resposta,R,[]).
 
-processa_contexto(Sem):-
-    once(atualiza_contexto(Sem)),
-
-    seta_contexto(computador),
-    once(atualiza_contexto(Sem)).
-
-%
 continuar(Sem):-
 	nonvar(Sem),
 	Sem=ato_fala:terminar,
@@ -305,6 +290,10 @@ monta_predicado_para_resolucao(Relacao,incog(_),Tema,Incognita,Predicado):-
 elementos_resposta(ser,incog(quem),TemaRes,Resposta,TemaRes,Resposta,ser):-
 	institui_pronome(TemaRes,TemaRef),
 	TemaRes\=TemaRef.
+
+% outro caso de uso de pronome, mas dessa vez possessivo
+elementos_resposta(ser,incog(qual),TemaRes,Resposta,TemaRes,Resposta,ser):-
+	TemaRes=comp_nominal(seu,_).
 
 elementos_resposta(Acao,incog(TipoNp),TemaRes,Resposta,Resposta,TemaRes,AcaoRes):-
 	nonvar(TipoNp),

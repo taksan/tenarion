@@ -29,7 +29,6 @@ atualiza_contexto_dado_np_real(TemaOuAgente):-
 atualiza_contexto_dado_np_real(TemaOuAgente):-
 	nonvar(TemaOuAgente),
 	TemaOuAgente=incog(quem),
-%	estar(player,Local),
     retractall(contexto(computador,(tipo_pro:reto),_)).
 
 

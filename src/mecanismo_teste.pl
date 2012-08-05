@@ -19,7 +19,7 @@ roda_testes([Teste|Outros],TotalPassados,Total):-
 	Total is SubTotal+1.
 
 executa(T,Passou):-
-%	ignore((T=teste55a,gspy(determina_resposta))),
+%	ignore((T=teste08,gspy(substitui_pronomes_na_sentenca))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,

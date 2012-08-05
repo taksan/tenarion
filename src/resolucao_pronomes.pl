@@ -1,9 +1,22 @@
 %:-[gulp].
 :-dynamic estah_na_mesma_sentenca/0.
+substitui_pronomes_na_sentenca_start(Pergunta):-
+    seta_contexto(jogador),
+	substitui_pronomes_na_sentenca(Pergunta),
+	once(atualiza_contexto(Pergunta)),
+
+    seta_contexto(computador),
+    once(atualiza_contexto(Pergunta)).
 
 substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
+%    seta_contexto(jogador),
 	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido),
 	substitui_pronome(TemaTalvezPronome,TemaTraduzido).
+	
+%	ignore((TemaTraduzido=corda,gspy(atualiza_contexto))),
+%	once(atualiza_contexto(agente_real:AgenteTraduzido..tema_real:TemaTraduzido)),
+ %   seta_contexto(computador),
+%	once(atualiza_contexto(agente_real:AgenteTraduzido..tema_real:TemaTraduzido)).
 
 substitui_pronome(TalvezPronome, Traduzido):-
 	nonvar(TalvezPronome),
@@ -21,6 +34,11 @@ substitui_pronome(TalvezPronome, TalvezPronome):-
 	substitui_pronomes_na_sentenca(TalvezPronome).
 
 substitui_pronome(NaoPronome, NaoPronome).
+
+institui_pronomes_na_sentenca_start(Resposta):-
+	institui_pronomes_na_sentenca(Resposta),
+	seta_contexto(jogador), 
+	once(atualiza_contexto(Resposta)).
 
 %%
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado ..porque:Porque):-
@@ -81,3 +99,9 @@ has_features(G):-
 suprime_se_era_incog(Original):-
 	nonvar(Original),
 	Original=incog(_).
+
+seta_contexto(Ctx):-
+    retractall(contexto_atual(_)),
+    assertz(contexto_atual(Ctx)).
+
+
