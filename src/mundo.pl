@@ -262,7 +262,7 @@ ser(L,L):-
     nao(L=player),
 	ignore(introduz_pessoa(L)).
 
-ser(Quem,comp_nominal(seu,nome)):-
+ser(pred(Quem),comp_nominal(seu,nome)):-
 	var(Quem),
 	falando_com(player,Quem),
 	ser(Quem,Quem).

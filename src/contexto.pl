@@ -25,13 +25,6 @@ atualiza_contexto_dado_np_real(TemaOuAgente):-
 %	estar(player,Local),
     retractall(contexto(_,_,_)).
 
-
-atualiza_contexto_dado_np_real(TemaOuAgente):-
-	nonvar(TemaOuAgente),
-	TemaOuAgente=incog(quem),
-    retractall(contexto(computador,(tipo_pro:reto),_)).
-
-
 atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
 	contexto_atual(jogador),
 	nonvar(T1),

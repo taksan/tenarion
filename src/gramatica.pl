@@ -174,6 +174,11 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhec
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao),
 	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
 
+sn(coord:nao ..id:Substantivo  ..tipo:T ..gen:G ..num:N ..desconhecido:nao)-->
+	{ nonvar(Substantivo), Substantivo=pred(Pred) },
+	np(id:Pred.. tipo:T ..gen:G ..num:N ..desconhecido:nao).
+	
+
 sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
 	{ id_para_np(Substantivo, SnComposto) },
 	{ SnComposto = comp_nominal(I,CompNominal) },
@@ -181,7 +186,7 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhec
 	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
    	ident(gen:G .. num:N ..tipo:TipoIdent),
 	poss(poss:I..pessoa:terc..gen:G),
-	sn(id:CompNominal .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
+	np(id:CompNominal .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 
 % essa regra eh para produzir texto sobre substantivos desconhecidos

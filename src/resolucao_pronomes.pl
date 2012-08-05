@@ -6,17 +6,12 @@ substitui_pronomes_na_sentenca_start(Pergunta):-
 	once(atualiza_contexto(Pergunta)),
 
     seta_contexto(computador),
-    once(atualiza_contexto(Pergunta)).
+    once(atualiza_contexto(Pergunta)),
+	remove_do_contexto_em_caso_de_quem(Pergunta).
 
 substitui_pronomes_na_sentenca(tema:TemaTalvezPronome ..tema_real:TemaTraduzido ..agente:AgenteTalvezPronome ..agente_real:AgenteTraduzido):-
-%    seta_contexto(jogador),
 	substitui_pronome(AgenteTalvezPronome,AgenteTraduzido),
 	substitui_pronome(TemaTalvezPronome,TemaTraduzido).
-	
-%	ignore((TemaTraduzido=corda,gspy(atualiza_contexto))),
-%	once(atualiza_contexto(agente_real:AgenteTraduzido..tema_real:TemaTraduzido)),
- %   seta_contexto(computador),
-%	once(atualiza_contexto(agente_real:AgenteTraduzido..tema_real:TemaTraduzido)).
 
 substitui_pronome(TalvezPronome, Traduzido):-
 	nonvar(TalvezPronome),
@@ -36,6 +31,7 @@ substitui_pronome(TalvezPronome, TalvezPronome):-
 substitui_pronome(NaoPronome, NaoPronome).
 
 institui_pronomes_na_sentenca_start(Resposta):-
+	coloca_no_contexto_se_agente_e_tema_sao_iguais(Resposta),
 	institui_pronomes_na_sentenca(Resposta),
 	seta_contexto(jogador), 
 	once(atualiza_contexto(Resposta)).
@@ -104,4 +100,16 @@ seta_contexto(Ctx):-
     retractall(contexto_atual(_)),
     assertz(contexto_atual(Ctx)).
 
+remove_do_contexto_em_caso_de_quem(AgenteOuTema):-
+	nonvar(AgenteOuTema),
+	(AgenteOuTema=agente_real:incog(quem);AgenteOuTema=tema_real:incog(quem)),
+    retractall(contexto(computador,(tipo_pro:reto),_)).
 
+remove_do_contexto_em_caso_de_quem(_).
+
+coloca_no_contexto_se_agente_e_tema_sao_iguais(agente_real:Agente..tema_real:Tema):-
+	nonvar(Agente),nonvar(Tema),
+	Agente=Tema,
+	atualiza_contexto_dado_np_real(Agente).
+
+coloca_no_contexto_se_agente_e_tema_sao_iguais(_).

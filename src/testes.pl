@@ -46,7 +46,7 @@ teste16c:-
 teste17:-
     dado_pergunta_espero_resposta('o que eh ele?', 'ele eh um pescador.').
 teste18:-
-    dado_pergunta_espero_resposta('quem eh ele?', 'eu nao sei.').
+    dado_pergunta_espero_resposta('quem eh ele?', 'ele eh um pescador.').
 teste19:-
 	dado_pergunta_espero_resposta('quem estah no caixa eletronico?', 'ninguem estah no caixa eletronico.').
 teste20_a:-
