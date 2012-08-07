@@ -20,6 +20,7 @@ a(adj:acesa    ..tipo:estar ..gen:fem ..num:plur) --> [acesas].
 a(adj:racional ..tipo:ser ..num:sing)-->[racional].
 a(adj:racional ..tipo:ser ..num:plur)-->[racionais].
 a(adj:caro     ..tipo:ser ..num:sing)-->[caro].
+a(adj:suficiente ..tipo:ser ..num:sing)-->[suficiente].
 
 a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
 a(adj:amarravel ..tipo:ser ..num:sing)-->[amarravel].
@@ -50,6 +51,7 @@ quant(id:nenhum..gen:fem.. num:sing) --> [nenhuma].
 quant(_) --> [].
 
 %%%% NUMERO
+num(id:1 ..num:sing) --> [1].
 num(id:1 ..gen:fem.. num:sing) --> [uma].
 num(id:2 ..gen:fem.. num:plur) --> [duas].
 num(id:3 ..num:plur) -->   [tres].
@@ -63,6 +65,7 @@ num(id:10 ..num:plur) -->   [dez].
 num(id:11 ..num:plur) -->   [onze].
 num(id:12 ..num:plur) -->   [doze].
 num(id:13 ..num:plur) -->   [treze].
+num(id:NUM ..num:plur) --> {integer(NUM)}, [NUM].
 num(_) -->   [].
 
 %%%% ADV* (que raio � isso??)
@@ -148,6 +151,7 @@ pro(tipo_pro:relativo ..pron:oque) --> [o],[que].
 pro(tipo_pro:relativo ..pron:qual ..num:sing ) --> [qual].
 pro(tipo_pro:relativo ..pron:qual ..num:plur ) --> [quais].
 pro(tipo_pro:relativo ..pron:onde) --> [onde].
+pro(tipo_pro:relativo ..pron:quanto) --> [quanto].
 
 %%%% ADVERBIOS
 advb(tipo_adv:lugar ..aceita_prep:de ..adv:aqui) --> [aqui].

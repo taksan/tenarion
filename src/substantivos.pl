@@ -60,6 +60,9 @@ np(id:pescador ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [pescador
 np(id:vendedor ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [vendedor].
 np(id:nome ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [nome].
 np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].
+np(id:prata ..tipo:nc ..gen:fem ..num:sing ..desconhecido:nao)-->[prata].
+np(id:prata ..tipo:nc ..gen:fem ..num:plur ..desconhecido:nao)-->[pratas].
+np(id:senha ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[senha].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

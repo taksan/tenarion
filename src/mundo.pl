@@ -149,7 +149,7 @@ estar(identidade, player).
 estar(cartao_credito, player).
 estar(sua_mao, player).
 
-dinheiro(player,0).
+dinheiro(player,5).
 
 %estar(OQue, Onde):-
 %        nonvar(OQue),nonvar(Onde),
@@ -251,15 +251,15 @@ ser(Alvo,Res):-
 	descreve(Res,Alvo).
 
 ser(player, Nome):-
-    jogador(Nome).
+    jogador(Nome),
+	ignore(introduz_player).
 
 ser(Nome, player):-
-    jogador(Nome).
-
+    jogador(Nome),
+	ignore(introduz_player).
 
 ser(L,L):-
     nonvar(L), \+ compound(L),
-    nao(L=player),
 	ignore(introduz_pessoa(L)).
 
 ser(pred(Quem),comp_nominal(seu,nome)):-
@@ -331,6 +331,11 @@ caro(Objeto):-
 	preco(Objeto,Preco),
 	dinheiro(player,Saldo),
 	Preco > Saldo.
+
+suficiente(comp_nominal(meu,dinheiro), Objeto):-
+	preco(Objeto,Preco),
+	dinheiro(player,Saldo),
+	Preco < Saldo.
 
 /* quem conhece quem*/
 conhecer(zulu, mateo).
@@ -531,6 +536,9 @@ colocar(player, (tema1:OQue ..tema2:Onde)):-
     retract(estar(OQue, player)),
     assertz(estar(OQue, Onde)).
 
+retirar(player,Tema):-
+	sinonimo(tirar(player,Tema)).
+
 tirar(player, (tema1:OQue ..tema2:DoQue)):-
     ter(player, DoQue),
 	estar(OQue, DoQue),
@@ -619,6 +627,7 @@ finaliza_conversa(Pessoa):-
 
 /* acoes provenientes do lexico */
 querer(zulu,vender(sambura)):-fail.
+querer(player,_).
 
 /* --- acoes de conversa com personagens --- */
 poder_especifico(comprar(sambura)):-
@@ -631,14 +640,16 @@ poder_especifico(comprar(_)).
 comprar(player, Objeto):-
     falando_com(player, Pessoa), 
     dono(Pessoa,Objeto),
-	nao(caro(Objeto)),
     poder_especifico(comprar(Objeto)),
+	suficiente(comp_nominal(player,dinheiro),Objeto),
     retract(dono(_,Objeto)),
     asserta(estar(Objeto,player)).
 
-digitar(player, OQue, NoQue):-
+digitar(player, (tema1:OQue ..tema2:NoQue)):-
     OQue=senha,
 	NoQue=caixa_eletronico,
+	estar(cartao_credito,NoQue),
+	estar(player,NoQue),
     assertz(digitado(OQue, NoQue)).
 
 pescar(player,Onde):-
@@ -657,6 +668,13 @@ introduz_pessoa(Quem):-
 	\+conhecer(player,Quem),
 	assertz(conhecer(player,Quem)).
 
+introduz_player:-
+	falando_com(player,Quem),
+	Quem\=narrador,
+	\+conhecer(Quem,player),
+	assertz(conhecer(Quem,player)).
+
+
 nome_de_quem_estah_falando(Nome):-
 	falando_com(player,Quem),
 	\+conhecer(player,Quem),
@@ -665,3 +683,33 @@ nome_de_quem_estah_falando(Nome):-
 nome_de_quem_estah_falando(Nome):-
 	falando_com(player,Nome).
 
+sinonimo(Pred):-
+	Pred.
+
+narrador(Pred):-
+	Pred.
+
+
+zulu(ser(A,B)):-
+	(A=zulu;B=zulu;B=comp_nominal(seu,nome)),
+	ser(A,B).
+
+zulu(ser(A,B)):-
+	conhecer(zulu,A),
+	ser(A,B).
+
+zulu(ser(A,B)):-
+	conhecer(zulu,B),
+	ser(A,B).
+
+/*
+zulu(ser(A,B)):-
+	gspy(ser),
+	ser(A,B).
+*/
+zulu(Pred):-
+	Pred=..[NomePred|_],
+	NomePred\=ser,
+	Pred.
+
+querer(_).

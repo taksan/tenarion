@@ -36,6 +36,18 @@ institui_pronomes_na_sentenca_start(Resposta):-
 	seta_contexto(jogador), 
 	once(atualiza_contexto(Resposta)).
 
+
+institui_pronomes_nas_sentencas_da_lista([H]):-
+	institui_pronomes_na_sentenca(H).
+
+institui_pronomes_nas_sentencas_da_lista([H|Tail]):-
+	institui_pronomes_na_sentenca(H),
+	institui_pronomes_nas_sentencas_da_lista(Tail).
+
+institui_pronomes_na_sentenca(ato_fala:composto ..composicao:Sentencas):-
+	nonvar(Sentencas),
+	institui_pronomes_nas_sentencas_da_lista(Sentencas).
+
 %%
 institui_pronomes_na_sentenca(tema_real:TemaReal ..tema:TemaReferenciado ..agente_real:AgenteReal ..agente:AgenteReferenciado ..porque:Porque):-
 	institui_pronome(AgenteReal, AgenteReferenciado),
@@ -55,6 +67,9 @@ institui_pronome_agente(Agente,_,AgenteReferenciado):-
 
 
 institui_pronome(comp_nominal(seu,ComplementoNom), comp_nominal(meu,ComplementoNom)):-
+	nonvar(ComplementoNom).
+
+institui_pronome(comp_nominal(player,ComplementoNom), comp_nominal(seu,ComplementoNom)):-
 	nonvar(ComplementoNom).
 
 institui_pronome(comp_nominal(Tema,ComplementoNom), comp_nominal(TemaReferenciado,ComplReferenciado)):-

@@ -3,7 +3,6 @@ http://beta.visl.sdu.dk/visl/pt/
 
 COMO voce está?
 
-
 pronomes obliquos
 http://www.portalsaofrancisco.com.br/alfa/morfologia/pronome-obliquo.php
 
@@ -32,62 +31,6 @@ ser(dono(voce,barco))
 ============================
 
 Permitir a pergunta "por que eu nao posso X"
-Ver: http://www.csupomona.edu/~jrfisher/www/prolog_tutorial/2_18.html
-
-?- clause(pode_pegar(X), R).
-false.
-
-?- clause(pode_pegar(X,Y), R).
-false.
-
-?- clause(pode_pegar(voce,faca), R).
-false.
-
-?- pode_pegar(voce,faca).
-Correct to: "poder_pegar(voce,faca)"? yes
-false.
-
-?- clause(poder_pegar(voce,faca), R).
-R = ((dono(faca, voce);\+dono(faca, _G313)), !, \+estar_em(faca, voce), !, mesmo_lugar(voce, faca), !, pegavel(faca)).
-
-?- clause(poder_pegar(voce,faca), [H_]).
-false.
-
-?- clause(poder_pegar(voce,faca), [H|_]).
-false.
-
-?- clause(poder_pegar(voce,faca), (H|_)).
-false.
-
-?- clause(poder_pegar(voce,faca), (H)).
-H = ((dono(faca, voce);\+dono(faca, _G313)), !, \+estar_em(faca, voce), !, mesmo_lugar(voce, faca), !, pegavel(faca)).
-
-?- clause(poder_pegar(voce,faca), (H,Rest)).
-H = (dono(faca, voce);\+dono(faca, _G21)),
-Rest = (!, \+estar_em(faca, voce), !, mesmo_lugar(voce, faca), !, pegavel(faca)).
-
-?- clause(poder_pegar(voce,faca), (H,Rest)).
-H = (dono(faca, voce);\+dono(faca, _G21)),
-Rest = (!, \+estar_em(faca, voce), !, mesmo_lugar(voce, faca), !, pegavel(faca)).
-
-?- clause(poder_pegar(voce,faca), ((A,B),Rest)).
-false.
-
-?- clause(poder_pegar(voce,faca), ((A;B),Rest)).
-A = dono(faca, voce),
-B = (\+dono(faca, _G28)),
-Rest = (!, \+estar_em(faca, voce), !, mesmo_lugar(voce, faca), !, pegavel(faca)).
-
-==========================
-Fulk > com quem estah as minhocas?
-narrador > As minhocas estao contigo.
-Fulk > com quem estao as minhocas?
-narrador > As minhocas estao contigo.
-Fulk > qem estah com as minhocas?
-narrador > H� hein?
-Fulk > quem estah com as minhocas?
-narrador > Ninguem estah em as minhocas.
-
 
 -atributos
         -dos locais... fazer testes
@@ -100,28 +43,9 @@ narrador > Ninguem estah em as minhocas.
 
         -* remar/navegar (ir_para)
 
-        -* largar
-
-        -* pegavel
-
         -* examinar *** 
 
-        -* estabalecer meio de mostrar estado de algumas
-           coisas baseado em predicados
-                -* sug.: invisivel(X)
-
         -previsao da conversa com personagens
-
--lexico
-        -criar todas as palavras necessarias
-
--integracao com o 'dialogo.pl'
-        -determinar como realizar acoes (semantica)
-
--testes - fazer funcionar tudo ate aqui
----------
-
--meio de "retornar" erros (criar erro generico)
 
 -descricao do local
 
@@ -130,9 +54,6 @@ narrador > Ninguem estah em as minhocas.
 
 -criar o "fim"
         
--testes - fazer funcionar tudo ate aqui
-----------------------------------
-
 -? sistema para determinacao do que o jogador
  efetivamente conhece (senao conhece, nao pode usar)
 

@@ -57,6 +57,17 @@ verificar_se_pode((Clausula,Outras),PorqueNao):-
 		)
 	).
 
+verificar_se_pode((Clausula,Outras),PorqueNao):-
+	Clausula=sinonimo(PredicadoSinonimo),
+	(
+		motivos_para_nao_poder(PredicadoSinonimo,Resultado),
+		(
+			( Resultado=[], verificar_se_pode(Outras,PorqueNao) );
+			transforma_asserts_ja(Resultado,PorqueNao)
+		)
+	).
+
+
 verificar_se_pode(((A;B),Outras),PorqueNao):-
 	((testa_clausula(A); testa_clausula(B)), verificar_se_pode(Outras,PorqueNao));
 	transforma_asserts_ja(A,PorqueNao).
@@ -64,6 +75,16 @@ verificar_se_pode(((A;B),Outras),PorqueNao):-
 verificar_se_pode((Clausula,Outras),PorqueNao):-
 	(testa_clausula(Clausula), verificar_se_pode(Outras,PorqueNao));
 	transforma_asserts_ja(Clausula,PorqueNao).
+
+verificar_se_pode((UltimaClausula),PorqueNao):-
+	UltimaClausula=sinonimo(PredicadoSinonimo),
+	(
+		motivos_para_nao_poder(PredicadoSinonimo,Resultado),
+		(
+			Resultado=[];
+			transforma_asserts_ja(Resultado,PorqueNao)
+		)
+	).
 
 verificar_se_pode((UltimaClausula),PorqueNao):-
 	(testa_clausula(UltimaClausula),PorqueNao=[]);

@@ -19,7 +19,7 @@ roda_testes([Teste|Outros],TotalPassados,Total):-
 	Total is SubTotal+1.
 
 executa(T,Passou):-
-%	ignore((T=teste08,gspy(substitui_pronomes_na_sentenca))),
+%	ignore((T=teste72,gspy(processar))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,
@@ -87,6 +87,11 @@ toString([H,,|Tail],String):-
 toString([H,Q],String):-
 	member(Q,[.,?]),
 	concat_atom([H, Q],String).
+
+toString([H,.|Tail],String):-
+	toString(Tail,StringResto),
+	concat_atom([H, '. ', StringResto],String).
+
 
 toString([H|Tail],String):-
 	toString(Tail,StringResto),

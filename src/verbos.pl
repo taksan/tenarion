@@ -111,10 +111,19 @@ v(acao:colocar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [coloco
 v(acao:colocar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [coloca].
 v(acao:colocar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [colocar].
 
+% VERBO: INSERIR
+v(acao:inserir ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:em)]) --> [insiro].
+v(acao:inserir ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [insere].
+v(acao:inserir ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:em)]) --> [inserir].
+
 % VERBO: tirar
 v(acao:tirar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:de)]) --> [tiro].
 v(acao:tirar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:de)]) --> [tira].
 v(acao:tirar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:de)]) --> [tirar].
+
+v(acao:retirar ..num:sing ..pessoa: prim ..subcat:[sn, sp(prep:de)]) --> [retiro].
+v(acao:retirar ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:de)]) --> [retira].
+v(acao:retirar ..num:sing ..pessoa: indic ..subcat:[sn, sp(prep:de)]) --> [retirar].
 
 
 % VERBO: COMPRAR
@@ -172,9 +181,9 @@ v(acao:ter ..num:sing ..pessoa: terc ..subcat:[sn]) --> [possui].
 v(acao:ter ..num:sing ..pessoa: indic ..subcat:[sn]) --> [possuir].
 
 % VERBO: DIGITAR
-v(acao:digitar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [digito].
-v(acao:digitar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [digito].
-v(acao:digitar ..num:sing ..pessoa: indic ..subcat:[sn]) --> [digitar].
+v(acao:digitar ..num:sing ..pessoa: prim ..subcat:[sn,sp(prep:em)]) --> [digito].
+v(acao:digitar ..num:sing ..pessoa: terc ..subcat:[sn,sp(prep:em)]) --> [digito].
+v(acao:digitar ..num:sing ..pessoa: indic ..subcat:[sn,sp(prep:em)]) --> [digitar].
 
 % VERBO: PODER
 v(acao:poder ..num:sing ..pessoa: prim ..subcat:[sv]) --> [posso].
@@ -196,6 +205,11 @@ v(acao:ver ..num:sing ..pessoa: indic ..subcat:[sn]) --> [ver].
 v(acao:saber ..num:sing ..pessoa:indic..subcat:[pro(pron:oque),sn]) --> [saber].
 v(acao:saber ..num:sing ..pessoa:prim ..subcat:[pro(pron:oque),sn]) --> [sei].
 v(acao:saber ..num:sing ..pessoa:terc ..subcat:[pro(pron:oque),sn]) --> [sabe].
+
+v(acao:saber ..num:sing ..pessoa:indic..subcat:[]) --> [saber].
+v(acao:saber ..num:sing ..pessoa:prim ..subcat:[]) --> [sei].
+v(acao:saber ..num:sing ..pessoa:terc ..subcat:[]) --> [sabe].
+
 
 v(acao:amarrar ..num:sing ..pessoa:indic ..subcat:[sn,sp(prep:em)]) --> [amarrar].
 v(acao:amarrar ..num:sing ..pessoa:prim  ..subcat:[sn,sp(prep:em)]) --> [amarro].

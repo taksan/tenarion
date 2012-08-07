@@ -47,13 +47,14 @@ s(ato_fala:responder .. mensagem: positivo)--> [sim].
 s(ato_fala:responder .. mensagem: negativo)--> advb(tipo_adv:afirmacao ..adv:nao).
 s(ato_fala:responder .. mensagem: quem) --> [quem],[ou],[o],[que],['?'].
 s(ato_fala:responder .. mensagem: ok) --> [ok].
-s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
 s(ato_fala:terminar .. mensagem: tchau) --> [tchau], pontuacao_opcional('.').
 s(ato_fala:responder .. mensagem: oi ..tema:T) --> 
 	[oi],
-	sn(id:T),
-	pontuacao_opcional('.').
+	np(id:T),
+	pontuacao_opcional('.'),
+	{nonvar(T)}.
 
+s(ato_fala:responder .. mensagem: oi) --> [oi], pontuacao_opcional('.').
 
 /* perguntas */
 
@@ -80,6 +81,12 @@ s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..d
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
+
+s(ato_fala:interro_agente_incognito ..tema:Agente ..agente:incog(qual) .. acao:ser ..desconhecido:IsDesconhecido ..num:N ..pessoa:Pes ..gen:G) -->
+	pro(tipo: relativo ..pron:qual ..num:N ..gen:G), 
+	sn(id:Agente ..num:N ..pessoa:Pes ..gen:G ..desconhecido:IsDesconhecido),
+    pontuacao_opcional(_).
+	
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
 s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:Paciente ..desconhecido:nao) -->
@@ -117,10 +124,14 @@ s(ato_fala:recusar ..agente:A ..acao:X.. tema:Paciente ..desconhecido:sim ..pess
         pontuacao_opcional('.').
 
 % SINTAGMA NOMINAL
-% casa com pronomes: eu, ele, voce
+% casa com pronomes: eu, ele, voce, onde, etc
 sn(coord:nao ..tipo:T ..id:Ag ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
 	{ \+compound(Ag)},
 	pro(tipo_pro:T ..gen:G .. num:N .. pessoa:P ..pron:Ag).
+
+sn(coord:nao ..tipo:relativo ..id:(Pron,I) ..gen:G .. num:N .. pessoa:P ..desconhecido:nao) -->
+	pro(tipo_pro:relativo ..num:N .. pessoa:P ..pron:Pron),
+	np(id:I ..gen:G ..num:N ..desconhecido:nao).
 
 sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
 	[lugar],
@@ -214,8 +225,9 @@ sv(tema_eh_agente_ou_complemento:complemento.. positivo:IsPositivo ..acao:A ..nu
 
 % VERBO INTRANSITIVO
 % verbos intransitivos: verbo ou forma do verbo que nao exige nenhum complemento (ex.: pescar em, "eu pesco.")
-sv(acao:A .. tema:TemaNaoInstanciado ..num:N ..pessoa:P ..desconhecido:nao) -->
-	{ var(TemaNaoInstanciado) },
+sv(acao:A .. tema:[] ..num:N ..pessoa:P ..desconhecido:nao ..positivo:IsPositivo) -->
+%	{ var(TemaNaoInstanciado) },
+	adv_afirmacao(positivo:IsPositivo),
 	v(acao:A ..subcat:[] .. num:N ..pessoa:P).
 
 sv(acao:A .. tema:Tema ..num:N ..pessoa:P ..desconhecido:nao) -->

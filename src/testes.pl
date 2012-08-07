@@ -61,10 +61,16 @@ teste21:-
 	dado_pergunta_espero_resposta('eu falo com o pescador.', 'ok').
 teste22:-
 	dado_pergunta_espero_resposta('oi.', 'oi.').
+teste22a:-
+	dado_pergunta_espero_resposta('quem sou eu?', 'eu nao sei.').
 teste23:-
-	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu.').
+	dado_pergunta_espero_resposta('quem eh voce?', 'eu sou o zulu. quem eh voce?').
 teste23a:-
+	dado_pergunta_espero_resposta('eu sou o foo.', 'oi foo.').
+teste23b:-
 	dado_pergunta_espero_resposta('qual eh o seu nome?', 'o meu nome eh zulu.').
+teste23c:-
+	dado_pergunta_espero_resposta('qual o seu nome?', 'o meu nome eh zulu.').
 teste24:-
 	dado_pergunta_espero_resposta('quem sou eu?', 'voce eh o foo.').
 teste24a:-
@@ -101,6 +107,8 @@ teste39:-
 	dado_pergunta_espero_resposta('eu largo as minhocas.', 'ok').
 teste40:-
 	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'voce nao pode tira-las da vara de pescar, porque elas nao estao na vara de pescar.').
+teste40a:-
+	dado_pergunta_espero_resposta('eu retiro as minhocas da vara de pescar.', 'voce nao pode retira-las da vara de pescar, porque elas nao estao na vara de pescar.').
 teste41:-
 	dado_pergunta_espero_resposta('eu pego o barco.', 'voce nao pode pega-lo, porque ele nao eh pegavel.').
 teste42:-
@@ -155,7 +163,22 @@ teste66:-
 	dado_pergunta_espero_resposta('quem eh o vendedor?', 'o mateo eh o vendedor.').
 teste67:-
 	dado_pergunta_espero_resposta('eu falo com o vendedor.', 'ok').
-
+teste68:-
+	dado_pergunta_espero_resposta('o que voce tem para vender?', 'foo').
+teste69:-
+	dado_pergunta_espero_resposta('eu quero comprar o martelo.','ok').
+teste69a:-
+	dado_pergunta_espero_resposta('eu compro o martelo.','voce nao pode compra-lo, porque o seu dinheiro nao eh suficiente.').
+teste69b:-
+	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 5 pratas.').
+teste69c:-
+	dado_pergunta_espero_resposta('quanto custa o martelo?','o martelo custa 10 pratas.').
+teste70:-
+	dado_pergunta_espero_resposta('eu vou para o caixa eletronico.','ok').
+teste71:-
+	dado_pergunta_espero_resposta('eu coloco o cartao de credito no caixa eletronico.', 'ok').
+teste72:-
+	dado_pergunta_espero_resposta('eu digito a senha no caixa eletronico.','ok').
 
 :-roda_testes.
 :-halt.
