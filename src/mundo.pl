@@ -27,6 +27,19 @@ ultima_tabua(1).
 
 /**** Localizacao dos objetos no mundo */
 
+quanto(Quem,ter,dinheiro,Incognita):-
+	Incognita=sn(id:prata ..numero:Saldo),
+	dinheiro(Quem,Saldo).
+
+% Ter é um verbo especial, porque nem sempre significa
+% que a o individuo realmente tem consigo
+
+% ter para VENDER
+ter(Quem,Verbo):-
+	nonvar(Verbo),
+	Verbo=vender(Quem,(tema1:Oque..tema2:ParaQuem)),
+	poder(vender(Quem,(tema1:Oque..tema2:ParaQuem))).
+
 /* DETERMINA O QUE O OBJETO X TEM */
 ter(Quem, OQue):-
     ( var(OQue); \+ racional(OQue) ),
@@ -104,10 +117,10 @@ estar(vaso_ming, balcao).
 estar(circulo_de_velas, balcao).
 
 /* CIRCULO DE VELAS */
-estar((vela, X), circulo_de_velas):-
-        conj_velas(Velas),
-        member(X, Velas).
-
+%estar((vela, X), circulo_de_velas):-
+%        conj_velas(Velas),
+%        member(X, Velas).
+estar(velas,circulo_de_velas).
 estar(santo_do_pau_oco, circulo_de_velas).
 
 /* CARTEIRA */
@@ -284,6 +297,8 @@ entidade(A,onde):-
 	local(A);
     racional(A).
 
+entidade(_,(quanto,_)).
+
 /* racionalidade */
 
 racional(player).
@@ -314,7 +329,7 @@ dono(zulu, sambura).
 dono(mateo, martelo).
 dono(mateo, serrote).
 dono(mateo, tesoura).
-dono(mateo, (velas, _)).
+dono(mateo, velas).
 dono(mateo, vaso_ming).
 dono(mateo, poster).
 dono(mateo, balcao).
@@ -628,22 +643,32 @@ finaliza_conversa(Pessoa):-
 /* acoes provenientes do lexico */
 querer(zulu,vender(sambura)):-fail.
 querer(player,_).
+querer(mateo,comprar(peixe)).
+querer(mateo,vender(OQue)):-
+	\+ member(OQue,[balcao,carteira,estande]),
+	nao(local(OQue)).
 
 /* --- acoes de conversa com personagens --- */
-poder_especifico(comprar(sambura)):-
-	!,
-	querer(zulu,vender(sambura)).
-
 poder_especifico(comprar(_)).
 
 /* comprar objeto da pessoa */
 comprar(player, Objeto):-
     falando_com(player, Pessoa), 
     dono(Pessoa,Objeto),
+	querer(Pessoa,vender(Objeto)),
     poder_especifico(comprar(Objeto)),
 	suficiente(comp_nominal(player,dinheiro),Objeto),
     retract(dono(_,Objeto)),
     asserta(estar(Objeto,player)).
+
+vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
+	dono(Quem,OQue),
+	querer(ParaQuem, comprar(OQue)),
+	querer(Quem,vender(OQue)),
+    poder_especifico(vender(Quem,OQue)),
+    retract(dono(_,OQue)),
+    asserta(estar(OQue,ParaQuem)).
+
 
 digitar(player, (tema1:OQue ..tema2:NoQue)):-
     OQue=senha,
@@ -702,11 +727,6 @@ zulu(ser(A,B)):-
 	conhecer(zulu,B),
 	ser(A,B).
 
-/*
-zulu(ser(A,B)):-
-	gspy(ser),
-	ser(A,B).
-*/
 zulu(Pred):-
 	Pred=..[NomePred|_],
 	NomePred\=ser,

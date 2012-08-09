@@ -141,6 +141,10 @@ v(acao:vender ..num:sing ..pessoa: prim ..subcat:[sn]) --> [vendo].
 v(acao:vender ..num:sing ..pessoa: terc ..subcat:[sn]) --> [vende].
 v(acao:vender ..num:sing ..pessoa: indic ..subcat:[sn]) --> [vender].
 
+v(acao:vender ..num:sing ..pessoa: prim ..subcat:[sn,sp(prep:para)]) --> [vendo].
+v(acao:vender ..num:sing ..pessoa: terc ..subcat:[sn,sp(prep:para)]) --> [vende].
+v(acao:vender ..num:sing ..pessoa: indic ..subcat:[sn,sp(prep:para)]) --> [vender].
+
 % VERBO: CORTAR
 v(acao:cortar ..num:sing ..pessoa: prim ..subcat:[sn]) --> [corto].
 v(acao:cortar ..num:sing ..pessoa: terc ..subcat:[sn]) --> [corta].

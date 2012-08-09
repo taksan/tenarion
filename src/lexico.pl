@@ -66,7 +66,6 @@ num(id:11 ..num:plur) -->   [onze].
 num(id:12 ..num:plur) -->   [doze].
 num(id:13 ..num:plur) -->   [treze].
 num(id:NUM ..num:plur) --> {integer(NUM)}, [NUM].
-num(_) -->   [].
 
 %%%% ADV* (que raio � isso??)
 adv -->  [bem].

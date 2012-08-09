@@ -82,16 +82,28 @@ processar([],[]).
 processar(
     (desconhecido:sim 
 	 ..agente_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
-    (ato_fala:recusar 
-        ..desconhecido:sim 
-        ..acao:saber
-        ..num:sing
-        ..tema:(acao:ser ..pessoa:terc ..num:Num 
-			..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
-        ..agente:eu
-        ..pessoa:prim
-        )):-
-    adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
+	Resposta):-
+	resposta_para_substantivo_desconhecido(
+		desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num),
+		Resposta).
+/*
+processar(
+    (desconhecido:sim 
+	 ..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	Resposta):-
+	nonvar(Texto),
+	resposta_para_substantivo_desconhecido(
+		desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num),
+		Resposta).
+*/
+processar(
+    (desconhecido:sim 
+	 ..tema_real:subtema:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num)),
+	Resposta):-
+	nonvar(Texto),
+	resposta_para_substantivo_desconhecido(
+		desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num),
+		Resposta).
 
 processar((agente_real:IdPessoa ..agente:IdPessoa ..gen:G ..num:N), Resposta):-
 	resposta_para_pessoa_desconhecida(IdPessoa,G,N,Resposta).
@@ -161,7 +173,7 @@ processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
 	determina_entidade_referenciada(T,PacienteDeterminado),
     PredAcao =.. [Relacao, Ag, PacienteDeterminado],
-	existe_predicado_binario(Relacao),
+	existe_predicado(Relacao),
 	(
 		(
 			interpretacao_do_interlocutor(PredAcao,PredContextualizado),
@@ -214,6 +226,19 @@ processar((ato_fala:responder ..mensagem:oi ..tema_real:T),(ato_fala:responder .
 processar(_, []).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+resposta_para_substantivo_desconhecido(
+	desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num),
+	(ato_fala:recusar 
+        ..desconhecido:sim 
+        ..acao:saber
+        ..num:sing
+        ..tema:(acao:ser ..pessoa:terc ..num:Num 
+			..tema_real:desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num))
+        ..agente:eu
+        ..pessoa:prim
+        )):-
+    adiciona_termo_a_definir(Texto, np(id:Texto ..tipo:Tipo ..num:Num ..gen:Gen)).
+
 resposta_para_pessoa_desconhecida(IdPessoa,G,N,
 	(ato_fala:interro_agente_incognito
 		..agente:incog(quem)
@@ -248,7 +273,7 @@ resposta_para_tema_incognito(
 	monta_predicado_para_resolucao(Relacao,AgenteDeterminado,TemaDeterminado,Incognita,PredAcao),
 	(	
 		(
-			existe_predicado_binario(Relacao),
+			existe_predicado(PredAcao),
 			interpretacao_do_interlocutor(PredAcao,PredContextualizado),
 			findall(Incognita, (PredContextualizado,entidade(Incognita,TipoNp)), L),
 			( (\+ L = [], setof(A, member(A,L), L1));  L1 = L),
@@ -286,10 +311,30 @@ resposta_do_interlocutor(_,Default,Default).
 
 interpretacao_do_interlocutor(Pred,PredContextualizado):-
 	falando_com(player,Quem),
-	existe_predicado_binario(Quem),
+	existe_predicado(Quem),
 	PredContextualizado=..[Quem,Pred].
 
 interpretacao_do_interlocutor(Pred,Pred).
+
+
+monta_predicado_para_resolucao(
+	Acao,
+	Agente,
+	incog((quanto,Substantivo)),
+	Incognita,
+	Predicado):-
+	Predicado=quanto(Agente,Acao,Substantivo,Incognita).
+
+monta_predicado_para_resolucao(
+	adj_advb(Acao,tipo:verbal ..prep:para ..verbo:Predicativo),
+	Agente,
+	incog(_),
+	Incognita,
+	Predicado
+	):-
+	nonvar(Acao),
+	PredAdvb=..[Predicativo, Agente, Incognita],
+	Predicado=..[Acao, Agente, PredAdvb].
 
 monta_predicado_para_resolucao(AcaoAlvo,
 				Agente,
@@ -320,6 +365,12 @@ elementos_resposta(ser,incog(quem),TemaRes,Resposta,TemaRes,Resposta,ser,sim):-
 elementos_resposta(ser,incog(qual),TemaRes,Resposta,TemaRes,Resposta,ser,_):-
 	TemaRes=comp_nominal(seu,_).
 
+elementos_resposta(Relacao,Agente,incog(oque),RespostaListaBiTransitivos,Agente,Resposta,Relacao,_):-
+	nonvar(RespostaListaBiTransitivos), is_list(RespostaListaBiTransitivos),
+	RespostaListaBiTransitivos=[Primeiro|_],
+	has_features(Primeiro),
+	obtem_sets_tema1_tema2(RespostaListaBiTransitivos,Resposta,_).
+
 elementos_resposta(Acao,incog(TipoNp),TemaRes,Resposta,Resposta,TemaRes,AcaoRes,_):-
 	nonvar(TipoNp),
 	ajuste_acao_de_acordo_com_resposta(TemaRes,Acao,AcaoRes).
@@ -335,6 +386,15 @@ ajuste_acao_de_acordo_com_resposta(Alvo, estar,exige_preposicao(estar,com)):-
 	racional(Alvo).
 
 ajuste_acao_de_acordo_com_resposta(_, R,R).
+
+obtem_sets_tema1_tema2(B,Temas1,Temas2):-
+	separa_tema1_tema2(B,T1,T2),	
+	list_to_set(T1,Temas1),
+	list_to_set(T2,Temas2).
+
+separa_tema1_tema2([],[],[]).
+separa_tema1_tema2([tema1:T1..tema2:T2|BTail],[T1|T1Tail],[T2|T2Tail]):-
+	separa_tema1_tema2(BTail,T1Tail,T2Tail).
 
 % normalizacao    
 normaliza_substantivos_resposta(TipoNp,[], np([],TipoNp)).
@@ -406,11 +466,16 @@ eh_tema_simples(Ag):-
 	\+ Ag=incog(_),
 	\+ has_features(Ag).
 
-existe_predicado_binario(Predicado):-
-	PredToCheck=..[Predicado,_,_],
-	clause(PredToCheck,_);
-	PredToCheck=..[Predicado,_],
-	clause(PredToCheck,_).
+
+existe_predicado(Predicado):-
+	Predicado=..[Pred|Terms], 
+	length(Terms,TermsLen),
+	current_predicate(Pred/TermsLen).
+
+existe_predicado(Pred):-
+	\+compound(Pred),
+	current_predicate(Pred/_).
+
 
 nadadica:-
-	nl.
+	1=1.

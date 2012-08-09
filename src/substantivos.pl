@@ -49,7 +49,7 @@ np(id:tesoura .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [tesoura].
 np(id:vara_pescar .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vara], [de], [pescar].
 np(id:vaso_ming .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [vaso],[ming].
 np(id:vela .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vela].
-np(id:(vela, _) .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [velas].
+np(id:velas .. tipo:nc ..num:plur ..gen:fem ..desconhecido:nao) --> [velas].
 np(id:vitoria_regia .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [vitoria-regia].
 np(id:sambura ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [sambura].
 np(id:chapeu ..tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [chapeu].
@@ -68,6 +68,6 @@ np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	[ Jogador ].
 
 % casa com nomes desconhecidos, ou seja, objetos ou pessoas desconhecidas.
-np(id:desconhecido(texto: Texto ..tipo:Tipo ..gen:G ..num:N) ..tipo:Tipo ..gen:G ..num:N ..desconhecido:sim) --> [Texto].
+np(id:desconhecido(texto: Texto ..tipo:nc ..gen:G ..num:N) ..tipo:nc ..gen:G ..num:N ..desconhecido:sim) --> [Texto].
 
 

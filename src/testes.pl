@@ -164,13 +164,13 @@ teste66:-
 teste67:-
 	dado_pergunta_espero_resposta('eu falo com o vendedor.', 'ok').
 teste68:-
-	dado_pergunta_espero_resposta('o que voce tem para vender?', 'foo').
+	dado_pergunta_espero_resposta('o que voce tem para vender?', 'eu tenho o santo do pau oco, um poster, um vaso ming, algumas velas, uma tesoura, um serrote e um martelo para vender.').
 teste69:-
 	dado_pergunta_espero_resposta('eu quero comprar o martelo.','ok').
 teste69a:-
 	dado_pergunta_espero_resposta('eu compro o martelo.','voce nao pode compra-lo, porque o seu dinheiro nao eh suficiente.').
 teste69b:-
-	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 5 pratas.').
+	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem cinco pratas.').
 teste69c:-
 	dado_pergunta_espero_resposta('quanto custa o martelo?','o martelo custa 10 pratas.').
 teste70:-

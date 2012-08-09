@@ -9,7 +9,6 @@
 * 	o verbo deve concordar com o agente, e nao com o tema!
 */
 
-
 /*** Sentencas compostas****/
 s(ato_fala:composto ..composicao:[])-->[].
 
@@ -147,14 +146,27 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..d
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
-% nao aceita produzir texto
-sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:IsDesconhecido) -->
-    { var(Substantivo), var(I), var(T), var(IsDesconhecido) },
-	det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant.. poss:Poss)),
-	mod(gen:G .. num:N), 
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido) -->
+    { 
+		ignore(
+			(
+			nonvar(Substantivo), nadadica,
+			id_para_np(Substantivo,sn(id:I..numero:Numero.. quant:Quant.. poss:Poss))
+			)
+		) 
+	},
+	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
+	det(gen:G .. num:N ..tipo:T ..gen:G ..det:det(numero:Numero.. quant:Quant.. poss:Poss)),
+%	mod(gen:G .. num:N), 
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido),
-	mod(gen:G .. num:N),
-	{ id_para_np(Substantivo,sn(id:I..numero:Numero.. quant:Quant.. poss:Poss))}.
+	{
+		ignore(
+			(
+			var(Substantivo), 
+			id_para_np(Substantivo,sn(id:I..numero:Numero.. quant:Quant.. poss:Poss))
+			)
+		)
+	}.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
 sn(coord:sim ..id:[A1,A2] .. num:plur ..prep:P) -->
@@ -184,11 +196,6 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhec
    	ident(gen:G .. num:N ..tipo:TipoIdent),
 	np(id:I .. tipo:T ..gen:G ..num:N ..desconhecido:nao),
 	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
-
-%sn(coord:nao ..id:Substantivo  ..tipo:T ..gen:G ..num:N ..desconhecido:nao)-->
-%	{ nonvar(Substantivo), Substantivo=pred(Pred) },
-%	np(id:Pred.. tipo:T ..gen:G ..num:N ..desconhecido:nao).
-	
 
 sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
 	{ id_para_np(Substantivo, SnComposto) },
@@ -240,12 +247,25 @@ sv(acao:A .. tema:Tema ..num:N ..pessoa:P ..desconhecido:nao) -->
 %%% que possuem as duas formas com conotações diferentes(ex: ser no sentido de ser ou de pertencer)
 %%% ele deve preferir tentar o que nao tem a preposição
 
-% VERBO TRANSITIVO DIRETO onde o OBJETO foi determinado antes
+% VERBO TRANSITIVO DIRETO onde o PACIENTE foi determinado antes
 % exemplo onde a faca está? (nesse caso o complemento é ONDE)
 % Nesses casos, o tema do sintagma verbal será o AGENTE  
 sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
 	sn(id:Agente ..pessoa:P ..num:N ..desconhecido:IsDesconhecido),
 	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P).
+
+sv(tema_eh_agente_ou_complemento:agente ..acao:adj_advb(A,AdjAdb) .. tema:Agente ..desconhecido:IsDesconhecido) -->
+	sn(id:Agente ..pessoa:P ..num:N ..desconhecido:IsDesconhecido),
+	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	adj_adv(adj:AdjAdb).
+
+sv(tema_eh_agente_ou_complemento:complemento ..acao:Acao .. tema:Paciente..desconhecido:IsDesconhecido ..positivo:IsPositivo ..num:N ..pessoa:P) -->
+	{nonvar(Acao),Acao=adj_advb(A,AdjAdb)},
+	{ ignore((var(IsPositivo), is_positivo(Paciente, IsPositivo))) },
+	adv_afirmacao(positivo:IsPositivo),
+	v(acao:A ..subcat:[sn] ..num:N ..pessoa:P),
+	sn(id:Paciente ..desconhecido:IsDesconhecido),
+	adj_adv(adj:AdjAdb).
 
 % igual ao caso anterior, apenas invertendo verbo com agente
 sv(tema_eh_agente_ou_complemento:agente ..acao:A .. tema:Agente ..desconhecido:IsDesconhecido) -->
@@ -352,10 +372,21 @@ adv_afirmacao(positivo: IsPositivo) -->
 	{ var(IsPositivo), IsPositivo=sim },
     advb(tipo_adv:afirmacao ..adv:IsPositivo).
 
-det(gen:G .. num:N ..tipo:T ..det:det(numero:Numero.. quant:Quant)) --> 
-       quant(id:Quant.. gen:G .. num:N),
-       ident(gen:G .. num:N ..tipo:T),
+det(gen:G .. num:N ..det:det(numero:Numero.. quant:Quant)) --> 
+	   {nonvar(Numero),var(Quant)},
        num(id:Numero ..gen:G .. num:N).
+
+det(gen:G .. num:N ..tipo:T ..det:det(quant:Quant)) --> 
+       quant_advb(id:Quant.. gen:G .. num:N),
+       ident(gen:G .. num:N ..tipo:T).
+
+quant_advb(id:Quant.. gen:G .. num:N)-->
+	{nonvar(Quant)},
+    quant(id:Quant.. gen:G .. num:N).
+
+quant_advb(id:Quant)-->
+	{var(Quant)},
+	[].
 
 sa(adj:A ..gen:G .. num:N) --> 
        a(adj:A ..gen:G .. num:N).
@@ -367,6 +398,10 @@ sa(adj:A ..gen:G .. num:N) -->
 sa(adj:A ..gen:G .. num:N) --> 
        a(adj:A ..gen:G .. num:N), 
        sp(_).
+
+adj_adv(adj:(tipo:verbal ..prep:P ..verbo:Verbo))-->
+	prep(prep:P),
+	v(acao:Verbo ..pessoa:indic).
 
 mod(adj:A ..gen:G .. num:N) --> sa(adj:A ..gen:G .. num:N).
 
