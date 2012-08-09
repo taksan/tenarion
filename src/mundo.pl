@@ -313,10 +313,10 @@ racional(Quem):-
 descreve(zulu,pescador).
 descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
-preco(martelo,10).
-preco(serrote,15).
-preco(tesoura,2).
-preco(vaso_ming,40).
+custa(martelo,10).
+custa(serrote,15).
+custa(tesoura,2).
+custa(vaso_ming,40).
 
 /* pertinencia */
 % zulu
@@ -342,13 +342,9 @@ dono(mateo, carteira).
 dono(player, X):-
     nonvar(X),
     estar(X, player).
-caro(Objeto):-
-	preco(Objeto,Preco),
-	dinheiro(player,Saldo),
-	Preco > Saldo.
 
 suficiente(comp_nominal(meu,dinheiro), Objeto):-
-	preco(Objeto,Preco),
+	custa(Objeto,Preco),
 	dinheiro(player,Saldo),
 	Preco < Saldo.
 
