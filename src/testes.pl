@@ -186,7 +186,7 @@ teste70a:-
 teste70b:-
 	dado_pergunta_espero_resposta('eu coloco o cartao de credito no caixa eletronico.', 'ok').
 teste70c:-
-	dado_pergunta_espero_resposta('eu digito a senha no teclado.','apareceu alguma coisa na tela.').
+	dado_pergunta_espero_resposta('eu digito a senha no teclado.','alguma coisa apareceu na tela.').
 teste70d:-
 	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','um cartao de credito, um teclado e uma tela estao aqui.').
 teste70e:-

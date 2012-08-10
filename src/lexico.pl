@@ -39,10 +39,10 @@ a(adj:quebrado   ..gen:fem ..tipo:estar ..num:sing)-->[quebrada].
 
 %%%% QUANT
 quant(id:todo.. gen:masc.. num:sing)   --> [todo].
-quant(id:todo.. ggen:fem.. num:sing)   --> [toda].
-quant(id:todo.. ggen:masc.. num:plur)  --> [todos].
-quant(id:todo.. ggen:fem.. num:plur)   --> [todas].
-quant(id:algum.. ggen:masc.. num:sing) --> [algum].
+quant(id:todo.. gen:fem.. num:sing)   --> [toda].
+quant(id:todo.. gen:masc.. num:plur)  --> [todos].
+quant(id:todo.. gen:fem.. num:plur)   --> [todas].
+quant(id:algum.. gen:masc.. num:sing) --> [algum].
 quant(id:algum.. gen:fem.. num:sing)   --> [alguma].
 quant(id:algum.. gen:masc.. num:plur)  --> [alguns].
 quant(id:algum.. gen:fem.. num:plur)   --> [algumas].
