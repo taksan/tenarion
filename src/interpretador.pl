@@ -62,7 +62,7 @@ processar((ato_fala:int_sim_nao
 			..agente_real:A 
 			..acao:Relacao 
 			..tema:(acao: AcaoAuxiliar ..tema_real:T ..desconhecido:nao)),
-          (ato_fala:responder .. mensagem:Resposta)):-
+          RespostaTracos):-
     PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
 	PredAcao =..[Relacao, PredAcaoAuxiliar],
 
@@ -256,8 +256,6 @@ resposta_do_interlocutor(Predicate,_,Resposta):-
 	Resposta\=[].
 
 resposta_do_interlocutor(_,Default,Default).
-
-encontra_evento((),[]).
 
 encontra_evento((evento(Resposta)),Resposta).
 encontra_evento((evento(Resposta),_),Resposta).
