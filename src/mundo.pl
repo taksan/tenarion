@@ -689,12 +689,11 @@ vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
 
 
 digitar(player, (tema1:senha ..tema2:teclado)):-
-	estar(teclado,Onde),
-	estar(player,Onde),
+	estar(player,caixa_eletronico),
 	estar(cartao_credito,caixa_eletronico),
-    assertz(digitado(OQue, NoQue)),
+    assertz(digitado(senha, teclado)),
 	assertz(estar(saldo,tela)),
-	evento(verbo:aparecer ..tempo:preterito ..agente:sn(id:coisa ..quant:algum) ..tema:tela).
+	evento(ato_fala:informar..acao:aparecer ..tempo:preterito ..agente:sn(id:coisa ..quant:algum) ..tema:tela).
 
 pescar(player,Onde):-
     Onde = lago,

@@ -66,6 +66,7 @@ np(id:prata ..tipo:nc ..gen:fem ..num:plur ..desconhecido:nao)-->[pratas].
 np(id:preco ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[preco].
 np(id:senha ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[senha].
 np(id:saldo ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[saldo].
+np(id:coisa ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[coisa].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

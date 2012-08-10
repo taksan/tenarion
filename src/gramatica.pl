@@ -64,31 +64,31 @@ s(ato_fala:interro_agente_incognito ..agente:incog(Id) ..acao:X.. pessoa:P.. gen
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..pessoa:P ..num:N ..gen:G ..desconhecido:nao),
     pontuacao_opcional('?').
 
-s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:nao) -->
+s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) ..acao:X ..desconhecido:nao) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:nao),
     pontuacao_opcional(_).
 
 
-s(ato_fala:interro_tema_incognito .. agente:Ag .. acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Paciente) ..desconhecido:IsDesconhecido ) -->
+s(ato_fala:interro_tema_incognito .. agente:Ag ..acao:X ..tema:(tema:incog(PronRelativo) ..subtema:Paciente) ..desconhecido:IsDesconhecido ) -->
 	sn(tipo:relativo .. coord:nao ..id:PronRelativo),% casa com ONDE
 	sn(id:Ag),%casa com o sujeito
     sv(tema_eh_agente_ou_complemento:complemento ..acao:X ..tema:Paciente ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 
-s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) .. acao:X ..desconhecido:IsDesconhecido) -->
+s(ato_fala:interro_tema_incognito ..agente:Agente ..tema:incog(Id) ..acao:X ..desconhecido:IsDesconhecido) -->
 	sn(tipo: relativo .. coord:nao ..id:Id ..pessoa:P), 
 	sv(tema_eh_agente_ou_complemento:agente ..acao:X ..tema:Agente ..pessoa:P ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 
-s(ato_fala:interro_agente_incognito ..tema:Agente ..agente:incog(qual) .. acao:ser ..desconhecido:IsDesconhecido ..num:N ..pessoa:Pes ..gen:G) -->
+s(ato_fala:interro_agente_incognito ..tema:Agente ..agente:incog(qual) ..acao:ser ..desconhecido:IsDesconhecido ..num:N ..pessoa:Pes ..gen:G) -->
 	pro(tipo: relativo ..pron:qual ..num:N ..gen:G), 
 	sn(id:Agente ..num:N ..pessoa:Pes ..gen:G ..desconhecido:IsDesconhecido),
     pontuacao_opcional(_).
 	
 	
 % perguntas cujas respostas serao sim ou nao no estilo "eu posso pegar", "eu posso ir", etc
-s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:Paciente ..desconhecido:nao) -->
+s(ato_fala:int_sim_nao .. agente:A ..acao:X .. tema:Paciente ..desconhecido:nao) -->
 	sn(id:A ..num:N ..pessoa:Pes ..gen:G),
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Paciente ..num:N ..pessoa:Pes ..gen:G),
     ['?'].
@@ -97,20 +97,20 @@ s(ato_fala:int_sim_nao .. agente:A .. acao:X .. tema:Paciente ..desconhecido:nao
 % sentenca para agente singular
 
 
-s(ato_fala:informar ..positivo:IsPositivo ..agente:A .. acao:X .. tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
+s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X .. tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
         {\+ is_list(A)}, 
 	sn(id:A .. num: N ..pessoa:Pes ..gen:G), 
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X .. tema:Paciente .. num: N ..pessoa:Pes ..gen:G),
    	pontuacao_opcional('.').
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no ancoradouro).
-s(ato_fala:informar .. agente:[A1|ATail] .. acao:X .. tema:Paciente ..pessoa:P) -->
+s(ato_fala:informar .. agente:[A1|ATail] ..acao:X .. tema:Paciente ..pessoa:P) -->
 	sn(coord:sim .. id:[A1|ATail] ..pessoa:P),
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Paciente .. num:plur ..pessoa:P),
     pontuacao_opcional('.').
 
 % sentenca na qual o agente tem que ser determinado pelo contexto (ex: pegar a lata - agente: quem falou)
-s(ato_fala:informar ..agente:(pessoa:P ..num:N) .. acao:X .. tema:Paciente ..desconhecido:_) -->
+s(ato_fala:informar ..agente:(pessoa:P ..num:N) ..acao:X .. tema:Paciente ..desconhecido:_) -->
 	sv(tema_eh_agente_ou_complemento:complemento ..acao:X .. tema:Paciente .. num:N .. pessoa:P),
 	pontuacao_opcional('.').
 
@@ -375,6 +375,11 @@ adv_afirmacao(positivo: IsPositivo) -->
 det(gen:G .. num:N ..det:det(numero:Numero.. quant:Quant)) --> 
 	   {nonvar(Numero),var(Quant)},
        num(id:Numero ..gen:G .. num:N).
+
+det(gen:G .. num:N ..det:det(numero:Numero.. quant:Quant)) --> 
+	   {var(Numero),nonvar(Quant)},
+       quant(id:Quant..gen:G .. num:N).
+
 
 det(gen:G .. num:N ..tipo:T ..det:det(quant:Quant)) --> 
        quant_advb(id:Quant.. gen:G .. num:N),

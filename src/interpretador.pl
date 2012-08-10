@@ -65,10 +65,16 @@ processar((ato_fala:int_sim_nao
           (ato_fala:responder .. mensagem:Resposta)):-
     PredAcaoAuxiliar =.. [AcaoAuxiliar, A, T],
 	PredAcao =..[Relacao, PredAcaoAuxiliar],
+
+	interpretacao_do_interlocutor(PredAcao,PredContextualizado),
 	(
-        	(PredAcao,Resposta=positivo);
+        	(PredContextualizado,Resposta=positivo);
 			Resposta=negativo
-	).
+	),
+	resposta_do_interlocutor(
+		PredContextualizado,
+		(ato_fala:responder .. mensagem:Resposta),
+		RespostaTracos).
 
 % processa perguntas do tipo "o que eu posso ... ou onde eu posso ir"
 processar((ato_fala:interro_tema_incognito
@@ -244,7 +250,21 @@ resposta_do_interlocutor(zulu(ser(Quem,B)),RespostaDada,RespostaNova):-
 	PerguntaResposta=(ato_fala:interro_agente_incognito ..acao:ser ..pessoa:terc ..tema:voce ..agente:incog(quem)),
 	RespostaNova=(ato_fala:composto ..composicao:[RespostaDada, PerguntaResposta]).
 
+resposta_do_interlocutor(Predicate,_,Resposta):-
+	clause(Predicate, Clauses),
+	encontra_evento(Clauses, Resposta),
+	Resposta\=[].
+
 resposta_do_interlocutor(_,Default,Default).
+
+encontra_evento((),[]).
+
+encontra_evento((evento(Resposta)),Resposta).
+encontra_evento((evento(Resposta),_),Resposta).
+
+encontra_evento((_,Resto),Resposta):-
+	encontra_evento(Resto,Resposta).
+
 
 interpretacao_do_interlocutor(Pred,PredContextualizado):-
 	falando_com(player,Quem),
