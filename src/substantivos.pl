@@ -24,6 +24,7 @@ np(id:barco .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [barco].
 
 np(id:agua_do_lago .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [agua].
 np(id:botoes .. tipo:nc ..num:plur ..gen:masc ..desconhecido:nao) --> [botoes].
+np(id:teclado .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [teclado].
 np(id:buraco .. tipo:nc ..num:sing ..gen:masc ..desconhecido:nao) --> [buraco].
 np(id:carteira .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [carteira].
 np(id:caixa_registradora .. tipo:nc ..num:sing ..gen:fem ..desconhecido:nao) --> [caixa],[registradora].
@@ -62,7 +63,9 @@ np(id:nome ..tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [nome].
 np(id:local_fechado ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[local],[fechado].
 np(id:prata ..tipo:nc ..gen:fem ..num:sing ..desconhecido:nao)-->[prata].
 np(id:prata ..tipo:nc ..gen:fem ..num:plur ..desconhecido:nao)-->[pratas].
+np(id:preco ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[preco].
 np(id:senha ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[senha].
+np(id:saldo ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[saldo].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

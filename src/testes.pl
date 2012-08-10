@@ -170,15 +170,29 @@ teste69:-
 teste69a:-
 	dado_pergunta_espero_resposta('eu compro o martelo.','voce nao pode compra-lo, porque o seu dinheiro nao eh suficiente.').
 teste69b:-
-	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem cinco pratas.').
+	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 5 pratas.').
 teste69c:-
-	dado_pergunta_espero_resposta('quanto custa o martelo?','o martelo custa 10 pratas.').
+	dado_pergunta_espero_resposta('quanto custa o martelo?','ele custa 10 pratas.').
+teste69d:-
+	dado_pergunta_espero_resposta('qual o preco do martelo?','o preco dele eh 10 pratas.').
+teste69e:-
+	dado_pergunta_espero_resposta('qual o preco da tesoura?','o preco dela eh 2 pratas.').
+teste69f:-
+	dado_pergunta_espero_resposta('eu compro ela.','ok.').
 teste70:-
 	dado_pergunta_espero_resposta('eu vou para o caixa eletronico.','ok').
-teste71:-
+teste70a:-
+	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','um teclado e uma tela estao aqui.').
+teste70b:-
 	dado_pergunta_espero_resposta('eu coloco o cartao de credito no caixa eletronico.', 'ok').
-teste72:-
-	dado_pergunta_espero_resposta('eu digito a senha no caixa eletronico.','ok').
+teste70c:-
+	dado_pergunta_espero_resposta('eu digito a senha no teclado.','apareceu alguma coisa na tela.').
+teste70d:-
+	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','um cartao de credito, um teclado e uma tela estao aqui.').
+teste70e:-
+	dado_pergunta_espero_resposta('o que tem na tela?','o saldo estah nela.').
+teste70f:-
+	dado_pergunta_espero_resposta('qual o valor do saldo?','o valor do saldo eh de 20 pratas.').
 
 :-roda_testes.
 :-halt.

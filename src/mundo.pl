@@ -133,8 +133,7 @@ estar(chiclete, embaixo_carteira).
 estar(feiticeira, poster).
 
 /* caixa eletronico */
-estar(dinheiro, caixa_eletronico).
-estar(botoes, caixa_eletronico).
+estar(teclado, caixa_eletronico).
 estar(tela, caixa_eletronico).
 
 /* LOCAL: LAGO */
@@ -248,7 +247,13 @@ local(lago).
 local(barco).
 local(caixa_eletronico).
 
-/* identidade */
+/* SER */
+ser(Res,comp_nominal(NomePred,Alvo)):-
+	nonvar(NomePred),
+	Pred=..[NomePred,Res,Alvo],
+	clause(Pred,_),
+	Pred.
+
 ser(comp_nominal(NomePred,Alvo),Res):-
 	nonvar(NomePred),
 	Pred=..[NomePred,Res,Alvo],
@@ -275,6 +280,10 @@ ser(L,L):-
     nonvar(L), \+ compound(L),
 	ignore(introduz_pessoa(L)).
 
+ser(L,L):-
+	nonvar(L),
+	L=sn(_).
+
 ser(pred(Quem),comp_nominal(seu,nome)):-
 	var(Quem),
 	falando_com(player,Quem),
@@ -298,6 +307,7 @@ entidade(A,onde):-
     racional(A).
 
 entidade(_,(quanto,_)).
+entidade(_,quanto).
 
 /* racionalidade */
 
@@ -313,10 +323,17 @@ racional(Quem):-
 descreve(zulu,pescador).
 descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
-custa(martelo,10).
-custa(serrote,15).
-custa(tesoura,2).
-custa(vaso_ming,40).
+custar(sn(id:prata ..numero:Preco),OQue):-
+	\+compound(OQue),
+	valor(OQue,Preco).
+
+preco(Valor,OQue):-
+	custar(Valor,OQue).
+
+valor(martelo,10).
+valor(serrote,15).
+valor(tesoura,2).
+valor(vaso_ming,40).
 
 /* pertinencia */
 % zulu
@@ -344,7 +361,7 @@ dono(player, X):-
     estar(X, player).
 
 suficiente(comp_nominal(meu,dinheiro), Objeto):-
-	custa(Objeto,Preco),
+	valor(Objeto,Preco),
 	dinheiro(player,Saldo),
 	Preco < Saldo.
 
@@ -556,6 +573,11 @@ tirar(player, (tema1:OQue ..tema2:DoQue)):-
     retract(estar(OQue, DoQue)),
     assertz(estar(OQue, player)).
 
+tirar(player, (tema1:OQue ..tema2:DoQue)):-
+	estar(player, DoQue),
+    retract(estar(OQue, DoQue)),
+    assertz(estar(OQue, player)).
+
 /* larga o objeto e o coloca na cena atual */
 soltar(player, OQue):-
 	ter(player,OQue),
@@ -666,12 +688,13 @@ vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
     asserta(estar(OQue,ParaQuem)).
 
 
-digitar(player, (tema1:OQue ..tema2:NoQue)):-
-    OQue=senha,
-	NoQue=caixa_eletronico,
-	estar(cartao_credito,NoQue),
-	estar(player,NoQue),
-    assertz(digitado(OQue, NoQue)).
+digitar(player, (tema1:senha ..tema2:teclado)):-
+	estar(teclado,Onde),
+	estar(player,Onde),
+	estar(cartao_credito,caixa_eletronico),
+    assertz(digitado(OQue, NoQue)),
+	assertz(estar(saldo,tela)),
+	evento(verbo:aparecer ..tempo:preterito ..agente:sn(id:coisa ..quant:algum) ..tema:tela).
 
 pescar(player,Onde):-
     Onde = lago,
@@ -729,3 +752,5 @@ zulu(Pred):-
 	Pred.
 
 querer(_).
+
+evento(_).

@@ -1,0 +1,93 @@
+Especificação do 2o Trabalho
+
+Proposta:
+Desenvolvimento de um jogo de RPG (roleplaying game) no qual existirão
+2 níveis de conversação:
+	1) Com o narrador (mestre de jogo)
+	2) Com os personagens de jogo
+
+O jogo será composto de um mundo com diversos ambientes, objetos e per-
+sonagens com os quais o usuário poderá interagir por intermédio do nar-
+rador.
+
+Para tanto, o narrador dispõe de informações sobre o estado do mundo e
+do jogador, incluindo posição deste no mundo e de seu inventário.
+
+MODELO DE MUNDO
+---------------
+
+SISTEMA DE LINGUAGEM
+--------------------
+
+O sistema de linguagem será capaz de ampliar a sua capacidade de acordo
+com exemplos providos pelo usuário, tanto através da inserção de regras
+gramaticais como de novos elementos léxicos. 
+
+Como consequência do método utilizado, o sistema também será capaz de
+não apenas detectar erros como sugerir alternativas para correção.
+
+A análise sintática será utilizando o algoritmo de Earley ou um sistema
+semelhante.
+
+* Métrica de erro
+
+Para ser capaz de aprender, será estabelecido uma métrica para determi-
+nar o quão longe uma determinada sentença está de ser corretamente ana-
+lisada. 
+
+Para calcular a métrica, o seguinte algoritmo será utilizado:
+Seja uma produção gramatical P -> A1,A2,A3,..,An e S a sentença a ser
+analisada.
+
+Suponha que S não foi reconhecida segundo a gramática.
+
+Para cada Ai faça:
+-Busque todos os Ai que não falham....
+//
+
+* Aprendizagem
+
+O sistema pode aprender novas estruturas gramáticas baseado na regra
+sintática que estiver mais próxima de ser capaz de cobrir o caso no
+qual houve falha.
+
+
+
+Exemplo de conversação(que se espera) com o sistema:
+-------------------------------------
+J -> jogador(humano)	N -> narrador(computador)
+
+J> Onde eu estou agora?
+N> Você está em um embarcadouro.
+J> Qual a cor da água?
+N> É meio marrom.
+J> Tem alguma coisa na água?
+N> Você não consegue ver...
+J> O que mais tem nesse local?
+N> Tem uma corda amarrada em uma âncora meio enferrujada e um barco.
+J> Só isso?
+N> Só.
+J> Eu pego a corda.
+N> Ok. 
+J> Quais objetos eu tenho na mão?
+N> Agora você tem uma corda cuja ponta está amarrada a uma âncora.
+J> Eu puxo a corda.
+N> Você percebe que a âncora é muito pesada e impede você de puxá-la.
+J> Tem uma faca por aqui?
+N> Não.
+J> Onde eu posso achar uma faca?
+N> Você deve descobrir sozinho.
+J> Me dê uma dica...
+N> Ok. Talvez você possa comprar uma...
+J> Mas eu não tenho dinheiro!
+N> É verdade.
+J> Eu vou sair do embarcadouro.
+N> Pra onde você vai?
+J> Eu vou procurar uma loja de suprimentos na cidade.
+N> Ok. Você encontra uma chamada "La Belle".
+J> Que nome idiota!
+N> Diga isso pro dono da loja.
+J> Eu entro na loja e examino o local.
+N> Essa é uma loja de paredes rústicas, formadas principalmente por
+   troncos de madeira.
+...

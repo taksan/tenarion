@@ -52,20 +52,7 @@ quant(_) --> [].
 
 %%%% NUMERO
 num(id:1 ..num:sing) --> [1].
-num(id:1 ..gen:fem.. num:sing) --> [uma].
-num(id:2 ..gen:fem.. num:plur) --> [duas].
-num(id:3 ..num:plur) -->   [tres].
-num(id:4 ..num:plur) -->   [quatro].
-num(id:5 ..num:plur) -->   [cinco].
-num(id:6 ..num:plur) -->   [seis].
-num(id:7 ..num:plur) -->   [sete].
-num(id:8 ..num:plur) -->   [oito].
-num(id:9 ..num:plur) -->   [nove].
-num(id:10 ..num:plur) -->   [dez].
-num(id:11 ..num:plur) -->   [onze].
-num(id:12 ..num:plur) -->   [doze].
-num(id:13 ..num:plur) -->   [treze].
-num(id:NUM ..num:plur) --> {integer(NUM)}, [NUM].
+num(id:NUM ..num:plur) --> {integer(NUM),NUM>1}, [NUM].
 
 %%%% ADV* (que raio � isso??)
 adv -->  [bem].
@@ -128,6 +115,7 @@ pro(tipo_pro:obliquo ..num:sing ..pessoa:prim ..subcat:[sv] ..pron:me) --> [me].
 pro(tipo_pro:obliquo ..num:sing ..pessoa:seg ..pron:te) -->  [te].
 pro(tipo_pro:pron_ninguem(quem) ..pron:ninguem) --> [ninguem].
 pro(tipo_pro:pron_ninguem(oque) ..pron:nada)--> [nada].
+pro(tipo_pro:pron_ninguem(qual) ..pron:nada)--> [nada].
 pro(tipo_pro:pron_ninguem(onde) ..pron:nenhum)--> [nenhum].
 
 pro(tipo_pro:demonstrativo ..pron:esse ..gen:masc.. num:sing) --> [esse].
