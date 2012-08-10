@@ -42,6 +42,8 @@ convertWord(+OldWord,-NewWord)
 
 ========================================================================*/
 
+:-[string].
+
 readText(WordList):-
    readWords(Words),
    checkWords(Words,WordList).
@@ -127,10 +129,15 @@ convertWord([Char|Rest1],[Char|Rest2]):-
 % Escrito por Michel Gagnon
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%5
+texto_nome_quem_fala(Nome):-
+	nome_de_quem_estah_falando(Desc),
+	sn(id:Desc,NomeCalc,[]),
+	converte_resposta_para_string(NomeCalc,NomeX),
+	capitalize(NomeX,Nome).
 
 writeLine([]).
 writeLine([First|Rest]):-
-    nome_de_quem_estah_falando(Nome),
+    texto_nome_quem_fala(Nome),
     write(Nome),
     write(' > '),
 	capitalize(First,FirstCap),
@@ -160,22 +167,10 @@ writeWords([W|Rest]):-
 	write(W),
 	writeWords(Rest).
 
-
-capitalize(W,W2):-
-	atom_chars(W,W1),
-	cap(W1,W1cap),
-	atom_chars(W2,W1cap).
-
 decap(Cap,Decap):-
 	Cap>64, Cap<92,!,
 	Decap is Cap+32.
 
 decap(Decap,Decap).
-
-cap([],[]).
-cap([F|Rest],[F2|Rest]):-
-	char_code(F,C),
-	C2 is C -32,
-	char_code(F2,C2).
 
 %char_code(X,X).

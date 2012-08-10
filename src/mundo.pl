@@ -10,6 +10,12 @@
    dynamic(conhecer/2),dynamic(dono/2),
    discontiguous(poder_especifico/1).
 
+:-[fatos].
+
+/* LOCAL INICIAL DE JOGO */
+estar(player, ancoradouro).
+falando_com(player, narrador).
+
 /**** Predicados auxiliares para informacao ****/
 
 nao(Predicado):-
@@ -17,13 +23,6 @@ nao(Predicado):-
 
 inventario(Obj):-
         examinar(player, Obj).
-
-falando_com(player, narrador).
-
-/**** objetos especiais */
-conj_velas([1,2,3,4,5,6,7,8,9,10,11,12,13]).
-
-ultima_tabua(1).
 
 /**** Localizacao dos objetos no mundo */
 
@@ -56,13 +55,6 @@ ter(player, ferramentas):-
 pertencer(OQue,A_Quem):-
     ter(A_Quem, OQue).
 
-/* DETERMINA CONEXAO ENTRE LOCAIS */
-
-adjacente(ancoradouro, carpintaria).
-adjacente(ancoradouro, lago).
-adjacente(barco, lago).
-adjacente(lago, ilha).
-
 perto(X, Y):-
         adjacente(X,Y).
 
@@ -76,97 +68,12 @@ perto(X, Y):-
         estar(X, Y).
 
 
-/* LOCAL: JOGO  -- todos os cenarios do jogo */
-estar(ancoradouro, jogo).
-estar(carpintaria, jogo).
-estar(lago, jogo).
-estar(ilha, jogo).
-
-/* LOCAL: ANCORADOURO */
-
-estar(tabuas, ancoradouro).
-estar(vara_pescar, ancoradouro).
-estar(minhocas, ancoradouro).
-estar(barco, ancoradouro).
-estar(zulu, ancoradouro).
-estar(corda, ancoradouro).
-
-/* BARCO */
-estar(buraco, barco).
-estar(pregos, barco).
-estar(corda, barco).
-estar(agua_do_lago, barco).
-
-/* LOCAL: CARPINTARIA */
-estar(mateo, carpintaria).
-estar(caixa_eletronico, carpintaria).
-estar(placa_nome_loja, carpintaria).
-estar(balcao, carpintaria).
-estar(estande, carpintaria).
-estar(carteira, carpintaria).
-estar(poster, carpintaria).
-
-/* ESTANDE */
-estar(martelo, estande).
-estar(serrote, estande).
-estar(tesoura, estande).
-
-/* BALCAO */
-estar(caixa_registradora, balcao).
-estar(vaso_ming, balcao).
-estar(circulo_de_velas, balcao).
-
-/* CIRCULO DE VELAS */
-%estar((vela, X), circulo_de_velas):-
-%        conj_velas(Velas),
-%        member(X, Velas).
-estar(velas,circulo_de_velas).
-estar(santo_do_pau_oco, circulo_de_velas).
-
-/* CARTEIRA */
-estar(embaixo_carteira, carteira).
-
-/* EMBAIXO DA CARTEIRA */
-estar(chiclete, embaixo_carteira).
-
-/* POSTER */
-estar(feiticeira, poster).
-
-/* caixa eletronico */
-estar(teclado, caixa_eletronico).
-estar(tela, caixa_eletronico).
-
-/* LOCAL: LAGO */
-estar(agua_do_lago, lago).
-estar(peixe_voador, lago).
-
-/* AGUA DO LAGO */
-estar(peixe, agua_do_lago).
-estar(vitoria_regia, agua_do_lago).
-
-/* PERSONAGENS */
-estar(sambura, zulu).
-
 /* Verificacao sobre um conjunto de objetos */
 estar(QueCoisas, Lug):-
         nonvar(QueCoisas),
         is_list(QueCoisas),
         estar_conj(QueCoisas, Lug).
 
-/* LOCAL ONDE O JOGADOR SE ENCONTRA */
-estar(player, ancoradouro).
-
-/* Inventario */
-estar(identidade, player).
-estar(cartao_credito, player).
-estar(sua_mao, player).
-
-dinheiro(player,5).
-
-%estar(OQue, Onde):-
-%        nonvar(OQue),nonvar(Onde),
-%        estar(OQue,NoQue),
-%        estar(NoQue,Onde).
 
 estar_conj([OQue], Lug):-
         estar(OQue, Lug).
@@ -207,45 +114,6 @@ navegavel(X):-
         flutua(X),
         tamanho(X, grande),
         nao(quebrado(X)).
-
-/* indica se objeto e invisivel */
-
-invisivel(chiclete).
-invisivel(pregos).
-invisivel(buraco).
-invisivel(dinheiro).
-invisivel(peixe).
-
-/* pegavel */
-
-pegavel((vela, _)).
-pegavel(martelo).
-pegavel(identidade).
-pegavel(carta_credito).
-pegavel(sua_mao).
-pegavel(tabuas).
-pegavel(vara_pescar).
-pegavel(minhocas).
-pegavel(pregos).
-pegavel(poster).
-pegavel(serrote).
-pegavel(tesoura).
-pegavel(vaso_ming).
-pegavel(santo_do_pau_oco).
-pegavel(chiclete).
-pegavel(dinheiro).
-pegavel(corda).
-
-amarrado(corda,barco).
-amarrado(corda,ancoradouro).
-
-/* indica que e um local e que o personagem pode "ir para" ele */
-local(ancoradouro).
-local(carpintaria).
-local(ilha).
-local(lago).
-local(barco).
-local(caixa_eletronico).
 
 /* SER */
 ser(Res,comp_nominal(NomePred,Alvo)):-
@@ -309,17 +177,6 @@ entidade(A,onde):-
 entidade(_,(quanto,_)).
 entidade(_,quanto).
 
-/* racionalidade */
-
-racional(player).
-racional(zulu).
-racional(mateo).
-racional(peixe_voador).
-racional(narrador).
-racional(Quem):-
-	jogador(Quem).
-
-
 descreve(zulu,pescador).
 descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
@@ -330,30 +187,6 @@ custar(sn(id:prata ..numero:Preco),OQue):-
 preco(Valor,OQue):-
 	custar(Valor,OQue).
 
-valor(martelo,10).
-valor(serrote,15).
-valor(tesoura,2).
-valor(vaso_ming,40).
-
-/* pertinencia */
-% zulu
-dono(zulu, barco).
-dono(zulu, tabuas).
-dono(zulu, chapeu).
-dono(zulu, sambura).
-
-% mateo
-dono(mateo, martelo).
-dono(mateo, serrote).
-dono(mateo, tesoura).
-dono(mateo, velas).
-dono(mateo, vaso_ming).
-dono(mateo, poster).
-dono(mateo, balcao).
-dono(mateo, estande).
-dono(mateo, carpintaria).
-dono(mateo, santo_do_pau_oco).
-dono(mateo, carteira).
 
 % player
 dono(player, X):-
@@ -365,42 +198,13 @@ suficiente(comp_nominal(meu,dinheiro), Objeto):-
 	dinheiro(player,Saldo),
 	Preco < Saldo.
 
-/* quem conhece quem*/
-conhecer(zulu, mateo).
-conhecer(mateo, zulu).
-conhecer(peixe_voador, zulu).
-conhecer(peixe_voador, mateo).
-conhecer(player,narrador).
-
-/* defeito */
-defeito(barco, buraco).
-defeito(tesoura, semfio).
-
 quebrado(OQue):-
     defeito(OQue, _).
-
-/* capacidade de flutuar */
-flutua(zulu).
-flutua(mateo).
-flutua(barco).
-flutua(tabua).
-flutua(vitoria_regia).
-flutua(placa_nome_loja).
-flutua(vaso_ming).
-flutua(vara_pescar).
-
-tamanho(barco, grande).
 
 /* indica que X esta unido a Y */
 unido(X, Y):-
         estar_em(Z, X),
         estar_em(Z, Y).
-
-/* determina tamanho dos elementos do jogo */
-
-comprimento(tabuas, 100).
-comprimento(buraco, 8).
-comprimento(remo, 60).
 
 /* ACOES: define acoes que podem ser realizadas SOBRE os objetos */
 
@@ -469,7 +273,7 @@ cortar_com(tabuas, serrote):-
         assertz(ultima_tabua(NovaUltima)),
         assertz(comprimento((tabua, NovaUltima), 10)),
         % posicionamento da tabua no mundo
-        estar_em(player, CenaAtual),
+        estar(player, CenaAtual),
         assertz(estar((tabua, NovaUltima), CenaAtual)).
 
 poder_especifico(cortar(player,corda,tesoura)).
@@ -495,8 +299,6 @@ assert_especifico(cortar(mao, serrote)):-
 assert_especifico(cortar(barco,serrote)):-
 	retract(consertado(barco)),
 	asserta(defeito(barco, buraco)).
-
-amarravel(corda).
 
 amarrar(player, (tema1:OQue.. tema2:[NoQue,ENoQue])):-
     ter(player, OQue),
@@ -609,7 +411,7 @@ vedar(buraco, X):-
 
 vedar(barco, X):-
      (X = vela ; X = chiclete),
-     estar_em(X, player),!,
+     estar(X, player),!,
      pregado(barco, tabuas),!,
      consertar(barco),
      retract(estar(X, player)).
@@ -627,7 +429,7 @@ fazer(player, remo):-
 examinar(OQue, [obj(Objetos), def(Defeitos)]):-
         \+ invisivel(OQue),
         estar(player, CenaAtual),
-        (estar_em(OQue, CenaAtual); OQue = CenaAtual),
+        (estar(OQue, CenaAtual); OQue = CenaAtual),
         (defeito(OQue, Defeitos); Defeitos=[]),
         findall(X, (estar(X, OQue), 
                     \+ member(X, [player, sua_mao]),
@@ -647,24 +449,6 @@ conversar(player, Pessoa):-
     racional(Pessoa),
     retract(falando_com(player,_)),
     assertz(falando_com(player, Pessoa)).
-
-finaliza_conversa(Pessoa):-
-    falando_com(_, Pessoa),
-    retract(falando_com(_, Pessoa)),
-    assertz(falando_com(player,narrador)).
-
-finaliza_conversa(Pessoa):-
-    falando_com(Pessoa, _),
-    retract(falando_com(Pessoa, _)),
-    asserta(falando_com(player,narrador)).
-
-/* acoes provenientes do lexico */
-querer(zulu,vender(sambura)):-fail.
-querer(player,_).
-querer(mateo,comprar(peixe)).
-querer(mateo,vender(OQue)):-
-	\+ member(OQue,[balcao,carteira,estande]),
-	nao(local(OQue)).
 
 /* --- acoes de conversa com personagens --- */
 poder_especifico(comprar(_)).
