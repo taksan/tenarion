@@ -176,9 +176,11 @@ teste69c:-
 teste69d:-
 	dado_pergunta_espero_resposta('qual o preco do martelo?','o preco dele eh 10 pratas.').
 teste69e:-
-	dado_pergunta_espero_resposta('qual o preco da tesoura?','o preco dela eh 2 pratas.').
+	dado_pergunta_espero_resposta('qual o preco da tesoura?','o preco da tesoura eh 2 pratas.').
 teste69f:-
-	dado_pergunta_espero_resposta('eu compro ela.','ok.').
+	dado_pergunta_espero_resposta('eu compro ela.','ok').
+teste69g:-
+	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 3 pratas.').
 teste70:-
 	dado_pergunta_espero_resposta('eu vou para o caixa eletronico.','ok').
 teste70a:-
@@ -192,7 +194,7 @@ teste70d:-
 teste70e:-
 	dado_pergunta_espero_resposta('o que tem na tela?','o saldo estah nela.').
 teste70f:-
-	dado_pergunta_espero_resposta('qual o valor do saldo?','o valor do saldo eh de 20 pratas.').
+	dado_pergunta_espero_resposta('qual o valor do saldo?','o valor do saldo eh 20 pratas.').
 
 :-roda_testes.
 :-halt.

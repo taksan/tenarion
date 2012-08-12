@@ -96,13 +96,19 @@ testa_clausula(Clausula):-
 	notrace(\+starts_with(NomePred,assert)),!.
 
 testa_clausula(Clausula):-
-	Clausula=..[Assert,FatoNovo],
-	notrace(starts_with(Assert,assert)),!,
+	Clausula=..[NomePred,FatoNovo],
+	notrace(starts_with(NomePred,assert)),!,
 	\+ FatoNovo.
 
+% clausulas que comecam com retract e colateral nao sao testadas para
+% evitar que a verificacao altere o estado
 testa_clausula(Clausula):-
-	Clausula=..[Assert,_],
-	notrace(starts_with(Assert,retract)),!.
+	Clausula=..[NomePred,_],
+	notrace(starts_with(NomePred,retract)),!.
+
+testa_clausula(Clausula):-
+	Clausula=..[NomePred|_],
+	notrace(starts_with(NomePred,colateral)).
 
 testa_clausula(Clausula):-
 	Clausula.

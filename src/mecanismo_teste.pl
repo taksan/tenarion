@@ -1,4 +1,4 @@
-[string].
+:-[string].
 
 roda_testes:-
     cleanup_player,
@@ -21,7 +21,7 @@ roda_testes([Teste|Outros],TotalPassados,Total):-
 	Total is SubTotal+1.
 
 executa(T,Passou):-
-%	ignore((T=teste70c,gspy(nadadica))),
+%	ignore((T=teste69f,gspy(suficiente))),
 	clause(T,C),
 	C=..[Pred,Pergunta,Esperado],!,
 	NC=..[Pred,Pergunta,RespostaReal],!,

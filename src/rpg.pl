@@ -64,4 +64,5 @@ continuar(Sem):-
 continuar(_):-
     dialogo.
 
-
+nadadica:-
+	1=1.

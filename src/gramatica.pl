@@ -139,33 +139,30 @@ sn(coord:nao ..positivo:nao ..id:np([],onde) ..desconhecido:nao)-->
 sn(coord:nao ..positivo:nao ..id:np([],TipoQuem) ..desconhecido:nao)-->
 	pro(tipo_pro:pron_ninguem(TipoQuem)).
 
-sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:DetPreferido) -->
     { id_para_np(Substantivo, I), (var(I); \+ is_list(I)), \+compound(I) },
-	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
+	{  determina_tipo_ident(DetPreferido,T,TipoIdent) },
    	ident(gen:G ..num:N ..tipo:TipoIdent),
 	np(id:I ..tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
 % usada para reconhecer usos de substantivos, casando com artigo, adjetivo, adv, quantidade(todos,alguns,etc)
-sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido) -->
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido
+	..prefere_det:DetPreferido) -->
     { 
-		ignore(
-			(
-			nonvar(Substantivo), nadadica,
+		ignore((% acha as features do det na producao de texto
+			nonvar(Substantivo), 
 			id_para_np(Substantivo,sn(id:I ..numero:Numero ..quant:Quant ..poss:Poss))
-			)
-		) 
+			)) 
 	},
-	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
-	det(num:N ..tipo:T ..gen:G ..det:det(numero:Numero ..quant:Quant ..poss:Poss)),
+	{  determina_tipo_ident(DetPreferido,T,DetEscolhido) },
+	det(num:N ..tipo:DetEscolhido ..gen:G ..det:det(numero:Numero ..quant:Quant ..poss:Poss)),
 %	mod(gen:G ..num:N), 
 	np(id:I ..tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido),
 	{
-		ignore(
-			(
+		ignore((%acha o Substantivo no reconhecimento de texto
 			var(Substantivo), 
 			id_para_np(Substantivo,sn(id:I ..numero:Numero ..quant:Quant ..poss:Poss))
-			)
-		)
+			))
 	}.
 
 % reconhece frases com conjuntos de substantivos (X e Y)
@@ -188,23 +185,23 @@ sn(coord:sim ..id:[A1|Resto] ..num:plur ..prep:P) -->
 	[,],
 	sn(coord:sim ..id:Resto ..prep:P ..prefere_det:nc).
 
-sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:DetPreferido) -->
 	{ id_para_np(Substantivo, SnComposto) },
 	{ SnComposto = comp_nominal(I,CompNominal) },
     { (var(I); \+ is_list(I)), \+compound(I) },
-	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
-   	ident(gen:G ..num:N ..tipo:TipoIdent),
+	{  determina_tipo_ident(DetPreferido,T,DetEscolhido) },
+   	ident(gen:G ..num:N ..tipo:DetEscolhido),
 	np(id:I ..tipo:T ..gen:G ..num:N ..desconhecido:nao),
-	sp(prep:de ..id:CompNominal ..prefere_det:TipoDet).
+	sp(prep:de ..id:CompNominal ..prefere_det:DetPreferido).
 
-sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
+sn(coord:nao ..id:Substantivo ..tipo:TipoNp ..gen:G ..num:N ..pessoa:terc ..desconhecido:nao ..prefere_det:TipoDet) -->
 	{ id_para_np(Substantivo, SnComposto) },
 	{ SnComposto = comp_nominal(I,CompNominal) },
     { (var(I); \+ is_list(I)), \+compound(I) },
-	{  nonvar(TipoDet),T\=np,TipoIdent=TipoDet; (var(TipoDet), TipoDet=np);TipoIdent=T },
-   	ident(gen:G ..num:N ..tipo:TipoIdent),
+	{  determina_tipo_ident(TipoDet,TipoNp,DetEscolhido) },
+   	ident(gen:G ..num:N ..tipo:DetEscolhido),
 	poss(poss:I ..pessoa:terc ..gen:G),
-	np(id:CompNominal ..tipo:T ..gen:G ..num:N ..desconhecido:nao).
+	np(id:CompNominal ..tipo:TipoNp ..gen:G ..num:N ..desconhecido:nao).
 
 
 % essa regra eh para produzir texto sobre substantivos desconhecidos
@@ -424,3 +421,7 @@ pontuacao_opcional(P) -->
 
 marcar_porque_processado(porque_processado:sim).
 
+determina_tipo_ident(DetPref,T,TipoIdent):-
+	nonvar(DetPref), T\=np,TipoIdent=DetPref; 
+	(var(DetPref), TipoIdent=np);
+	TipoIdent=T.

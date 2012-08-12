@@ -8,6 +8,7 @@
    dynamic(consertado/1),dynamic(pregado/2),
    dynamic(amarrado/2),dynamic(digitado/2),
    dynamic(conhecer/2),dynamic(dono/2),
+   dynamic(dinheiro/2),
    discontiguous(poder_especifico/1).
 
 :-[fatos].
@@ -182,19 +183,24 @@ descreve(mateo,comp_nominal(vendedor,carpintaria)).
 
 custar(sn(id:prata ..numero:Preco),OQue):-
 	\+compound(OQue),
-	valor(OQue,Preco).
+	quanto_custa(OQue,Preco).
+
+valor(sn(id:prata..numero:Saldo),saldo):-
+	saldo_conta(player,Saldo).
 
 preco(Valor,OQue):-
 	custar(Valor,OQue).
-
 
 % player
 dono(player, X):-
     nonvar(X),
     estar(X, player).
 
+suficiente(comp_nominal(player,dinheiro), Objeto):-
+	suficiente(comp_nominal(meu,dinheiro), Objeto).
+
 suficiente(comp_nominal(meu,dinheiro), Objeto):-
-	valor(Objeto,Preco),
+	quanto_custa(Objeto,Preco),
 	dinheiro(player,Saldo),
 	Preco < Saldo.
 
@@ -460,8 +466,17 @@ comprar(player, Objeto):-
 	querer(Pessoa,vender(Objeto)),
     poder_especifico(comprar(Objeto)),
 	suficiente(comp_nominal(player,dinheiro),Objeto),
+	colateral_novo_saldo_subtraindo_valor_de(Objeto),
     retract(dono(_,Objeto)),
     asserta(estar(Objeto,player)).
+
+colateral_novo_saldo_subtraindo_valor_de(Objeto):-
+	quanto_custa(Objeto,Preco),
+	dinheiro(player,Saldo),
+	NovoSaldo is Saldo-Preco,
+	NovoSaldo >= 0,
+	retract(dinheiro(player,_)),
+	asserta(dinheiro(player,NovoSaldo)).
 
 vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
 	dono(Quem,OQue),

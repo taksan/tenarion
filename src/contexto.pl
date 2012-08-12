@@ -22,7 +22,6 @@ atualiza_contexto_dado_np_real([]).
 atualiza_contexto_dado_np_real(TemaOuAgente):-
 	nonvar(TemaOuAgente),
 	TemaOuAgente=incog(onde),
-%	estar(player,Local),
     retractall(contexto(_,_,_)).
 
 atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
@@ -30,7 +29,18 @@ atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
 	nonvar(T1),
 	nonvar(T2),
 	ser(comp_nominal(T1,T2),TemaOuAgente),
-	atualiza_contexto_dado_np_real(TemaOuAgente).
+	\+compound(TemaOuAgente),
+	atualiza_contexto_dado_np_real(TemaOuAgente),
+	atualiza_contexto_dado_np_real(T1),
+	atualiza_contexto_dado_np_real(T2).
+
+atualiza_contexto_dado_np_real(comp_nominal(T1,T2)):-
+	contexto_atual(jogador),
+	nonvar(T1),
+	nonvar(T2),
+	atualiza_contexto_dado_np_real(T1),
+	atualiza_contexto_dado_np_real(T2).
+
 
 
 atualiza_contexto_dado_np_real(TemaOuAgente):-
@@ -46,7 +56,7 @@ atualiza_pessoa(Pessoa, NovoValor):-
 	NovoValor\=player,
     \+ estar(player, NovoValor),
     contexto_atual(Ctx),
-	Pessoa=(tipa_pro:reto ..pessoa:terc ..gen:G),
+	Pessoa=(tipo_pro:reto ..pessoa:terc ..gen:G),
     retractall(contexto(Ctx, (tipo_pro:reto ..pessoa:terc ..gen:G), _)),
     asserta(contexto(Ctx, Pessoa, NovoValor)).
 
@@ -56,7 +66,8 @@ atualiza_pessoa(_ , _).
 atualiza_advb_aqui:-
 	contexto_atual(Ctx),
 	estar(player, Aqui),
-	\+contexto(Ctx, (tipo_pro:adv.. tipo_adv:lugar ..adv:aqui), Aqui),
+	\+contexto(Ctx, (tipo_pro:advb.. tipo_adv:lugar ..adv:aqui), Aqui),
+	retractall(contexto(Ctx, tipo_pro:advb,_)),
 	asserta(contexto(Ctx, (tipo_pro:advb ..tipo_adv:lugar ..adv:aqui), Aqui)).
 
 %evita que o atualiza_advb_aqui falhe

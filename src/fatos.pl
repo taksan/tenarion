@@ -1,4 +1,5 @@
 dinheiro(player,5).
+saldo_conta(player,20).
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
 
@@ -133,10 +134,10 @@ racional(narrador).
 racional(Quem):-
 	jogador(Quem).
 
-valor(martelo,10).
-valor(serrote,15).
-valor(tesoura,2).
-valor(vaso_ming,40).
+quanto_custa(martelo,10).
+quanto_custa(serrote,15).
+quanto_custa(tesoura,2).
+quanto_custa(vaso_ming,40).
 
 /* pertinencia */
 % zulu

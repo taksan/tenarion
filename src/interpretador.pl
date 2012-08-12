@@ -441,5 +441,5 @@ existe_predicado(Pred):-
 	current_predicate(Pred/_).
 
 
-nadadica:-
+breakpoint:-
 	1=1.
