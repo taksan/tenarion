@@ -9,7 +9,7 @@
 
 % VERBO: ESTAR
 subcat(estar,SUBCAT):-
-	member(SUBCAT,[advb,sp(prep:em),sp(prep:com),sa,loc(verbo:estar)]).
+	member(SUBCAT,[advb,sp(prep:em),sp(prep:com),sa,loc(verbo:estar),gerundio]).
 v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estah].
 v(acao:estar ..tempo:presente ..num:plur ..pessoa: terc  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estao].
 v(acao:estar ..tempo:presente ..num:sing ..pessoa: prim  ..subcat:[SUBCAT] ..poss:nao) --> {subcat(estar,SUBCAT)}, [estou].
@@ -37,6 +37,8 @@ v(acao:conhecer ..tempo:presente ..num:sing  ..pessoa: terc ..subcat:[sn]) --> [
 v(acao:consertar ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [consertar].
 v(acao:consertar ..tempo:presente ..num:sing ..pessoa: prim  ..subcat:[sn]) --> [conserto].
 v(acao:consertar ..tempo:presente ..num:sing ..pessoa: terc  ..subcat:[sn]) --> [conserta].
+v(acao:consertar ..gen:masc ..num:sing ..pessoa: participio  ..subcat:[sn]) --> [consertado].
+v(acao:consertar ..gen:fem  ..num:sing ..pessoa: participio  ..subcat:[sn]) --> [consertada].
 
 % VERBO: PEGAR
 v(acao:pegar ..tempo:presente ..num:sing .. pessoa:indic ..subcat:[sn]) --> [pegar].
@@ -163,6 +165,9 @@ v(acao:fazer ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [faz
 v(acao:aparecer ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [aparecer].
 v(acao:aparecer ..tempo:preterito..num:sing ..pessoa: terc  ..subcat:[sp(prep:em)]) --> [apareceu].
 
+% APARECER
+v(acao:pedir ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [pedir].
+v(acao:pedir ..tempo:_        ..num:_    ..pessoa: gerundio ..subcat:[sn]) --> [pedindo].
 
 % VERBO: EXAMINAR
 v(acao:examinar ..tempo:presente ..num:sing ..pessoa: prim ..subcat:[sn]) --> [examino].
@@ -182,7 +187,6 @@ v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
 % onde ter tem sentido de estar
 v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[advb]) --> [tem].
 v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
-v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[]) --> [tem].
 
 v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
 v(acao:ter ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].
@@ -226,6 +230,7 @@ v(acao:saber ..tempo:presente ..num:sing ..pessoa:terc ..subcat:[]) --> [sabe].
 v(acao:amarrar ..tempo:presente ..num:sing ..pessoa:indic ..subcat:[sn,sp(prep:em)]) --> [amarrar].
 v(acao:amarrar ..tempo:presente ..num:sing ..pessoa:prim  ..subcat:[sn,sp(prep:em)]) --> [amarro].
 v(acao:amarrar ..tempo:presente ..num:sing ..pessoa:terc  ..subcat:[sn,sp(prep:em)]) --> [amarra].
+v(acao:amarrar ..tempo:_        ..num:sing ..pessoa:participio  ..subcat:[sn,sp(prep:em)]) --> [amarrado].
 
 v(acao:desamarrar ..tempo:presente ..num:sing ..pessoa:indic ..subcat:[sn]) --> [desamarrar].
 v(acao:desamarrar ..tempo:presente ..num:sing ..pessoa:prim  ..subcat:[sn]) --> [desamarro].

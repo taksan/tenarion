@@ -14,7 +14,7 @@
 :-[fatos].
 
 /* LOCAL INICIAL DE JOGO */
-estar(player, ancoradouro).
+estar(player, embarcadouro).
 falando_com(player, narrador).
 
 /**** Predicados auxiliares para informacao ****/
@@ -159,7 +159,6 @@ ser(pred(Quem),comp_nominal(seu,nome)):-
 	ser(Quem,Quem).
 
 /* diferenca entre pessoas e objetos */
-
 /* entidade(player, _):- !, fail. */
 
 entidade(_,qual).
@@ -178,9 +177,6 @@ entidade(A,onde):-
 entidade(_,(quanto,_)).
 entidade(_,quanto).
 
-descreve(zulu,pescador).
-descreve(mateo,comp_nominal(vendedor,carpintaria)).
-
 custar(sn(id:prata ..numero:Preco),OQue):-
 	\+compound(OQue),
 	quanto_custa(OQue,Preco).
@@ -191,7 +187,6 @@ valor(sn(id:prata..numero:Saldo),saldo):-
 preco(Valor,OQue):-
 	custar(Valor,OQue).
 
-% player
 dono(player, X):-
     nonvar(X),
     estar(X, player).
@@ -370,7 +365,13 @@ colocar(player, (tema1:OQue ..tema2:Onde)):-
     ter(player, OQue),
 	poder_especifico(colocar(OQue,Onde)),
     retract(estar(OQue, player)),
-    assertz(estar(OQue, Onde)).
+    assertz(estar(OQue, Onde)),
+	colateral_evento_colocar(OQue,Onde).
+
+colateral_evento_colocar(cartao_credito,caixa_eletronico):-
+	evento(agente:caixa_eletronico ..acao:estar ..tema:(acao:pedir ..tema_real:comp_nominal(player,senha))).
+
+colateral_evento_colocar(_,_).
 
 retirar(player,Tema):-
 	sinonimo(tirar(player,Tema)).
@@ -399,6 +400,7 @@ poder_especifico(pegar(player,corda)):-
 
 pegar(Quem, OQue):-
     pegavel(OQue),
+	nao(grande(OQue)),
 	nao(pregado(OQue,_)),
     estar(Quem,Aqui),
     estar(OQue,Aqui),
@@ -491,8 +493,16 @@ digitar(player, (tema1:senha ..tema2:teclado)):-
 	estar(player,caixa_eletronico),
 	estar(cartao_credito,caixa_eletronico),
     assertz(digitado(senha, teclado)),
-	assertz(estar(saldo,tela)),
-	evento(ato_fala:informar..acao:aparecer ..tempo:preterito ..agente:sn(id:coisa ..quant:algum) ..tema:tela).
+	assertz(estar(comp_nominal(menu,caixa_eletronico),tela)),
+	evento(acao:aparecer ..tempo:preterito ..agente:comp_nominal(menu,caixa_eletronico) ..tema:tela).
+
+digitar(player, (tema1:Valor ..tema2:teclado)):-
+	integer(Valor),
+	estar(player,caixa_eletronico),
+	estar(cartao_credito,caixa_eletronico),
+	digitado(senha,teclado),
+	retract(digitado(senha,teclado)),
+    assertz(digitado(Valor, teclado)).
 
 pescar(player,Onde):-
     Onde = lago,
@@ -531,7 +541,6 @@ sinonimo(Pred):-
 narrador(Pred):-
 	Pred.
 
-
 zulu(ser(A,B)):-
 	(A=zulu;B=zulu;B=comp_nominal(seu,nome)),
 	ser(A,B).
@@ -549,6 +558,27 @@ zulu(Pred):-
 	NomePred\=ser,
 	Pred.
 
+%mateo(conversar(player,mateo)):-
+%	conversar(player,mateo),
+%	evento(agente:player ..acao:querer ..tema:(acao:comprar ..tema_real:sn(id:coisa ..quant:algum))).
+
 querer(_).
 
-evento(_).
+evento(Resposta):-
+	Resposta=(ato_fala:interro_agente_incognito..agente:incog(_)),
+	limpa_eventos,
+	asserta(resposta_evento(Resposta)).
+
+evento(Resposta):-
+	Resposta=(ato_fala:interro_tema_incognito..tema:incog(_)),
+	limpa_eventos,
+	asserta(resposta_evento(Resposta)).
+
+evento(Resposta):-
+	Resposta=ato_fala:informar,
+	limpa_eventos,
+	asserta(resposta_evento(Resposta)).
+
+limpa_eventos:-
+	retractall(resposta_evento(_)).
+	

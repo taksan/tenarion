@@ -32,8 +32,8 @@ normaliza_tracos_explicacao(Normalizado):-
 	verbo_da_locucao(Predicado,Acao).
 
 normaliza_tracos_explicacao(Normalizado):-
-	Normalizado=(predicado:Predicado ..acao:Acao ..tema_real:Predicado),
-	tipo_adjetivo(Predicado,Acao).
+	Normalizado=(predicado:Predicado ..acao:Acao ..tema_real:Adjetivo),
+	tipo_adjetivo(Predicado,Acao,Adjetivo).
 
 normaliza_tracos_explicacao(Normalizado):-
 	Normalizado=(predicado:Predicado ..tema_possivel:Tema ..tema_real:comp_nominal(Predicado,Tema)),
@@ -49,7 +49,11 @@ eh_verbo(Verbo):-
 verbo_da_locucao(Locucao,Verbo):-
 	loc(id:Locucao ..verbo:Verbo,[_],[]).
 
-tipo_adjetivo(Adjetivo,Verbo):-
+tipo_adjetivo(Adjetivo,Verbo,(mod:Advb ..adj:Adjetivo)):-
+	a(adj:Adjetivo ..tipo:Verbo ,[_],[]),
+	adjetivo_com_verbo_prefere(Adjetivo,Verbo,Advb).
+
+tipo_adjetivo(Adjetivo,Verbo,Adjetivo):-
 	a(adj:Adjetivo ..tipo:Verbo,[_],[]).
 
 converte_tema(
@@ -67,3 +71,5 @@ converte_tema(
 	eh_verbo(Pred).
 
 converte_tema(_,T,T).
+
+adjetivo_com_verbo_prefere(grande,ser,muito).

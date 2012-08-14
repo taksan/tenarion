@@ -5,16 +5,14 @@
 %%%% ADJETIVOS
 
 a(adj:sem_fio  ..tipo:estar ..gen:_ ..num:_) --> [sem], [fio].
-a(adj:grande   ..tipo:ser ..gen:_ ..num:sing) --> [grande].
-a(adj:grande   ..tipo:ser ..gen:_ ..num:plur) --> [grandes].
+a(adj:grande   ..tipo:ser ..num:sing ..prefere_adv:muito)-->[grande].
+a(adj:grande   ..tipo:ser ..num:plur ..prefere_adv:muito) --> [grandes].
 a(adj:voador   ..tipo:ser ..gen:masc ..num:sing) --> [voador].
 a(adj:voador   ..tipo:ser ..gen:masc ..num:plur) --> [voadores].
 a(adj:pequeno  ..tipo:ser ..gen:fem ..num:sing) --> [pequena].
 a(adj:pequeno  ..tipo:ser ..gen:masc ..num:sing) --> [pequeno].
 a(adj:pequeno  ..tipo:ser ..gen:fem ..num:plur) --> [pequenas].
 a(adj:pequeno  ..tipo:ser ..gen:masc ..num:plur) --> [pequenos].
-a(adj:estragado ..tipo:estar ..gen:masc ..num:sing) --> [estragado].
-a(adj:estragado..tipo:estar ..gen:fem ..num:sing) --> [estragada].
 a(adj:acesa    ..tipo:estar ..gen:fem ..num:sing) --> [acesa].
 a(adj:acesa    ..tipo:estar ..gen:fem ..num:plur) --> [acesas].
 a(adj:racional ..tipo:ser ..num:sing)-->[racional].
@@ -26,16 +24,17 @@ a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
 a(adj:amarravel ..tipo:ser ..num:sing)-->[amarravel].
 a(adj:possivel  ..tipo:ser ..num:sing)-->[possivel].
 
-a(adj:consertado ..gen:masc ..tipo:estar  ..num:sing)-->[consertado].
-a(adj:consertada ..gen:fem  ..tipo:estar  ..num:sing)-->[consertada].
+% "adjetivos" que sao na realidade participio de verbos
+a(adj:estragado  ..gen:masc ..tipo:estar ..num:sing)--> [estragado].
+a(adj:estragado  ..gen:fem  ..tipo:estar ..num:sing)--> [estragada].
+a(adj:consertado ..gen:masc ..tipo:estar ..num:sing)-->[consertado].
+a(adj:consertada ..gen:fem  ..tipo:estar ..num:sing)-->[consertada].
 a(adj:amarrado   ..gen:masc ..tipo:estar ..num:sing)-->[amarrado].
 a(adj:amarrado   ..gen:fem  ..tipo:estar ..num:sing)-->[amarrada].
 a(adj:pregado    ..gen:masc ..tipo:estar ..num:sing)-->[pregado].
-a(adj:pregado    ..gen:fem ..tipo:estar ..num:sing)-->[pregada].
+a(adj:pregado    ..gen:fem  ..tipo:estar ..num:sing)-->[pregada].
 a(adj:quebrado   ..gen:masc ..tipo:estar ..num:sing)-->[quebrado].
-a(adj:quebrado   ..gen:fem ..tipo:estar ..num:sing)-->[quebrada].
-%a(adj:perto      ..gen:_   ..tipo:estar ..num:sing)-->[perto].
-
+a(adj:quebrado   ..gen:fem  ..tipo:estar ..num:sing)-->[quebrada].
 
 %%%% QUANT
 quant(id:todo.. gen:masc.. num:sing)   --> [todo].
@@ -53,10 +52,24 @@ quant(_) --> [].
 %%%% NUMERO
 num(id:1 ..num:sing) --> [1].
 num(id:NUM ..num:plur) --> {integer(NUM),NUM>1}, [NUM].
+num(id:NInt ..num:plur) --> [NUM],{is_number(NUM), atom_number(NUM,NInt),NInt>1} .
 
-%%%% ADV* (que raio � isso??)
-adv -->  [bem].
-adv -->  [mais].
+is_number(Atom):-
+	nonvar(Atom),
+	atom_chars(Atom,Chars),
+	is_number_a(Chars).
+
+is_digit(A):-
+	char_code(A,D),
+	D > 47,
+	D < 58.
+
+is_number_a([D]):-
+	is_digit(D).
+
+is_number_a([D|Tail]):-
+	is_digit(D),
+	is_number_a(Tail).
 
 %%%% IDENT
 % tipo:nc -> nome comum
@@ -146,6 +159,11 @@ advb(tipo_adv:lugar ..adv:la) --> [la].
 advb(tipo_adv:afirmacao ..adv:nao) --> [nao].
 advb(tipo_adv:afirmacao ..adv:sim) --> [].
 advb(tipo_adv:afirmacao ..adv:ja) -->[ja].
+
+advb(tipo_adv:intensidade ..adv:bem) -->[bem].
+advb(tipo_adv:intensidade ..adv:mais) --> [mais].
+advb(tipo_adv:intensidade ..adv:muito) -->[muito].
+
 
 %%% LOCUCAO PREPOSITIVA
 loc(tipo:prep.. id:perto ..prep:de ..verbo:estar)-->[perto].

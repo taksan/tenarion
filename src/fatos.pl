@@ -3,26 +3,26 @@ saldo_conta(player,20).
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
 
-adjacente(ancoradouro, carpintaria).
-adjacente(ancoradouro, lago).
+adjacente(embarcadouro, carpintaria).
+adjacente(embarcadouro, lago).
 adjacente(barco, lago).
 adjacente(lago, ilha).
 
 
 /* LOCAL: JOGO  -- todos os cenarios do jogo */
-estar(ancoradouro, jogo).
+estar(embarcadouro, jogo).
 estar(carpintaria, jogo).
 estar(lago, jogo).
 estar(ilha, jogo).
 
 /* LOCAL: ANCORADOURO */
 
-estar(tabuas, ancoradouro).
-estar(vara_pescar, ancoradouro).
-estar(minhocas, ancoradouro).
-estar(barco, ancoradouro).
-estar(zulu, ancoradouro).
-estar(corda, ancoradouro).
+estar(tabuas, embarcadouro).
+estar(vara_pescar, embarcadouro).
+estar(minhocas, embarcadouro).
+estar(barco, embarcadouro).
+estar(zulu, embarcadouro).
+estar(corda, embarcadouro).
 
 /* BARCO */
 estar(buraco, barco).
@@ -85,6 +85,9 @@ estar(identidade, player).
 estar(cartao_credito, player).
 estar(sua_mao, player).
 
+estar(comp_nominal(opcao,saque),comp_nominal(menu,caixa_eletronico)).
+estar(comp_nominal(opcao,saldo),comp_nominal(menu,caixa_eletronico)).
+
 /* indica se objeto e invisivel */
 
 invisivel(chiclete).
@@ -112,12 +115,14 @@ pegavel(santo_do_pau_oco).
 pegavel(chiclete).
 pegavel(dinheiro).
 pegavel(corda).
+pegavel(barco).
+pegavel(dinheiro).
 
 amarrado(corda,barco).
-amarrado(corda,ancoradouro).
+amarrado(corda,embarcadouro).
 
 /* indica que e um local e que o personagem pode "ir para" ele */
-local(ancoradouro).
+local(embarcadouro).
 local(carpintaria).
 local(ilha).
 local(lago).
@@ -181,6 +186,7 @@ flutua(vaso_ming).
 flutua(vara_pescar).
 
 tamanho(barco, grande).
+grande(barco).
 
 /* determina tamanho dos elementos do jogo */
 
@@ -201,4 +207,7 @@ querer(mateo,comprar(peixe)).
 querer(mateo,vender(OQue)):-
 	\+ member(OQue,[balcao,carteira,estande]),
 	nao(local(OQue)).
+
+descreve(zulu,pescador).
+descreve(mateo,comp_nominal(vendedor,carpintaria)).
 

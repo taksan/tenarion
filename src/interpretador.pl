@@ -16,6 +16,7 @@ processar(
 	resposta_para_substantivo_desconhecido(
 		desconhecido(texto:Texto ..tipo:Tipo ..gen:Gen ..num:Num),
 		Resposta).
+
 /*
 processar(
     (desconhecido:sim 
@@ -110,6 +111,10 @@ processar((ato_fala:interro_agente_incognito
 			..tema_real:Tema),
 			Resposta):-
 	resposta_para_tema_incognito( Relacao, incog(TipoNp), Tema, TipoNp, Resposta).
+
+
+processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema:oque),
+		  (ato_fala:interro_tema_incognito ..agente_real:Ag ..acao:Relacao ..tema:incog(oque))).
 	
 processar((ato_fala:informar .. agente_real:Ag .. acao:Relacao .. tema_real:T),
           Resposta):-
@@ -250,27 +255,24 @@ resposta_do_interlocutor(zulu(ser(Quem,B)),RespostaDada,RespostaNova):-
 	PerguntaResposta=(ato_fala:interro_agente_incognito ..acao:ser ..pessoa:terc ..tema:voce ..agente:incog(quem)),
 	RespostaNova=(ato_fala:composto ..composicao:[RespostaDada, PerguntaResposta]).
 
-resposta_do_interlocutor(Predicate,_,Resposta):-
-	clause(Predicate, Clauses),
-	encontra_evento(Clauses, Resposta),
-	Resposta\=[].
+resposta_do_interlocutor(_,_,Resposta):-
+	resposta_evento(Resposta),
+	limpa_eventos.
 
 resposta_do_interlocutor(_,Default,Default).
 
 encontra_evento((evento(Resposta)),Resposta).
 encontra_evento((evento(Resposta),_),Resposta).
-
 encontra_evento((_,Resto),Resposta):-
 	encontra_evento(Resto,Resposta).
 
-
 interpretacao_do_interlocutor(Pred,PredContextualizado):-
+	limpa_eventos,
 	falando_com(player,Quem),
 	existe_predicado(Quem),
 	PredContextualizado=..[Quem,Pred].
 
 interpretacao_do_interlocutor(Pred,Pred).
-
 
 monta_predicado_para_resolucao(
 	Acao,

@@ -9,7 +9,7 @@ np(id:peixe_voador .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [pei
 np(id:sua_mao ..gen:fem ..num:sing ..desconhecido:nao) --> [sua],[mao].
 
 % objetos com nomes proprios (np), serao designados com o os a as
-np(id:ancoradouro .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [ancoradouro].
+np(id:embarcadouro .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [embarcadouro].
 np(id:balcao .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [balcao].
 np(id:carpintaria .. tipo:np ..num:sing ..gen:fem ..desconhecido:nao) --> [carpintaria].
 np(id:caixa_eletronico .. tipo:np ..num:sing ..gen:masc ..desconhecido:nao) --> [caixa],[eletronico].
@@ -68,6 +68,10 @@ np(id:senha ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[senha].
 np(id:saldo ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[saldo].
 np(id:valor ..tipo:np ..gen:masc ..num:sing ..desconhecido:nao)-->[valor].
 np(id:coisa ..tipo:np ..gen:fem ..num:sing ..desconhecido:nao)-->[coisa].
+np(id:menu  ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[menu].
+np(id:opcao ..tipo:nc ..gen:fem ..num:sing ..desconhecido:nao)-->[opcao].
+np(id:opcao ..tipo:nc ..gen:fem ..num:plural ..desconhecido:nao)-->[opcoes].
+np(id:saque ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[saque].
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].
