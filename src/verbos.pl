@@ -185,8 +185,8 @@ v(acao:ter ..tempo:presente ..num:sing ..pessoa: prim ..subcat:[sn]) --> [tenho]
 v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn]) --> [tem].
 
 % onde ter tem sentido de estar
-v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[advb]) --> [tem].
-v(acao:estar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
+v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[advb]) --> [tem].
+v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sp(prep:em)]) --> [tem].
 
 v(acao:ter ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn, sp(prep:em)]) --> [tem].
 v(acao:ter ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [ter].

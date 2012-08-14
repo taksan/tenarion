@@ -5,7 +5,7 @@ is_verbose:-true.
 % os testes sao deterministicamente executador na ordem alfabetica.
 % a ordem dos testes nao eh facultativa!
 teste01:-
-    dado_pergunta_espero_resposta('o que tem aqui?', 'o barco, uma corda, algumas minhocas, algumas tabuas e uma vara de pescar estao aqui.').
+    dado_pergunta_espero_resposta('o que tem aqui?', 'aqui tem o barco, uma corda, algumas minhocas, algumas tabuas e uma vara de pescar.').
 teste02:- 
     dado_pergunta_espero_resposta('quem estah aqui?', 'o pescador estah aqui.').
 teste03:- 
@@ -85,7 +85,7 @@ teste27:-
 teste28:-
 	dado_pergunta_espero_resposta('eu coloco as minhocas na vara de pescar.', 'ok').
 teste29:-
-	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'as minhocas estao nela.').
+	dado_pergunta_espero_resposta('o que tem na vara de pescar?', 'ela tem algumas minhocas.').
 teste30:-
 	dado_pergunta_espero_resposta('o que eu posso consertar', 'voce nao pode consertar nada.').
 teste31:-
@@ -93,7 +93,7 @@ teste31:-
 teste32:-
 	dado_pergunta_espero_resposta('eu desamarro a corda.', 'ok').
 teste33:-
-	dado_pergunta_espero_resposta('onde a corda estah?', 'ela estah no embarcadouro e no barco.').
+	dado_pergunta_espero_resposta('onde a corda estah?', 'ela estah no barco e no embarcadouro.').
 teste34:-
 	dado_pergunta_espero_resposta('eu pego a corda.', 'ok').
 teste35:-
@@ -185,17 +185,17 @@ teste69g:-
 teste70:-
 	dado_pergunta_espero_resposta('eu vou para o caixa eletronico.','ok').
 teste70a:-
-	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','um teclado e uma tela estao aqui.').
+	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','aqui tem um teclado e uma tela.').
 teste70b:-
 	dado_pergunta_espero_resposta('eu coloco o cartao de credito no caixa eletronico.', 'o caixa eletronico estah pedindo a sua senha.').
 teste70c:-
 	dado_pergunta_espero_resposta('eu digito a senha no teclado.','o menu do caixa eletronico apareceu na tela.').
 teste70d:-
-	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','um cartao de credito, um teclado e uma tela estao aqui.').
+	dado_pergunta_espero_resposta('o que tem no caixa eletronico?','aqui tem um cartao de credito, um teclado e uma tela.').
 teste70e:-
-	dado_pergunta_espero_resposta('o que tem na tela?','o menu do caixa eletronico estah nela.').
+	dado_pergunta_espero_resposta('o que tem na tela?','ela tem um menu do caixa eletronico.').
 teste70f:-
-	dado_pergunta_espero_resposta('o que tem no menu do caixa eletronico?','o menu tem uma opcao de saque e uma opcao de saldo.').
+	dado_pergunta_espero_resposta('o que tem no menu do caixa eletronico?','o menu do caixa eletronico tem uma opcao do saldo e uma opcao de um saque.').
 teste70g:-
 	dado_pergunta_espero_resposta('qual o valor do saldo?','o valor do saldo eh 20 pratas.').
 teste71:-

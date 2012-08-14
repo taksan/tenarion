@@ -33,6 +33,8 @@ quanto(Quem,ter,dinheiro,Incognita):-
 
 % Ter é um verbo especial, porque nem sempre significa
 % que a o individuo realmente tem consigo
+ter_estar(OQue,Onde):-
+	estar(OQue,Onde).
 
 % ter para VENDER
 ter(Quem,Verbo):-

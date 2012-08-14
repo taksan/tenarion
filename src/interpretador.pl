@@ -303,7 +303,9 @@ monta_predicado_para_resolucao(AcaoAlvo,
 
 %monta_predicado_para_resolucao(Relacao,incog(quanto),Tema,Incognita,Predicado):-
 %   Predicado =.. [Relacao, Tema, Incognita].
-
+monta_predicado_para_resolucao(ter,incog(oque),Tema,Incognita,Predicado):-
+%	gspy(normaliza_substantivos_resposta),
+	Predicado=estar(Incognita,Tema).
 
 monta_predicado_para_resolucao(Relacao,Agente,incog(_),Incognita,Predicado):-
     Predicado =.. [Relacao, Agente, Incognita].
@@ -327,6 +329,9 @@ elementos_resposta(ser,incog(qual),TemaRes,np([],qual),TemaRes,np([],qual),ser,_
 elementos_resposta(ser,incog(quem),TemaRes,Resposta,TemaRes,Resposta,ser,sim):-
 	institui_pronome(TemaRes,TemaRef),
 	TemaRes\=TemaRef.
+
+
+elementos_resposta(ter,incog(oque),TemaViraAgente,Resposta,TemaViraAgente,Resposta,ter,sim).
 
 elementos_resposta(Relacao,Agente,incog(oque),RespostaListaBiTransitivos,Agente,Resposta,Relacao,_):-
 	nonvar(RespostaListaBiTransitivos), is_list(RespostaListaBiTransitivos),

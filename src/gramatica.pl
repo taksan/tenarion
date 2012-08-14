@@ -98,10 +98,17 @@ s(ato_fala:int_sim_nao ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..desco
 
 
 s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
-        {\+ is_list(A)}, 
-	sn(id:A ..num: N ..pessoa:Pes ..gen:G), 
+    {\+ is_list(A)}, 
+	sn(id:A ..num: N ..pessoa:Pes ..gen:G),
 	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X ..tempo:Tempo ..tema:Paciente ..num: N ..pessoa:Pes ..gen:G),
    	pontuacao_opcional('.').
+
+s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
+    {\+ is_list(A), Pes=terc}, 
+	sadvb(id:A),
+	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X ..tempo:Tempo ..tema:Paciente ..num: N ..pessoa:Pes ..gen:G),
+   	pontuacao_opcional('.').
+
 
 % sentenca com agente composto (ex: as minhocas e a vara de pescar estao no embarcadouro).
 s(ato_fala:informar ..agente:[A1|ATail] ..acao:X ..tempo:Tempo ..tema:Paciente ..pessoa:P) -->
