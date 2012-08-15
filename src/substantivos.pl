@@ -72,6 +72,8 @@ np(id:menu  ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[menu].
 np(id:opcao ..tipo:nc ..gen:fem ..num:sing ..desconhecido:nao)-->[opcao].
 np(id:opcao ..tipo:nc ..gen:fem ..num:plural ..desconhecido:nao)-->[opcoes].
 np(id:saque ..tipo:nc ..gen:masc ..num:sing ..desconhecido:nao)-->[saque].
+np(id:confirmacao ..tipo:nc ..gen:fem ..num:sing ..desconhecido:nao)-->[confirmacao].
+
 np(id:Jogador ..tipo:np ..num:sing ..gen:GeneroJogador ..desconhecido:nao)-->
 	{ jogador(Jogador), sexo_jogador(GeneroJogador) },
 	[ Jogador ].

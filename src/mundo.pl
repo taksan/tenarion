@@ -7,8 +7,9 @@
    dynamic(jogador/1),dynamic(estado),
    dynamic(consertado/1),dynamic(pregado/2),
    dynamic(amarrado/2),dynamic(digitado/2),
+   dynamic(selecionado/2),
    dynamic(conhecer/2),dynamic(dono/2),
-   dynamic(dinheiro/2),
+   dynamic(dinheiro_do_jogador/2),
    discontiguous(poder_especifico/1).
 
 :-[fatos].
@@ -29,7 +30,7 @@ inventario(Obj):-
 
 quanto(Quem,ter,dinheiro,Incognita):-
 	Incognita=sn(id:prata ..numero:Saldo),
-	dinheiro(Quem,Saldo).
+	dinheiro_do_jogador(Quem,Saldo).
 
 % Ter é um verbo especial, porque nem sempre significa
 % que a o individuo realmente tem consigo
@@ -76,6 +77,12 @@ estar(QueCoisas, Lug):-
         nonvar(QueCoisas),
         is_list(QueCoisas),
         estar_conj(QueCoisas, Lug).
+
+estar(Algo, Onde):-
+	nonvar(Algo),nonvar(Onde),
+	estar(OQue,Onde),
+	\+local(OQue),
+	estar(Algo,OQue).
 
 
 estar_conj([OQue], Lug):-
@@ -147,6 +154,8 @@ ser(Nome, player):-
     jogador(Nome),
 	ignore(introduz_player).
 
+ser(sn(id:prata),dinheiro).
+
 ser(L,L):-
     nonvar(L), \+ compound(L),
 	ignore(introduz_pessoa(L)).
@@ -198,7 +207,7 @@ suficiente(comp_nominal(player,dinheiro), Objeto):-
 
 suficiente(comp_nominal(meu,dinheiro), Objeto):-
 	quanto_custa(Objeto,Preco),
-	dinheiro(player,Saldo),
+	dinheiro_do_jogador(player,Saldo),
 	Preco < Saldo.
 
 quebrado(OQue):-
@@ -411,6 +420,17 @@ pegar(Quem, OQue):-
     retractall(estar(OQue, _)),
     assertz(estar(OQue, Quem)).
 
+pegar(player,OQue):-
+	nonvar(OQue),
+	OQue=sn(id:prata ..numero:Valor),
+	estar(player,Aqui),
+	estar(OQue,Aqui),
+	dinheiro_do_jogador(player,Anterior),
+	retract(dinheiro_do_jogador(player,_)),
+	NovoValor is Valor+Anterior,
+	assertz(dinheiro_do_jogador(player,NovoValor)).
+
+
 /* vedar -- para vedar buracos */
 vedar(buraco, X):-
      (X = vela ; X = chiclete),
@@ -476,11 +496,11 @@ comprar(player, Objeto):-
 
 colateral_novo_saldo_subtraindo_valor_de(Objeto):-
 	quanto_custa(Objeto,Preco),
-	dinheiro(player,Saldo),
+	dinheiro_do_jogador(player,Saldo),
 	NovoSaldo is Saldo-Preco,
 	NovoSaldo >= 0,
-	retract(dinheiro(player,_)),
-	asserta(dinheiro(player,NovoSaldo)).
+	retract(dinheiro_do_jogador(player,_)),
+	asserta(dinheiro_do_jogador(player,NovoSaldo)).
 
 vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
 	dono(Quem,OQue),
@@ -494,7 +514,7 @@ vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
 digitar(player, (tema1:senha ..tema2:teclado)):-
 	estar(player,caixa_eletronico),
 	estar(cartao_credito,caixa_eletronico),
-    assertz(digitado(senha, teclado)),
+    assert_digitado(digitado(senha, teclado)),
 	assertz(estar(comp_nominal(menu,caixa_eletronico),tela)),
 	evento(acao:aparecer ..tempo:preterito ..agente:comp_nominal(menu,caixa_eletronico) ..tema:tela).
 
@@ -502,9 +522,35 @@ digitar(player, (tema1:Valor ..tema2:teclado)):-
 	integer(Valor),
 	estar(player,caixa_eletronico),
 	estar(cartao_credito,caixa_eletronico),
+	selecionado(comp_nominal(opcao,saque),caixa_eletronico),
+	retract(selecionado(comp_nominal(opcao,saque),caixa_eletronico)),
+    assert_digitado(digitado(Valor, teclado)),
+	evento(acao:aparecer ..tempo:preterito ..agente:comp_nominal(opcao,confirmacao) ..tema:tela).
+
+selecionar(player,comp_nominal(opcao,saque)):-
+	estar(player,caixa_eletronico),
 	digitado(senha,teclado),
-	retract(digitado(senha,teclado)),
-    assertz(digitado(Valor, teclado)).
+	assertz(selecionado(comp_nominal(opcao,saque),caixa_eletronico)),
+	evento(agente:caixa_eletronico ..acao:estar ..tema:(acao:pedir ..tema_real:valor)).
+
+selecionar(player,comp_nominal(opcao,saldo)):-
+	estar(player,caixa_eletronico),
+	digitado(senha,teclado),
+	saldo_conta(player,Num),
+	evento(acao:ser ..agente:comp_nominal(valor,saldo) ..tema:sn(id:prata ..numero:Num)).
+
+selecionar(player,comp_nominal(opcao,confirmacao)):-
+	estar(player,caixa_eletronico),
+	digitado(Valor,teclado),
+	assertz(estar(sn(id:prata ..numero:Valor),caixa_eletronico)),
+	retractall(digitado(_,teclado)),
+	retractall(selecionado(_,teclado)),
+	evento(agente:sn(id:prata ..numero:Valor) ..tema:caixa_eletronico ..acao:aparecer ..tempo:preterito).
+
+assert_digitado(NovoDigitado):-
+	NovoDigitado=..[digitado,_,NoQue],
+	retractall(digitado(_,NoQue)),
+	assertz(NovoDigitado).
 
 pescar(player,Onde):-
     Onde = lago,

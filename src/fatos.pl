@@ -1,4 +1,4 @@
-dinheiro(player,5).
+dinheiro_do_jogador(player,5).
 saldo_conta(player,20).
 
 /* DETERMINA CONEXAO ENTRE LOCAIS */
@@ -116,7 +116,6 @@ pegavel(chiclete).
 pegavel(dinheiro).
 pegavel(corda).
 pegavel(barco).
-pegavel(dinheiro).
 
 amarrado(corda,barco).
 amarrado(corda,embarcadouro).

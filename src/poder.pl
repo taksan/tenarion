@@ -111,6 +111,10 @@ testa_clausula(Clausula):-
 	notrace(starts_with(NomePred,colateral)).
 
 testa_clausula(Clausula):-
+	Clausula=..[NomePred|_],
+	notrace(starts_with(NomePred,evento)).
+
+testa_clausula(Clausula):-
 	Clausula.
 
 starts_with(String,Prefix):-

@@ -35,6 +35,11 @@ a(adj:pregado    ..gen:masc ..tipo:estar ..num:sing)-->[pregado].
 a(adj:pregado    ..gen:fem  ..tipo:estar ..num:sing)-->[pregada].
 a(adj:quebrado   ..gen:masc ..tipo:estar ..num:sing)-->[quebrado].
 a(adj:quebrado   ..gen:fem  ..tipo:estar ..num:sing)-->[quebrada].
+a(adj:digitado   ..gen:masc ..tipo:estar ..num:sing)-->[digitado].
+a(adj:digitado   ..gen:fem  ..tipo:estar ..num:sing)-->[digitada].
+a(adj:selecionado   ..gen:masc ..tipo:estar ..num:sing)-->[selecionado].
+a(adj:selecionado   ..gen:fem  ..tipo:estar ..num:sing)-->[selecionada].
+
 
 %%%% QUANT
 quant(id:todo.. gen:masc.. num:sing)   --> [todo].

@@ -96,7 +96,6 @@ s(ato_fala:int_sim_nao ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..desco
 /* informar / mandar */
 % sentenca para agente singular
 
-
 s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
     {\+ is_list(A)}, 
 	sn(id:A ..num: N ..pessoa:Pes ..gen:G),
@@ -106,7 +105,7 @@ s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X ..tempo:Tempo ..te
 s(ato_fala:informar ..positivo:IsPositivo ..agente:A ..acao:X ..tempo:Tempo ..tema:Paciente ..pessoa:Pes ..desconhecido:_) -->
     {\+ is_list(A), Pes=terc}, 
 	sadvb(id:A),
-	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X ..tempo:Tempo ..tema:Paciente ..num: N ..pessoa:Pes ..gen:G),
+	sv(tema_eh_agente_ou_complemento:complemento ..positivo:IsPositivo ..acao:X ..tempo:Tempo ..tema:Paciente ..num:sing ..pessoa:Pes),
    	pontuacao_opcional('.').
 
 
@@ -155,13 +154,18 @@ sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..d
    	ident(gen:G ..num:N ..tipo:TipoIdent),
 	np(id:I ..tipo:T ..gen:G ..num:N ..desconhecido:nao).
 
+sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..num:N ..pessoa:terc ..desconhecido:nao) -->
+    { id_para_np(Substantivo, I), (var(I); \+ is_list(I)), \+compound(I) },
+	np(id:I ..tipo:T ..gen:G ..num:N ..desconhecido:nao).
+
 sn(coord:nao ..id:Substantivo ..tipo:T ..gen:G ..num:N ..desconhecido:IsDesconhecido
 	..prefere_det:DetPreferido) -->
     { 
 		ignore((% acha as features do det na producao de texto
 			nonvar(Substantivo), 
 			id_para_np(Substantivo,sn(id:I ..numero:Numero ..quant:Quant ..poss:Poss))
-			)) 
+			)),
+			breakpoint
 	},
 	{  determina_tipo_ident(DetPreferido,T,DetEscolhido) },
 	det(num:N ..tipo:DetEscolhido ..gen:G ..det:det(numero:Numero ..quant:Quant ..poss:Poss)),
@@ -400,6 +404,10 @@ det(gen:G ..num:N ..det:det(numero:Numero ..quant:Quant)) -->
 det(gen:G ..num:N ..tipo:T ..det:det(quant:Quant)) --> 
        quant_advb(id:Quant ..gen:G ..num:N),
        ident(gen:G ..num:N ..tipo:T).
+
+det(gen:G ..num:N ..det:det(numero:Numero)) --> 
+	   ident(gen:G ..num:N),
+       num(id:Numero ..gen:G ..num:N).
 
 quant_advb(id:Quant ..gen:G ..num:N)-->
 	{nonvar(Quant)},

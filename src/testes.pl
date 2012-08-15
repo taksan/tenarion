@@ -198,12 +198,20 @@ teste70f:-
 	dado_pergunta_espero_resposta('o que tem no menu do caixa eletronico?','o menu do caixa eletronico tem uma opcao do saldo e uma opcao de um saque.').
 teste70g:-
 	dado_pergunta_espero_resposta('qual o valor do saldo?','o valor do saldo eh 20 pratas.').
+teste70h:-
+	dado_pergunta_espero_resposta('eu seleciono a opcao de saldo.','o valor do saldo eh 20 pratas.').
 teste71:-
 	dado_pergunta_espero_resposta('eu pego.', 'o que voce pega?').
 teste72:-
-	dado_pergunta_espero_resposta('eu digito 20 no teclado.','ok').
+	dado_pergunta_espero_resposta('eu digito 20 no teclado.','voce nao pode digitar 20 no teclado, porque a opcao do saque nao estah selecionada.').
+teste72a:-
+	dado_pergunta_espero_resposta('eu seleciono a opcao de saque.','o caixa eletronico estah pedindo o valor.').
+teste72b:-
+	dado_pergunta_espero_resposta('eu digito 20 no teclado.','a opcao da confirmacao apareceu na tela.').
+teste72c:-
+	dado_pergunta_espero_resposta('eu seleciono a opcao de confirmacao.','20 pratas apareceram no caixa eletronico.').
 teste73:-
-	dado_pergunta_espero_resposta('eu pego o dinheiro.','ok').
+	dado_pergunta_espero_resposta('eu pego as 20 pratas.','ok').
 teste74:-
 	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 23 pratas.').
 

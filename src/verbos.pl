@@ -164,6 +164,7 @@ v(acao:fazer ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [faz
 % APARECER
 v(acao:aparecer ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sp(prep:em)]) --> [aparecer].
 v(acao:aparecer ..tempo:preterito..num:sing ..pessoa: terc  ..subcat:[sp(prep:em)]) --> [apareceu].
+v(acao:aparecer ..tempo:preterito..num:plur ..pessoa: terc  ..subcat:[sp(prep:em)]) --> [apareceram].
 
 % APARECER
 v(acao:pedir ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [pedir].
@@ -201,6 +202,12 @@ v(acao:ter ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [possu
 v(acao:digitar ..tempo:presente ..num:sing ..pessoa: prim ..subcat:[sn,sp(prep:em)]) --> [digito].
 v(acao:digitar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn,sp(prep:em)]) --> [digito].
 v(acao:digitar ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn,sp(prep:em)]) --> [digitar].
+
+% VERBO: selecionar
+v(acao:selecionar ..tempo:presente ..num:sing ..pessoa: prim ..subcat:[sn]) --> [seleciono].
+v(acao:selecionar ..tempo:presente ..num:sing ..pessoa: terc ..subcat:[sn]) --> [seleciona].
+v(acao:selecionar ..tempo:presente ..num:sing ..pessoa: indic ..subcat:[sn]) --> [selecionar].
+
 
 % VERBO: PODER
 v(acao:poder ..tempo:presente ..num:sing ..pessoa: prim ..subcat:[sv]) --> [posso].
