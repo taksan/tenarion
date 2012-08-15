@@ -211,9 +211,19 @@ teste72b:-
 teste72c:-
 	dado_pergunta_espero_resposta('eu seleciono a opcao de confirmacao.','20 pratas apareceram no caixa eletronico.').
 teste73:-
-	dado_pergunta_espero_resposta('eu pego as 20 pratas.','ok').
+	dado_pergunta_espero_resposta('eu pego 10 pratas.','ok').
 teste74:-
+	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 13 pratas.').
+teste74a:-
+	dado_pergunta_espero_resposta('o que tem aqui?','aqui tem um cartao de credito, um teclado, uma tela e 10 pratas.').
+teste75:-
+	dado_pergunta_espero_resposta('eu pego o dinheiro.','ok').
+teste76:-
 	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 23 pratas.').
+teste77:-
+	dado_pergunta_espero_resposta('o que tem aqui?','aqui tem um cartao de credito, um teclado e uma tela.').
+
+
 
 :-roda_testes.
 :-halt.

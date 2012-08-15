@@ -20,7 +20,7 @@ a(adj:racional ..tipo:ser ..num:plur)-->[racionais].
 a(adj:caro     ..tipo:ser ..num:sing)-->[caro].
 a(adj:suficiente ..tipo:ser ..num:sing)-->[suficiente].
 
-a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
+%a(adj:pegavel   ..tipo:ser ..num:sing)-->[pegavel].
 a(adj:amarravel ..tipo:ser ..num:sing)-->[amarravel].
 a(adj:possivel  ..tipo:ser ..num:sing)-->[possivel].
 

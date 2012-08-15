@@ -154,8 +154,6 @@ ser(Nome, player):-
     jogador(Nome),
 	ignore(introduz_player).
 
-ser(sn(id:prata),dinheiro).
-
 ser(L,L):-
     nonvar(L), \+ compound(L),
 	ignore(introduz_pessoa(L)).
@@ -410,11 +408,11 @@ poder_especifico(pegar(player,corda)):-
 	nao(amarrado(corda,_)).
 
 pegar(Quem, OQue):-
-    pegavel(OQue),
-	nao(grande(OQue)),
-	nao(pregado(OQue,_)),
     estar(Quem,Aqui),
     estar(OQue,Aqui),
+	nao(grande(OQue)),
+	nao(pregado(OQue,_)),
+    pegavel(OQue),
     (dono(Quem, OQue);nao(dono(_,OQue))),
 	poder_especifico(pegar(Quem,OQue)),
     retractall(estar(OQue, _)),
@@ -422,9 +420,27 @@ pegar(Quem, OQue):-
 
 pegar(player,OQue):-
 	nonvar(OQue),
-	OQue=sn(id:prata ..numero:Valor),
+	OQue=dinheiro,
 	estar(player,Aqui),
-	estar(OQue,Aqui),
+	estar(sn(id:prata ..numero:Valor),Aqui),
+	colateral_pegar_dinheiro(Valor).
+
+pegar(player,OQue):-
+	nonvar(OQue),
+	OQue=sn(id:prata ..numero:Valor),
+	colateral_pegar_dinheiro(Valor).
+
+colateral_pegar_dinheiro(Valor):-
+	estar(player,Aqui),
+	SnReal=sn(id:prata ..numero:ValorReal),
+	estar(SnReal,Aqui),
+	Valor =< ValorReal,
+	ValorSub is ValorReal-Valor,
+	retract(estar(SnReal,Aqui)),
+	ignore((ValorSub>0, assertz(estar(sn(id:prata ..numero:ValorSub),Aqui)))),
+	colateral_adicionar_dinheiro(Valor).
+
+colateral_adicionar_dinheiro(Valor):-
 	dinheiro_do_jogador(player,Anterior),
 	retract(dinheiro_do_jogador(player,_)),
 	NovoValor is Valor+Anterior,
