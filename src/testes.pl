@@ -23,7 +23,7 @@ teste07b:-
 teste08:-
     dado_pergunta_espero_resposta('eu pego ela.', 'voce nao pode pega-la, porque ela estah amarrada.').
 teste09:-
-    dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade e a sua mao.').
+    dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade, a sua mao e 5 pratas.').
 teste10_a:-
 	dado_pergunta_espero_resposta('o martelo estah aqui?', 'nao').
 teste10_b:-
@@ -33,7 +33,7 @@ teste11:-
 teste12:-
     dado_pergunta_espero_resposta('eu pego elas.', 'ok').
 teste13:-
-    dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade, algumas minhocas e a sua mao.').
+    dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, a identidade, algumas minhocas, a sua mao e 5 pratas.').
 teste14:-
     dado_pergunta_espero_resposta('o barco estah aqui?', 'sim').
 teste15:-
@@ -97,7 +97,7 @@ teste33:-
 teste34:-
 	dado_pergunta_espero_resposta('eu pego a corda.', 'ok').
 teste35:-
-	dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, uma corda, a identidade, a sua mao e uma vara de pescar.').
+	dado_pergunta_espero_resposta('o que eu tenho?', 'voce tem um cartao de credito, uma corda, a identidade, a sua mao, uma vara de pescar e 5 pratas.').
 teste36:-
 	dado_pergunta_espero_resposta('eu tiro as minhocas da vara de pescar.', 'ok').
 teste37:-
@@ -212,9 +212,13 @@ teste72c:-
 	dado_pergunta_espero_resposta('eu seleciono a opcao de confirmacao.','20 pratas apareceram no caixa eletronico.').
 teste73:-
 	dado_pergunta_espero_resposta('eu pego 10 pratas.','ok').
+teste73a:-
+	dado_pergunta_espero_resposta('quanto dinheiro tem aqui?','aqui tem 10 pratas.').
 teste74:-
 	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 13 pratas.').
 teste74a:-
+	dado_pergunta_espero_resposta('quanto eu tenho?','voce tem 13 pratas.').
+teste74b:-
 	dado_pergunta_espero_resposta('o que tem aqui?','aqui tem um cartao de credito, um teclado, uma tela e 10 pratas.').
 teste75:-
 	dado_pergunta_espero_resposta('eu pego o dinheiro.','ok').
@@ -222,8 +226,6 @@ teste76:-
 	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 23 pratas.').
 teste77:-
 	dado_pergunta_espero_resposta('o que tem aqui?','aqui tem um cartao de credito, um teclado e uma tela.').
-
-
 
 :-roda_testes.
 :-halt.

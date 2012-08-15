@@ -32,10 +32,13 @@ quanto(Quem,ter,dinheiro,Incognita):-
 	Incognita=sn(id:prata ..numero:Saldo),
 	dinheiro_do_jogador(Quem,Saldo).
 
+quanto(Onde,ter,dinheiro,Incognita):-
+	Incognita=sn(id:prata ..numero:_),
+	estar(Incognita,Onde).
+
+
 % Ter é um verbo especial, porque nem sempre significa
 % que a o individuo realmente tem consigo
-ter_estar(OQue,Onde):-
-	estar(OQue,Onde).
 
 % ter para VENDER
 ter(Quem,Verbo):-
@@ -44,11 +47,18 @@ ter(Quem,Verbo):-
 	poder(vender(Quem,(tema1:Oque..tema2:ParaQuem))).
 
 /* DETERMINA O QUE O OBJETO X TEM */
+
 ter(Quem, OQue):-
     ( var(OQue); \+ racional(OQue) ),
     estar(OQue,OndeEsta),
     estar(OQue, Quem),
     OndeEsta=Quem.
+
+ter(Quem, OQue):-
+	nonvar(Quem),Quem=player,
+	(estar(OQue,player);
+		(OQue=sn(id:prata ..numero:Saldo),dinheiro_do_jogador(player,Saldo))
+	).
 
 ter(player, ferramentas):-
     ter(player,pregos),
@@ -183,8 +193,13 @@ entidade(A,onde):-
 	local(A);
     racional(A).
 
-entidade(_,(quanto,_)).
-entidade(_,quanto).
+entidade(OQue,(quanto,dinheiro)):-
+	nonvar(OQue),
+	OQue=sn(id:prata).
+
+entidade(OQue,quanto):-
+	nonvar(OQue),
+	OQue=sn(numero:_).
 
 custar(sn(id:prata ..numero:Preco),OQue):-
 	\+compound(OQue),

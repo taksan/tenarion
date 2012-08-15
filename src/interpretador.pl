@@ -277,10 +277,18 @@ interpretacao_do_interlocutor(Pred,Pred).
 monta_predicado_para_resolucao(
 	Acao,
 	Agente,
-	incog((quanto,Substantivo)),
+	incog((quanto,Substantivo)),%paciente
 	Incognita,
 	Predicado):-
 	Predicado=quanto(Agente,Acao,Substantivo,Incognita).
+
+monta_predicado_para_resolucao(
+	Acao,
+	incog((quanto,Substantivo)),%agente
+	Paciente,
+	Incognita,
+	Predicado):-
+	Predicado=quanto(Paciente,Acao,Substantivo,Incognita).
 
 monta_predicado_para_resolucao(
 	adj_advb(Acao,tipo:verbal ..prep:para ..verbo:Predicativo),
@@ -301,10 +309,7 @@ monta_predicado_para_resolucao(AcaoAlvo,
 	PredAcaoAuxiliar =..[AcaoAlvo, Agente, Incognita],
     Predicado =.. [Relacao, PredAcaoAuxiliar].
 
-%monta_predicado_para_resolucao(Relacao,incog(quanto),Tema,Incognita,Predicado):-
-%   Predicado =.. [Relacao, Tema, Incognita].
 monta_predicado_para_resolucao(ter,incog(oque),Tema,Incognita,Predicado):-
-%	gspy(normaliza_substantivos_resposta),
 	Predicado=estar(Incognita,Tema).
 
 monta_predicado_para_resolucao(Relacao,Agente,incog(_),Incognita,Predicado):-
@@ -330,7 +335,6 @@ elementos_resposta(ser,incog(quem),TemaRes,Resposta,TemaRes,Resposta,ser,sim):-
 	institui_pronome(TemaRes,TemaRef),
 	TemaRes\=TemaRef.
 
-
 elementos_resposta(ter,incog(oque),TemaViraAgente,Resposta,TemaViraAgente,Resposta,ter,sim).
 
 elementos_resposta(Relacao,Agente,incog(oque),RespostaListaBiTransitivos,Agente,Resposta,Relacao,_):-
@@ -340,7 +344,7 @@ elementos_resposta(Relacao,Agente,incog(oque),RespostaListaBiTransitivos,Agente,
 	obtem_sets_tema1_tema2(RespostaListaBiTransitivos,Resposta,_).
 
 elementos_resposta(Relacao,incog(TipoNp),PacienteViraAgente,RespostaViraPaciente,PacienteViraAgente,RespostaViraPaciente,Relacao,_):-
-	member(TipoNp,[quanto,qual]).
+	member(TipoNp,[(quanto,_),quanto,qual]).
 
 elementos_resposta(Acao,incog(TipoNp),TemaRes,Resposta,Resposta,TemaRes,AcaoRes,_):-
 	nonvar(TipoNp),
