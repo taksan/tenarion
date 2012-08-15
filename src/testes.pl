@@ -226,6 +226,11 @@ teste76:-
 	dado_pergunta_espero_resposta('quanto dinheiro eu tenho?','voce tem 23 pratas.').
 teste77:-
 	dado_pergunta_espero_resposta('o que tem aqui?','aqui tem um cartao de credito, um teclado e uma tela.').
+teste78:-
+	dado_pergunta_espero_resposta('eu tiro o cartao de credito do caixa eletronico.','ok').
+teste79:-
+	dado_pergunta_espero_resposta('eu insiro o cartao de credito no caixa eletronico.','o caixa eletronico estah pedindo a sua senha.').
+
 
 :-roda_testes.
 :-halt.

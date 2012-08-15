@@ -392,6 +392,9 @@ colocar(player, (tema1:OQue ..tema2:Onde)):-
     assertz(estar(OQue, Onde)),
 	colateral_evento_colocar(OQue,Onde).
 
+inserir(player, tema1:cartao_credito ..tema2:caixa_eletronico):-
+	sinonimo(colocar(player, tema1:cartao_credito ..tema2:caixa_eletronico)).
+
 colateral_evento_colocar(cartao_credito,caixa_eletronico):-
 	evento(agente:caixa_eletronico ..acao:estar ..tema:(acao:pedir ..tema_real:comp_nominal(player,senha))).
 
@@ -541,7 +544,7 @@ vender(Quem, (tema1:OQue ..tema2:ParaQuem)):-
     retract(dono(_,OQue)),
     asserta(estar(OQue,ParaQuem)).
 
-
+%% Sequencia para sacar dinheiro do caixa -->
 digitar(player, (tema1:senha ..tema2:teclado)):-
 	estar(player,caixa_eletronico),
 	estar(cartao_credito,caixa_eletronico),
@@ -582,7 +585,7 @@ assert_digitado(NovoDigitado):-
 	NovoDigitado=..[digitado,_,NoQue],
 	retractall(digitado(_,NoQue)),
 	assertz(NovoDigitado).
-
+%% <--- fim da sequencia para sacar dinheiro
 pescar(player,Onde):-
     Onde = lago,
     estar(player,Aqui),
